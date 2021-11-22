@@ -1,0 +1,9 @@
+base
+sf
+dplyr
+ggplot2
+sp
+spData
+spdep
+cowplot
+tint
