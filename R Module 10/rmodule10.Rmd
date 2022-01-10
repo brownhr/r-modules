@@ -17,7 +17,7 @@ text-align: justify}
 ```
 ```{r setup, include=FALSE}
 rm(list = ls())
-setwd("C:/Users/Harrison Brown/Documents/R Projects/R Module 10")
+setwd("C:/Users/brownhr/Documents/R Projects/R Module 10")
 
 library(sf)
 library(stats)
@@ -130,6 +130,7 @@ Additionally, calculating Moran's I on the residuals of the Spatial Lag model gi
 \pagebreak
 
 ## 4. Spatial Error
+
 
 The function for spatial error, $\gamma = \beta x + \epsilon; \epsilon = \lambda W \epsilon+\zeta$, represents spatial autocorrelation separated into two terms, with $\lambda$ representing the correlation coefficient, and $\zeta$ modelling random error.
 
