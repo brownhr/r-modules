@@ -1,25 +1,5 @@
----
-title: "R Module 2"
-subtitle: "GHY 5800 — Quantitative Methods in Geography"
-output: html_document
-css: air_square.css
+# R Module 2 {- #r-module-2}
 
-knit: pagedown::chrome_print
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.align = "center")
-```
-
-```{=html}
-<style>
-body
-  {text-align: justify}
-  {font-size: 18px}
-</style>
-```
-
-----------
 
 ## Working with R Scripts and Projects
 

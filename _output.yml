@@ -2,6 +2,8 @@ bookdown::gitbook:
   css: style.css
   config:
     toc:
+      number_sections: no
+      collapse: subsection
       before: |
         <li><a href="./">A Minimal Book Example</a></li>
       after: |
@@ -15,3 +17,7 @@ bookdown::pdf_book:
   citation_package: natbib
   keep_tex: yes
 bookdown::epub_book: default
+fontsettings:
+  theme: sepia
+  family: sans
+  size: 3

@@ -1,38 +1,14 @@
----
-title: "R Module 1"
-subtitle: "GHY 5800 — Quantitative Methods in Geography"
-output: html_document
-css: air_square.css
+# R Module 1 {- #r-module-1}
 
-knit: pagedown::chrome_print
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{=html}
-<style>
-body
-  {text-align: justify}
-  {font-size: 18px}
-</style>
-```
-
-----------
-
-## Introduction to R and R Studio
-
-In this R Module, we will learn about the basics of using R and R Studio to explore data, perform analysis, and write-up lab reports.
-
-### What is R?
+## What is R?
 
 R, or the *R Project for Statistical Computing*, is a programming language designed for use in data analysis and data science. Initially developed in 1993, R has become one of the most popular languages for data science, due to its design towards statistics and data.
 
 R is popular in geographical data science, as there are many packages (add-on libraries of pre-built tools and functions) that can be used to perform GIS, Remote Sensing, or qualitative analyses.
 
 
-### R Studio
+## R Studio
 
 R Studio is a popular IDE (*Integrated Development Environment*) that allows for more convenient programming in the R language. Rather than running R programs (*scripts*) from the command line, R Studio allows users to interactively write and execute scripts, as well as view data and file paths in a single environment. R Studio also allows users to manage and install packages, generate plots and figures, and "knit" code into a .PDF or .HTML for making reports.
 
