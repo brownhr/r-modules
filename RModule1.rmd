@@ -7,6 +7,11 @@ knitr::opts_chunk$set(
 
 ```
 
+```{r klrm1, echo = F, include = T}
+klippy::klippy()
+```
+
+
 ## What is R?
 
 R, or the *R Project for Statistical Computing*, is a programming language designed for use in data analysis and data science. Initially developed in 1993, R has become one of the most popular languages for data science, due to its design towards statistics and data.

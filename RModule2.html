@@ -32,6 +32,10 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -292,6 +296,10 @@ $(document).ready(function () {
 
 <div id="r-module-2" class="section level1">
 <h1>R Module 2</h1>
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
 <div id="working-with-r-scripts-and-projects" class="section level2">
 <h2>Working with R Scripts and Projects</h2>
 <p>In the previous R Module, we worked entirely within the context of the R <em>console</em>, which allowed us to run code line-by-line and see the results immediately. However, when working on more complex projects, it’s important to be able to stay organized, not only for your own sake, but also to help potential collaborators understand your workflow, which includes the people troubleshooting issues in your code! R <em>scripts</em> are designed exactly for this; scripts are essentially text files that allow you to save, review, and edit your code, then run your code all at once! This is necessary when doing real-world programming in R — coding is an iterative process, in which you work on things step-by-step until you get the desired code!</p>
@@ -319,7 +327,7 @@ Example of an R script written in RStudio
 <p>Creating a new <em>Script</em> is very easy; either type <code>Cmd/CTRL-Shift-N</code>, or select <code>File &gt; New File... &gt; R Script</code>. You’ll be greeted with a new <em>Script</em>, which can hold your code!</p>
 <p>Let’s try out a few basic things – exploring some data. For now, we’ll use the <code>trees</code> dataset from the wonderful <code>datasets</code> package.</p>
 <p>Enter the following into your script. By default, the <code>datasets</code> package is already loaded, but it’s good practice to have all of your <code>library()</code> calls at the beginning of your scripts, which is why it’s included here.</p>
-<pre class="r"><code>library(datasets)
+<pre class="r klippy"><code>library(datasets)
 
 tree_data &lt;- trees</code></pre>
 <p><strong>N.B.:</strong> The <code>&lt;-</code> arrow is called an <em>assignment operator</em>, and takes a value on the right of the arrow and <em>assigns</em> it to a variable on the left. R also has the <code>=</code> operator, which works similarly, but for now stick to using <code>&lt;-</code> to avoid confusion (there is a difference between <code>&lt;-</code> and <code>=</code> but it’s not important for now!).</p>
@@ -458,7 +466,7 @@ find_mode(actors)</code></pre>
 </div>
 </div>
 
-<p>Copyright &copy; 2022 brownhr. v.0.0.2</p>
+<p>Copyright &copy; 2022 brownhr. v.0.0.3</p>
 
 
 

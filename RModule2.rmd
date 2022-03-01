@@ -7,6 +7,10 @@ knitr::opts_chunk$set(
 
 ```
 
+```{r klrm2, echo = F, include = T}
+klippy::klippy()
+```
+
 
 ## Working with R Scripts and Projects
 
@@ -56,7 +60,7 @@ Let's try out a few basic things – exploring some data. For now, we'll use the
 
 Enter the following into your script. By default, the `datasets` package is already loaded, but it's good practice to have all of your `library()` calls at the beginning of your scripts, which is why it's included here.
 
-```{r trees-intro}
+```{r trees-intro, class.source = 'klippy'}
 library(datasets)
 
 tree_data <- trees
