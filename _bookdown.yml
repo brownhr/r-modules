@@ -1,6 +1,0 @@
-delete_merged_file: true
-language:
-  ui:
-    chapter_name: "R Module "
-rmd_files: ["index.rmd", "RModule1.rmd", "RModule2.rmd"]
-output_dir: "docs"
