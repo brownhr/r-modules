@@ -1,4 +1,11 @@
-# R Module 2 {- #r-module-2}
+# R Module 2
+
+```{r setup-rm2, include=FALSE}
+knitr::opts_chunk$set(
+  fig.align = "center"
+)
+
+```
 
 
 ## Working with R Scripts and Projects
@@ -128,6 +135,9 @@ Save the plot as an image and embed it into your document!
 I moved the Working Directory and File Management topics to R Module 3; this one seemed to be getting a bit lengthy, so I didn't want to add too much all at once!
 -->
 
+
+------------
+
 ## Introductory Statistics
 
 Now that we've covered some more fundamental R topics, we can discuss the quantitative methods of this R Module. We'll keep it fairly light and talk about introductory descriptive statistics — *Measures of Central Tendency* and *Measures of Dispersion*.
@@ -191,6 +201,8 @@ actors <- c("Robert", "Chris", "Chris", "Jeremy", "Scarlett", "Mark", "Samuel")
 find_mode(actors)
 ```
 
+
+------------
 
 ### Assignment
 

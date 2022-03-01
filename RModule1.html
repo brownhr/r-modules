@@ -245,7 +245,7 @@ $(document).ready(function () {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
+  <a href="https://brownhr.github.io">
     <span class="fa fa-home"></span>
      
     Home
@@ -290,8 +290,8 @@ $(document).ready(function () {
 </div>
 
 
-<div id="r-module-1" class="section level1 unnumbered">
-<h1 class="unnumbered">R Module 1</h1>
+<div id="r-module-1" class="section level1">
+<h1>R Module 1</h1>
 <div id="what-is-r" class="section level2">
 <h2>What is R?</h2>
 <p>R, or the <em>R Project for Statistical Computing</em>, is a programming language designed for use in data analysis and data science. Initially developed in 1993, R has become one of the most popular languages for data science, due to its design towards statistics and data.</p>
@@ -306,6 +306,7 @@ $(document).ready(function () {
 For writing up documents and reports, text editors like Word and Google Docs do the job, but sometimes we need to include figures, data, or reports. Rather than constantly taking screenshots (and updating them when things change!) we can use R Markdown to create comprehensive documents that automatically include figures and tables *directly from the data*. R Markdown has a bit of a learning curve, especially compared to Word, but once we cover the basics, it becomes easy to make documents and reports (this R Module was written entirely in R Markdown!)
 -->
 <div style="page-break-after: always;"></div>
+<hr />
 </div>
 <div id="getting-started" class="section level2">
 <h2>Getting Started</h2>
@@ -333,6 +334,7 @@ The default interface for RStudio
 <li>The Scripts window is essential for staying organized in your projects; scripts are used to save R code to a file, which is necessary to stay organized, and allows you to pick up where you left off, rather than having to re-type code each time you start an R session.</li>
 </ul>
 <p>The other tabs and panes are useful, but those listed above are the most commonly-used.</p>
+<hr />
 </div>
 </div>
 <div id="basics-of-r" class="section level2">
@@ -361,16 +363,17 @@ head(painters)</code></pre>
 ## Levels: A B C D E F G H</code></pre>
 <p>We can also see from this <strong>Use R to produce the following simple data summaries and visualizations commonly used for qualitative data:</strong></p>
 <ol style="list-style-type: decimal">
-<li>A histogram of the <code>Composition</code> variable from the <code>painters</code> dataset, using the <code>hist()</code> function.</li>
-<li>A <strong>horizontal</strong> bar chart of the <code>Expression</code> variable, using the <code>barplot()</code> function.
+<li><p>A histogram of the <code>Composition</code> variable from the <code>painters</code> dataset, using the <code>hist()</code> function.</p></li>
+<li><p>A <strong>horizontal</strong> bar chart of the <code>Expression</code> variable, using the <code>barplot()</code> function.</p>
 <ul>
 <li><em>Tip: use `?barplot() to see which argument you need to change to get a horizontal bar plot</em></li>
 </ul></li>
-<li>A pie chart of the <code>Schools</code> variable, using the <code>pie()</code> function.
+<li><p>A pie chart of the <code>Schools</code> variable, using the <code>pie()</code> function.</p>
 <ul>
 <li><em>Hint: you need to wrap the <code>pie()</code> function around the <code>table()</code> function, because you need <strong>frequencies</strong> of each school, rather than just their label</em></li>
 </ul></li>
 </ol>
+<hr />
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -389,22 +392,22 @@ head(painters)</code></pre>
 ##  Max.   :5.100   Max.   :96.0</code></pre>
 <p>Let’s try some more meaningful summaries for quantitative data using R. Just as before, produce the following and put your output into your document.</p>
 <ol start="4" style="list-style-type: decimal">
-<li>A histogram for the eruptions. R will automatically decide how to group your observations. Remember to plot <em>only</em> the <code>eruptions</code> variable.</li>
-<li>Another histogram of eruptions, but specify 2 data classes instead of the default values.
+<li><p>A histogram for the eruptions. R will automatically decide how to group your observations. Remember to plot <em>only</em> the <code>eruptions</code> variable.</p></li>
+<li><p>Another histogram of eruptions, but specify 2 data classes instead of the default values.</p>
 <ul>
 <li><em>Hint: use <code>?hist()</code> to see more documentation on the <code>hist()</code> function.</em></li>
 </ul></li>
-<li>A boxplot of eruptions that is horizontal, rather than vertical.
+<li><p>A boxplot of eruptions that is horizontal, rather than vertical.</p>
 <ul>
 <li>Use <code>?boxplot()</code> to figure out how to change the orientation.</li>
 </ul></li>
-<li>Repeat steps 4-6 on a dataset of your own choosing and interpret the data. You can also use functions such as <code>mean</code>, <code>median</code>, <code>quantile</code>, etc. to help interpret your data.</li>
+<li><p>Repeat steps 4-6 on a dataset of your own choosing and interpret the data. You can also use functions such as <code>mean</code>, <code>median</code>, <code>quantile</code>, etc. to help interpret your data.</p></li>
 </ol>
 <p>If you’ve made it this far, then congrats – you’re learning R! Once you’re done celebrating, give your document a title or header called “R Module 1”, add your name, and turn it in to Google Classroom. Bring any questions, insights, comments, or concerns to the next class!</p>
 </div>
 </div>
 
-<p>Copyright &copy; 2022 brownhr </p>
+<p>Copyright &copy; 2022 brownhr. v.0.0.2</p>
 
 
 
