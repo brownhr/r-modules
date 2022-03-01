@@ -1,0 +1,25 @@
+name: "r-modules"
+navbar:
+  title: "R Modules"
+  left:
+    - text: "Home"
+      icon: fa-home
+      href: index.html
+    - text: "About"
+      icon: fa-info
+      href: about.html
+    - text: "R Modules"
+    
+      menu:
+      - text: "R Modules"
+      - text: "R Module 1"
+        href: RModule1.html
+      - text: "R Module 2"
+        href: RModule2.html
+output:
+  html_document:
+    css: air_square.css
+    highlight: textmate
+    include:
+      after_body: footer.html
+output_dir: "."
