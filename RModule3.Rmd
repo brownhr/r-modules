@@ -1,0 +1,33 @@
+# R Module 3
+
+
+```{r klrm3, echo = F, include = T}
+klippy::klippy()
+```
+
+
+## File Management
+
+### Importing Data
+
+### Readr
+
+
+## Mapping with `sf`
+
+### Choropleth Mapping
+
+### Importing and Exporting Shapefiles
+
+
+## Probability and Probability Distributions
+
+### Mapping Techniques
+
+### Discrete Distributions
+
+- Uniform
+- Binomial
+- Poisson
+
+### Continuous Distributions
