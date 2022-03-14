@@ -1,0 +1,20 @@
+# R Module 4
+
+
+```{r klrm3, echo = F, include = T}
+klippy::klippy()
+```
+
+## Qualitative Data
+
+### Factors and Levels in R
+
+### Recoding using `dplyr`
+
+### Visualizing Qualitative Data with `ggplot2`
+
+## Survey Development, Sampling, and Statistical Tests
+
+### Sampling Techniques
+
+### Statistisal Tests for Surveys
