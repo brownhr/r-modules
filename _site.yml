@@ -16,6 +16,10 @@ navbar:
         href: RModule1.html
       - text: "R Module 2"
         href: RModule2.html
+      - text: "R Module 3"
+        href: RModule3.html
+      - text: "R Module 4"
+        href: RModule4.html
 output:
   html_document:
     css: air_square.css
