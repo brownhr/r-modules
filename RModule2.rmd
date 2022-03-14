@@ -1,11 +1,5 @@
 # R Module 2
 
-```{r setup-rm2, include=FALSE}
-knitr::opts_chunk$set(
-  fig.align = "center"
-)
-
-```
 
 ```{r klrm2, echo = F, include = T}
 klippy::klippy()

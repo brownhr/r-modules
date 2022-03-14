@@ -276,6 +276,12 @@ $(document).ready(function () {
     <li>
       <a href="RModule2.html">R Module 2</a>
     </li>
+    <li>
+      <a href="RModule3.html">R Module 3</a>
+    </li>
+    <li>
+      <a href="RModule4.html">R Module 4</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -314,11 +320,11 @@ Example of an R script written in RStudio
 <p>R Projects are an important (and <em>essential</em>!) way of maintaining and organizing your work within RStudio. <em>Projects</em> can be thought of like folders; they’re tools for containing all the scripts, files, and data that you need for your analyses. <em>Projects</em> also allow you to save all your progress, including the variables you create, the data you load, etc. You can also use <em>Projects</em> to save your workspace, so you can easily switch between working on class projects, R Modules, or whatever else you’re doing, without losing any progress.</p>
 <p>Let’s start by creating a new R Project! Go ahead and open RStudio, and create a new Project by clicking <code>File &gt; New Project...</code></p>
 <p>You’ll then get this window:</p>
-<p><img src="img/NewProjectStep1.png" width="268" style="display: block; margin: auto;" /></p>
+<p><img src="img/NewProjectStep1.png" width="268" /></p>
 <p>Then, Select <code>New Project</code>…</p>
-<p><img src="img/NewProjectStep2.png" width="268" style="display: block; margin: auto;" /></p>
+<p><img src="img/NewProjectStep2.png" width="268" /></p>
 <p>Finally, enter “R Module 2” as the name of the directory, and browse to a folder where you can find the Project again (e.g., your <code>Documents</code> folder)…</p>
-<p><img src="img/NewProjectStep3.png" width="269" style="display: block; margin: auto;" /></p>
+<p><img src="img/NewProjectStep3.png" width="269" /></p>
 <p>Once you’ve created your new Project, you’ll see that you’re working within the Project when you see an icon – <img src="img/RModule2.png" /> – in the top-right corner.</p>
 </div>
 <div id="creating-new-scripts" class="section level3">
@@ -333,7 +339,7 @@ tree_data &lt;- trees</code></pre>
 <p><strong>N.B.:</strong> The <code>&lt;-</code> arrow is called an <em>assignment operator</em>, and takes a value on the right of the arrow and <em>assigns</em> it to a variable on the left. R also has the <code>=</code> operator, which works similarly, but for now stick to using <code>&lt;-</code> to avoid confusion (there is a difference between <code>&lt;-</code> and <code>=</code> but it’s not important for now!).</p>
 <p>You can run code from Scripts in several ways; either line-by-line, by entering <code>Cmd/CTRL-Enter</code>, or by running the entire script with <code>Cmd/CTRL-Alt-R</code>. Go ahead and run everything now.</p>
 <p>What we’ve done so far is assign the <code>trees</code> dataset to the variable <code>tree_data</code>. You can see this variable in the <strong>Environment</strong> tab:</p>
-<p><img src="img/tree_environment.png" width="318" style="display: block; margin: auto;" /></p>
+<p><img src="img/tree_environment.png" width="318" /></p>
 <p>Before we go any further, let’s save our script (<code>Cmd/CTRL-S</code>) as <code>tree_data.R</code>…</p>
 <p>Now, we’ll get into the real content of why scripts are useful! Let’s create some graphs and figures, but let’s use some specialized packages to do so.</p>
 <div style="page-break-after: always;"></div>
@@ -354,7 +360,7 @@ ggplot(
   )
 ) +
   geom_point()</code></pre>
-<p><img src="RModule2_files/figure-html/trees-gg-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="RModule2_files/figure-html/trees-gg-1.png" width="672" /></p>
 <p>The fundamental process of working within <code>ggplot2</code> is that figures and graphs are generated as <em>layers</em> based on a set of <em>data</em>. Within the <code>ggplot()</code> function, we defined <code>data = tree_data</code>. However, we also need to tell <code>ggplot2</code> <em>what</em> we want to plot from that data; this is done using something called <strong><em>Aesthetic Mappings</em></strong>, with the <code>aes()</code> function. This function (which is pretty much only used within <code>ggplot()</code>) assigns variables or columns within a dataset to a certain aspect of our plot, whether it be the x or y coordinate, the size of a point, the color of a line, etc. Many datasets have too many columns to graph all at once, so using the <code>aes()</code> function allows us to decide what attributes of our data we wish to visualize, and how those attributes are visualized.</p>
 <p>The <code>geom_point()</code> function translates our data and <em>aesthetic mappings</em> into an actual figure; it specifies the kind of graph we wish to create (in this case, a scatter plot or <em>point</em> plot). <strong>Notice</strong> the <code>+</code> operator between the <code>ggplot()</code> and the <code>geom_point()</code> calls; this is how <code>ggplot2</code> adds and modifies layers on a plot. If you ever have errors making plots with <code>ggplot2</code>, this is one of the first things to check!</p>
 <p>Let’s briefly discuss another plot:</p>
@@ -368,7 +374,7 @@ ggplot(
     x = &quot;Volume&quot;,
     y = &quot;Count&quot;
   )</code></pre>
-<p><img src="RModule2_files/figure-html/tree_hist-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="RModule2_files/figure-html/tree_hist-1.png" width="672" /></p>
 <p>We can create histograms using the <code>geom_histogram()</code> function. Additionally, adding axis labels and a title is done with the <code>labs()</code> function — again, note the <code>+</code> operator between each layer. Explore some of the documentation (<code>?</code>) of the functions we use to better understand usage and examples.</p>
 <p><strong>Assignment 1: Create your own histogram of the <code>tree_data</code> dataset using <code>ggplot2</code>, showing:</strong></p>
 <ol style="list-style-type: decimal">
