@@ -308,12 +308,25 @@ $(document).ready(function () {
 </script>
 <div id="what-is-r" class="section level2">
 <h2>What is R?</h2>
-<p>R, or the <em>R Project for Statistical Computing</em>, is a programming language designed for use in data analysis and data science. Initially developed in 1993, R has become one of the most popular languages for data science, due to its design towards statistics and data.</p>
-<p>R is popular in geographical data science, as there are many packages (add-on libraries of pre-built tools and functions) that can be used to perform GIS, Remote Sensing, or qualitative analyses.</p>
+<p>R, or the <em>R Project for Statistical Computing</em>, is a
+programming language designed for use in data analysis and data science.
+Initially developed in 1993, R has become one of the most popular
+languages for data science, due to its design towards statistics and
+data.</p>
+<p>R is popular in geographical data science, as there are many packages
+(add-on libraries of pre-built tools and functions) that can be used to
+perform GIS, Remote Sensing, or qualitative analyses.</p>
 </div>
 <div id="r-studio" class="section level2">
 <h2>R Studio</h2>
-<p>R Studio is a popular IDE (<em>Integrated Development Environment</em>) that allows for more convenient programming in the R language. Rather than running R programs (<em>scripts</em>) from the command line, R Studio allows users to interactively write and execute scripts, as well as view data and file paths in a single environment. R Studio also allows users to manage and install packages, generate plots and figures, and “knit” code into a .PDF or .HTML for making reports.</p>
+<p>R Studio is a popular IDE (<em>Integrated Development
+Environment</em>) that allows for more convenient programming in the R
+language. Rather than running R programs (<em>scripts</em>) from the
+command line, R Studio allows users to interactively write and execute
+scripts, as well as view data and file paths in a single environment. R
+Studio also allows users to manage and install packages, generate plots
+and figures, and “knit” code into a .PDF or .HTML for making
+reports.</p>
 <!--
 ### R Markdown
 
@@ -324,12 +337,19 @@ For writing up documents and reports, text editors like Word and Google Docs do 
 </div>
 <div id="getting-started" class="section level2">
 <h2>Getting Started</h2>
-<p>In order to use R and R Studio, you’ll need to download and install them onto your computer. If you’ve used R before, make sure you’re using at least version 4.1.2 to make sure everything runs smoothly.</p>
-<p>Navigate to these websites to download the right version for your device (versions for both Windows and Mac exist!)</p>
+<p>In order to use R and R Studio, you’ll need to download and install
+them onto your computer. If you’ve used R before, make sure you’re using
+at least version 4.1.2 to make sure everything runs smoothly.</p>
+<p>Navigate to these websites to download the right version for your
+device (versions for both Windows and Mac exist!)</p>
 <ul>
-<li><p><a href="https://cran.r-project.org/bin/windows/base/">Download R 4.1.2 for Windows 32/64-bit</a></p></li>
-<li><p><a href="https://cran.r-project.org/bin/macosx/">Download R for macOS</a></p></li>
-<li><p><a href="https://www.rstudio.com/products/rstudio/download/#download">Download RStudio</a></p></li>
+<li><p><a href="https://cran.r-project.org/bin/windows/base/">Download R
+4.1.2 for Windows 32/64-bit</a></p></li>
+<li><p><a href="https://cran.r-project.org/bin/macosx/">Download R for
+macOS</a></p></li>
+<li><p><a
+href="https://www.rstudio.com/products/rstudio/download/#download">Download
+RStudio</a></p></li>
 </ul>
 <div id="r-studio-interface" class="section level3">
 <h3>R Studio Interface</h3>
@@ -339,15 +359,30 @@ For writing up documents and reports, text editors like Word and Google Docs do 
 The default interface for RStudio
 </p>
 </div>
-<p>Above is a screenshot of RStudio’s interface; notice that the main window is divided into different “panes”, each with a different purpose. The main panes we’ll use in this class are the <em>Console</em> (left), <em>Environment</em> (upper right), <em>Files / Plot Viewer</em> (bottom right), and <em>Scripts</em> (not shown). These panes are useful for different tasks:</p>
+<p>Above is a screenshot of RStudio’s interface; notice that the main
+window is divided into different “panes”, each with a different purpose.
+The main panes we’ll use in this class are the <em>Console</em> (left),
+<em>Environment</em> (upper right), <em>Files / Plot Viewer</em> (bottom
+right), and <em>Scripts</em> (not shown). These panes are useful for
+different tasks:</p>
 <ul>
-<li>The Console is used to write code and view its output. This is (for now) where we’ll run all of our code, and where we can see the results of our operations.</li>
-<li>The Environment tab shows different datasets and variables that we assign – we’ll get into this more in future R Modules.</li>
-<li>The Files tab gives us a view into our <em>working directory</em>, a “default folder” that we can use to call other files, scripts, or data.</li>
-<li>The Plots tab is used when we generate a plot or image (e.g., with the <code>plot()</code> or <code>hist()</code> functions).</li>
-<li>The Scripts window is essential for staying organized in your projects; scripts are used to save R code to a file, which is necessary to stay organized, and allows you to pick up where you left off, rather than having to re-type code each time you start an R session.</li>
+<li>The Console is used to write code and view its output. This is (for
+now) where we’ll run all of our code, and where we can see the results
+of our operations.</li>
+<li>The Environment tab shows different datasets and variables that we
+assign – we’ll get into this more in future R Modules.</li>
+<li>The Files tab gives us a view into our <em>working directory</em>, a
+“default folder” that we can use to call other files, scripts, or
+data.</li>
+<li>The Plots tab is used when we generate a plot or image (e.g., with
+the <code>plot()</code> or <code>hist()</code> functions).</li>
+<li>The Scripts window is essential for staying organized in your
+projects; scripts are used to save R code to a file, which is necessary
+to stay organized, and allows you to pick up where you left off, rather
+than having to re-type code each time you start an R session.</li>
 </ul>
-<p>The other tabs and panes are useful, but those listed above are the most commonly-used.</p>
+<p>The other tabs and panes are useful, but those listed above are the
+most commonly-used.</p>
 <hr />
 </div>
 </div>
@@ -355,8 +390,16 @@ The default interface for RStudio
 <h2>Basics of R</h2>
 <div id="exploring-data" class="section level3">
 <h3>Exploring data</h3>
-<p>To begin with our first R Module, let’s load and explore some basic data. For starters, we need to start RStudio; load the program from your computer and you should see an interface like what’s shown above.</p>
-<p>Let’s look at some introductory data - in this case, the <em>painters</em> dataset from the <em>MASS</em> package, which is included within R. Follow the directions below to load and view the dataset; I’ll explain as we go along. To start, type the following into the <strong>console</strong> — the part of the window with the blue <span style="color: blue;"><code>&gt;</code></span> icon — and then hit the <code>Enter</code> key.</p>
+<p>To begin with our first R Module, let’s load and explore some basic
+data. For starters, we need to start RStudio; load the program from your
+computer and you should see an interface like what’s shown above.</p>
+<p>Let’s look at some introductory data - in this case, the
+<em>painters</em> dataset from the <em>MASS</em> package, which is
+included within R. Follow the directions below to load and view the
+dataset; I’ll explain as we go along. To start, type the following into
+the <strong>console</strong> — the part of the window with the blue
+<span style="color: blue;"><code>&gt;</code></span> icon — and then hit
+the <code>Enter</code> key.</p>
 <pre class="r"><code>library(MASS)
 
 head(painters)</code></pre>
@@ -367,35 +410,76 @@ head(painters)</code></pre>
 ## Del Sarto              12      16      9          8      A
 ## Fr. Penni               0      15      8          0      A
 ## Guilio Romano          15      16      4         14      A</code></pre>
-<p>When you see code in these boxes, that’s code that can be run in RStudio (and what’s cool is that this document was written entirely in RStudio, so the code you see is <em>actually</em> being run in an R session).</p>
-<p>So, when we run this code, we get a table (technically, a <code>data.frame</code>) of names and various attributes of historical painters. But what did we actually run? The <code>library()</code> function takes the name of an R package and loads it into the workspace. Because some packages take a long time to load, the user has to specify which ones are loaded into memory, as opposed to loading the <span class="math inline">\(\approx 18,000\)</span> packages on the <em>Comprehensive R Archive Network</em> (<em>CRAN</em>) – a network of servers that store code for R.</p>
-<p>We used <code>library(MASS)</code> to load the <code>MASS</code> package; note the capitalization – <code>library(mass)</code> will not work! After we loaded this package, we called <code>head(painters)</code> to look at the head – by default the first 6 rows – of the <code>painters</code> dataset.</p>
-<p><strong><em>TIP: If you’re not sure what a function in R does, you can enter a <code>?</code> before the function in the console, e.g., <code>?head()</code> to view documentation, arguments, and examples of the function</em></strong></p>
-<p>We can also view specific variables in the dataset with <strong>the <code>$</code> operator</strong>; for example, <code>painters$School</code> gives us:</p>
+<p>When you see code in these boxes, that’s code that can be run in
+RStudio (and what’s cool is that this document was written entirely in
+RStudio, so the code you see is <em>actually</em> being run in an R
+session).</p>
+<p>So, when we run this code, we get a table (technically, a
+<code>data.frame</code>) of names and various attributes of historical
+painters. But what did we actually run? The <code>library()</code>
+function takes the name of an R package and loads it into the workspace.
+Because some packages take a long time to load, the user has to specify
+which ones are loaded into memory, as opposed to loading the <span
+class="math inline">\(\approx 18,000\)</span> packages on the
+<em>Comprehensive R Archive Network</em> (<em>CRAN</em>) – a network of
+servers that store code for R.</p>
+<p>We used <code>library(MASS)</code> to load the <code>MASS</code>
+package; note the capitalization – <code>library(mass)</code> will not
+work! After we loaded this package, we called
+<code>head(painters)</code> to look at the head – by default the first 6
+rows – of the <code>painters</code> dataset.</p>
+<p><strong><em>TIP: If you’re not sure what a function in R does, you
+can enter a <code>?</code> before the function in the console, e.g.,
+<code>?head()</code> to view documentation, arguments, and examples of
+the function</em></strong></p>
+<p>We can also view specific variables in the dataset with <strong>the
+<code>$</code> operator</strong>; for example,
+<code>painters$School</code> gives us:</p>
 <pre><code>##  [1] A A A A A A A A A A B B B B B B C C C C C C D D D D D D D D D D E E E E E E
 ## [39] E F F F F G G G G G G G H H H H
 ## Levels: A B C D E F G H</code></pre>
-<p>We can also see from this <strong>Use R to produce the following simple data summaries and visualizations commonly used for qualitative data:</strong></p>
+<p>We can also see from this <strong>Use R to produce the following
+simple data summaries and visualizations commonly used for qualitative
+data:</strong></p>
 <ol style="list-style-type: decimal">
-<li><p>A histogram of the <code>Composition</code> variable from the <code>painters</code> dataset, using the <code>hist()</code> function.</p></li>
-<li><p>A <strong>horizontal</strong> bar chart of the <code>Expression</code> variable, using the <code>barplot()</code> function.</p>
+<li><p>A histogram of the <code>Composition</code> variable from the
+<code>painters</code> dataset, using the <code>hist()</code>
+function.</p></li>
+<li><p>A <strong>horizontal</strong> bar chart of the
+<code>Expression</code> variable, using the <code>barplot()</code>
+function.</p>
 <ul>
-<li><em>Tip: use `?barplot() to see which argument you need to change to get a horizontal bar plot</em></li>
+<li><em>Tip: use `?barplot() to see which argument you need to change to
+get a horizontal bar plot</em></li>
 </ul></li>
-<li><p>A pie chart of the <code>Schools</code> variable, using the <code>pie()</code> function.</p>
+<li><p>A pie chart of the <code>Schools</code> variable, using the
+<code>pie()</code> function.</p>
 <ul>
-<li><em>Hint: you need to wrap the <code>pie()</code> function around the <code>table()</code> function, because you need <strong>frequencies</strong> of each school, rather than just their label</em></li>
+<li><em>Hint: you need to wrap the <code>pie()</code> function around
+the <code>table()</code> function, because you need
+<strong>frequencies</strong> of each school, rather than just their
+label</em></li>
 </ul></li>
 </ol>
 <hr />
 <div style="page-break-after: always;"></div>
 </div>
 </div>
-<div id="importing-and-visualizing-quantitative-data" class="section level2">
+<div id="importing-and-visualizing-quantitative-data"
+class="section level2">
 <h2>Importing and Visualizing Quantitative Data</h2>
-<p>Now, we’ll work with a different dataset; the tutorials in this section are based on a built-in dataset called <code>faithful</code>, from the pre-loaded <code>datasets</code> package. It consists of a collection of observations of the Old Faithful geyser in Yellowstone National Park.</p>
-<p>There are two observation variables in the dataset. The first one, <code>eruptions</code>, is the duration of geyser eruptions. The second one, <code>waiting</code>, is the length of the waiting period until the next eruption. Use the function <code>head()</code> to examine these two observations.</p>
-<p>We can also view some summary statistics on this dataset, such as mean, median, etc.:</p>
+<p>Now, we’ll work with a different dataset; the tutorials in this
+section are based on a built-in dataset called <code>faithful</code>,
+from the pre-loaded <code>datasets</code> package. It consists of a
+collection of observations of the Old Faithful geyser in Yellowstone
+National Park.</p>
+<p>There are two observation variables in the dataset. The first one,
+<code>eruptions</code>, is the duration of geyser eruptions. The second
+one, <code>waiting</code>, is the length of the waiting period until the
+next eruption. Use the function <code>head()</code> to examine these two
+observations.</p>
+<p>We can also view some summary statistics on this dataset, such as
+mean, median, etc.:</p>
 <pre class="r"><code>summary(faithful)</code></pre>
 <pre><code>##    eruptions        waiting    
 ##  Min.   :1.600   Min.   :43.0  
@@ -404,20 +488,34 @@ head(painters)</code></pre>
 ##  Mean   :3.488   Mean   :70.9  
 ##  3rd Qu.:4.454   3rd Qu.:82.0  
 ##  Max.   :5.100   Max.   :96.0</code></pre>
-<p>Let’s try some more meaningful summaries for quantitative data using R. Just as before, produce the following and put your output into your document.</p>
+<p>Let’s try some more meaningful summaries for quantitative data using
+R. Just as before, produce the following and put your output into your
+document.</p>
 <ol start="4" style="list-style-type: decimal">
-<li><p>A histogram for the eruptions. R will automatically decide how to group your observations. Remember to plot <em>only</em> the <code>eruptions</code> variable.</p></li>
-<li><p>Another histogram of eruptions, but specify 2 data classes instead of the default values.</p>
+<li><p>A histogram for the eruptions. R will automatically decide how to
+group your observations. Remember to plot <em>only</em> the
+<code>eruptions</code> variable.</p></li>
+<li><p>Another histogram of eruptions, but specify 2 data classes
+instead of the default values.</p>
 <ul>
-<li><em>Hint: use <code>?hist()</code> to see more documentation on the <code>hist()</code> function.</em></li>
+<li><em>Hint: use <code>?hist()</code> to see more documentation on the
+<code>hist()</code> function.</em></li>
 </ul></li>
-<li><p>A boxplot of eruptions that is horizontal, rather than vertical.</p>
+<li><p>A boxplot of eruptions that is horizontal, rather than
+vertical.</p>
 <ul>
-<li>Use <code>?boxplot()</code> to figure out how to change the orientation.</li>
+<li>Use <code>?boxplot()</code> to figure out how to change the
+orientation.</li>
 </ul></li>
-<li><p>Repeat steps 4-6 on a dataset of your own choosing and interpret the data. You can also use functions such as <code>mean</code>, <code>median</code>, <code>quantile</code>, etc. to help interpret your data.</p></li>
+<li><p>Repeat steps 4-6 on a dataset of your own choosing and interpret
+the data. You can also use functions such as <code>mean</code>,
+<code>median</code>, <code>quantile</code>, etc. to help interpret your
+data.</p></li>
 </ol>
-<p>If you’ve made it this far, then congrats – you’re learning R! Once you’re done celebrating, give your document a title or header called “R Module 1”, add your name, and turn it in to Google Classroom. Bring any questions, insights, comments, or concerns to the next class!</p>
+<p>If you’ve made it this far, then congrats – you’re learning R! Once
+you’re done celebrating, give your document a title or header called “R
+Module 1”, add your name, and turn it in to Google Classroom. Bring any
+questions, insights, comments, or concerns to the next class!</p>
 </div>
 </div>
 

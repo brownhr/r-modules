@@ -308,7 +308,17 @@ $(document).ready(function () {
 </script>
 <div id="working-with-r-scripts-and-projects" class="section level2">
 <h2>Working with R Scripts and Projects</h2>
-<p>In the previous R Module, we worked entirely within the context of the R <em>console</em>, which allowed us to run code line-by-line and see the results immediately. However, when working on more complex projects, it’s important to be able to stay organized, not only for your own sake, but also to help potential collaborators understand your workflow, which includes the people troubleshooting issues in your code! R <em>scripts</em> are designed exactly for this; scripts are essentially text files that allow you to save, review, and edit your code, then run your code all at once! This is necessary when doing real-world programming in R — coding is an iterative process, in which you work on things step-by-step until you get the desired code!</p>
+<p>In the previous R Module, we worked entirely within the context of
+the R <em>console</em>, which allowed us to run code line-by-line and
+see the results immediately. However, when working on more complex
+projects, it’s important to be able to stay organized, not only for your
+own sake, but also to help potential collaborators understand your
+workflow, which includes the people troubleshooting issues in your code!
+R <em>scripts</em> are designed exactly for this; scripts are
+essentially text files that allow you to save, review, and edit your
+code, then run your code all at once! This is necessary when doing
+real-world programming in R — coding is an iterative process, in which
+you work on things step-by-step until you get the desired code!</p>
 <div class="figure" style="text-align: center">
 <img src="img/R%20Scripts%20Example.png" alt="Example of an R script written in RStudio" width="514" />
 <p class="caption">
@@ -317,39 +327,94 @@ Example of an R script written in RStudio
 </div>
 <div id="r-projects" class="section level3">
 <h3>R Projects</h3>
-<p>R Projects are an important (and <em>essential</em>!) way of maintaining and organizing your work within RStudio. <em>Projects</em> can be thought of like folders; they’re tools for containing all the scripts, files, and data that you need for your analyses. <em>Projects</em> also allow you to save all your progress, including the variables you create, the data you load, etc. You can also use <em>Projects</em> to save your workspace, so you can easily switch between working on class projects, R Modules, or whatever else you’re doing, without losing any progress.</p>
-<p>Let’s start by creating a new R Project! Go ahead and open RStudio, and create a new Project by clicking <code>File &gt; New Project...</code></p>
+<p>R Projects are an important (and <em>essential</em>!) way of
+maintaining and organizing your work within RStudio. <em>Projects</em>
+can be thought of like folders; they’re tools for containing all the
+scripts, files, and data that you need for your analyses.
+<em>Projects</em> also allow you to save all your progress, including
+the variables you create, the data you load, etc. You can also use
+<em>Projects</em> to save your workspace, so you can easily switch
+between working on class projects, R Modules, or whatever else you’re
+doing, without losing any progress.</p>
+<p>Let’s start by creating a new R Project! Go ahead and open RStudio,
+and create a new Project by clicking
+<code>File &gt; New Project...</code></p>
 <p>You’ll then get this window:</p>
 <p><img src="img/NewProjectStep1.png" width="268" /></p>
 <p>Then, Select <code>New Project</code>…</p>
 <p><img src="img/NewProjectStep2.png" width="268" /></p>
-<p>Finally, enter “R Module 2” as the name of the directory, and browse to a folder where you can find the Project again (e.g., your <code>Documents</code> folder)…</p>
+<p>Finally, enter “R Module 2” as the name of the directory, and browse
+to a folder where you can find the Project again (e.g., your
+<code>Documents</code> folder)…</p>
 <p><img src="img/NewProjectStep3.png" width="269" /></p>
-<p>Once you’ve created your new Project, you’ll see that you’re working within the Project when you see an icon – <img src="img/RModule2.png" /> – in the top-right corner.</p>
+<p>Once you’ve created your new Project, you’ll see that you’re working
+within the Project when you see an icon – <img src="img/RModule2.png" />
+– in the top-right corner.</p>
 </div>
 <div id="creating-new-scripts" class="section level3">
 <h3>Creating New Scripts</h3>
-<p>As stated earlier, <em>Scripts</em> are simply text files containing the commands that you would otherwise enter into the console. This makes it easy to save progress, return to code later, share your code with friends and loved ones, and more. Going forward, we’ll use <em>Scripts</em> whenever we want to perform analyses for our R Modules, which makes it easier to troubleshoot our code. Feel free to continue using the <em>Console</em> when exploring the data, though!</p>
-<p>Creating a new <em>Script</em> is very easy; either type <code>Cmd/CTRL-Shift-N</code>, or select <code>File &gt; New File... &gt; R Script</code>. You’ll be greeted with a new <em>Script</em>, which can hold your code!</p>
-<p>Let’s try out a few basic things – exploring some data. For now, we’ll use the <code>trees</code> dataset from the wonderful <code>datasets</code> package.</p>
-<p>Enter the following into your script. By default, the <code>datasets</code> package is already loaded, but it’s good practice to have all of your <code>library()</code> calls at the beginning of your scripts, which is why it’s included here.</p>
+<p>As stated earlier, <em>Scripts</em> are simply text files containing
+the commands that you would otherwise enter into the console. This makes
+it easy to save progress, return to code later, share your code with
+friends and loved ones, and more. Going forward, we’ll use
+<em>Scripts</em> whenever we want to perform analyses for our R Modules,
+which makes it easier to troubleshoot our code. Feel free to continue
+using the <em>Console</em> when exploring the data, though!</p>
+<p>Creating a new <em>Script</em> is very easy; either type
+<code>Cmd/CTRL-Shift-N</code>, or select
+<code>File &gt; New File... &gt; R Script</code>. You’ll be greeted with
+a new <em>Script</em>, which can hold your code!</p>
+<p>Let’s try out a few basic things – exploring some data. For now,
+we’ll use the <code>trees</code> dataset from the wonderful
+<code>datasets</code> package.</p>
+<p>Enter the following into your script. By default, the
+<code>datasets</code> package is already loaded, but it’s good practice
+to have all of your <code>library()</code> calls at the beginning of
+your scripts, which is why it’s included here.</p>
 <pre class="r klippy"><code>library(datasets)
 
 tree_data &lt;- trees</code></pre>
-<p><strong>N.B.:</strong> The <code>&lt;-</code> arrow is called an <em>assignment operator</em>, and takes a value on the right of the arrow and <em>assigns</em> it to a variable on the left. R also has the <code>=</code> operator, which works similarly, but for now stick to using <code>&lt;-</code> to avoid confusion (there is a difference between <code>&lt;-</code> and <code>=</code> but it’s not important for now!).</p>
-<p>You can run code from Scripts in several ways; either line-by-line, by entering <code>Cmd/CTRL-Enter</code>, or by running the entire script with <code>Cmd/CTRL-Alt-R</code>. Go ahead and run everything now.</p>
-<p>What we’ve done so far is assign the <code>trees</code> dataset to the variable <code>tree_data</code>. You can see this variable in the <strong>Environment</strong> tab:</p>
+<p><strong>N.B.:</strong> The <code>&lt;-</code> arrow is called an
+<em>assignment operator</em>, and takes a value on the right of the
+arrow and <em>assigns</em> it to a variable on the left. R also has the
+<code>=</code> operator, which works similarly, but for now stick to
+using <code>&lt;-</code> to avoid confusion (there is a difference
+between <code>&lt;-</code> and <code>=</code> but it’s not important for
+now!).</p>
+<p>You can run code from Scripts in several ways; either line-by-line,
+by entering <code>Cmd/CTRL-Enter</code>, or by running the entire script
+with <code>Cmd/CTRL-Alt-R</code>. Go ahead and run everything now.</p>
+<p>What we’ve done so far is assign the <code>trees</code> dataset to
+the variable <code>tree_data</code>. You can see this variable in the
+<strong>Environment</strong> tab:</p>
 <p><img src="img/tree_environment.png" width="318" /></p>
-<p>Before we go any further, let’s save our script (<code>Cmd/CTRL-S</code>) as <code>tree_data.R</code>…</p>
-<p>Now, we’ll get into the real content of why scripts are useful! Let’s create some graphs and figures, but let’s use some specialized packages to do so.</p>
+<p>Before we go any further, let’s save our script
+(<code>Cmd/CTRL-S</code>) as <code>tree_data.R</code>…</p>
+<p>Now, we’ll get into the real content of why scripts are useful! Let’s
+create some graphs and figures, but let’s use some specialized packages
+to do so.</p>
 <div style="page-break-after: always;"></div>
 </div>
 <div id="ggplot2" class="section level3">
 <h3>ggplot2</h3>
-<p>The amazing <code>ggplot2</code> package is designed to generate high-quality, visually appealing graphs, figures, and even maps! Using this package is somewhat different than the base R <code>plot()</code> and <code>hist()</code> functions, but once you understand the core concept of how <code>ggplot2</code> works, it’ll be easy to create your own graphs!</p>
-<p>For reference, the amazing <em>R Graph Gallery</em> is a treasure trove of information and examples on how to generate all sorts of figures with <code>ggplot2</code>, and can be found at <a href="https://www.r-graph-gallery.com/index.html" class="uri">https://www.r-graph-gallery.com/index.html</a></p>
-<p>Feel free to use this site (as well as Google, Stack Exchange, etc.!) when creating plots — there are <em>hundreds</em> of ways to customize your plots; enough to teach an entire course just on <code>ggplot2</code>!</p>
-<p>Using the <code>trees</code> dataset, let’s create a scatter plot of tree height vs tree volume. Add the following into your script and hit run; you should be left with a plot! I’ll explain what is happening.</p>
+<p>The amazing <code>ggplot2</code> package is designed to generate
+high-quality, visually appealing graphs, figures, and even maps! Using
+this package is somewhat different than the base R <code>plot()</code>
+and <code>hist()</code> functions, but once you understand the core
+concept of how <code>ggplot2</code> works, it’ll be easy to create your
+own graphs!</p>
+<p>For reference, the amazing <em>R Graph Gallery</em> is a treasure
+trove of information and examples on how to generate all sorts of
+figures with <code>ggplot2</code>, and can be found at <a
+href="https://www.r-graph-gallery.com/index.html"
+class="uri">https://www.r-graph-gallery.com/index.html</a></p>
+<p>Feel free to use this site (as well as Google, Stack Exchange, etc.!)
+when creating plots — there are <em>hundreds</em> of ways to customize
+your plots; enough to teach an entire course just on
+<code>ggplot2</code>!</p>
+<p>Using the <code>trees</code> dataset, let’s create a scatter plot of
+tree height vs tree volume. Add the following into your script and hit
+run; you should be left with a plot! I’ll explain what is happening.</p>
 <pre class="r"><code>library(ggplot2)
 
 ggplot(
@@ -361,8 +426,28 @@ ggplot(
 ) +
   geom_point()</code></pre>
 <p><img src="RModule2_files/figure-html/trees-gg-1.png" width="672" /></p>
-<p>The fundamental process of working within <code>ggplot2</code> is that figures and graphs are generated as <em>layers</em> based on a set of <em>data</em>. Within the <code>ggplot()</code> function, we defined <code>data = tree_data</code>. However, we also need to tell <code>ggplot2</code> <em>what</em> we want to plot from that data; this is done using something called <strong><em>Aesthetic Mappings</em></strong>, with the <code>aes()</code> function. This function (which is pretty much only used within <code>ggplot()</code>) assigns variables or columns within a dataset to a certain aspect of our plot, whether it be the x or y coordinate, the size of a point, the color of a line, etc. Many datasets have too many columns to graph all at once, so using the <code>aes()</code> function allows us to decide what attributes of our data we wish to visualize, and how those attributes are visualized.</p>
-<p>The <code>geom_point()</code> function translates our data and <em>aesthetic mappings</em> into an actual figure; it specifies the kind of graph we wish to create (in this case, a scatter plot or <em>point</em> plot). <strong>Notice</strong> the <code>+</code> operator between the <code>ggplot()</code> and the <code>geom_point()</code> calls; this is how <code>ggplot2</code> adds and modifies layers on a plot. If you ever have errors making plots with <code>ggplot2</code>, this is one of the first things to check!</p>
+<p>The fundamental process of working within <code>ggplot2</code> is
+that figures and graphs are generated as <em>layers</em> based on a set
+of <em>data</em>. Within the <code>ggplot()</code> function, we defined
+<code>data = tree_data</code>. However, we also need to tell
+<code>ggplot2</code> <em>what</em> we want to plot from that data; this
+is done using something called <strong><em>Aesthetic
+Mappings</em></strong>, with the <code>aes()</code> function. This
+function (which is pretty much only used within <code>ggplot()</code>)
+assigns variables or columns within a dataset to a certain aspect of our
+plot, whether it be the x or y coordinate, the size of a point, the
+color of a line, etc. Many datasets have too many columns to graph all
+at once, so using the <code>aes()</code> function allows us to decide
+what attributes of our data we wish to visualize, and how those
+attributes are visualized.</p>
+<p>The <code>geom_point()</code> function translates our data and
+<em>aesthetic mappings</em> into an actual figure; it specifies the kind
+of graph we wish to create (in this case, a scatter plot or
+<em>point</em> plot). <strong>Notice</strong> the <code>+</code>
+operator between the <code>ggplot()</code> and the
+<code>geom_point()</code> calls; this is how <code>ggplot2</code> adds
+and modifies layers on a plot. If you ever have errors making plots with
+<code>ggplot2</code>, this is one of the first things to check!</p>
 <p>Let’s briefly discuss another plot:</p>
 <pre class="r"><code>ggplot(
   data = tree_data,
@@ -375,12 +460,20 @@ ggplot(
     y = &quot;Count&quot;
   )</code></pre>
 <p><img src="RModule2_files/figure-html/tree_hist-1.png" width="672" /></p>
-<p>We can create histograms using the <code>geom_histogram()</code> function. Additionally, adding axis labels and a title is done with the <code>labs()</code> function — again, note the <code>+</code> operator between each layer. Explore some of the documentation (<code>?</code>) of the functions we use to better understand usage and examples.</p>
-<p><strong>Assignment 1: Create your own histogram of the <code>tree_data</code> dataset using <code>ggplot2</code>, showing:</strong></p>
+<p>We can create histograms using the <code>geom_histogram()</code>
+function. Additionally, adding axis labels and a title is done with the
+<code>labs()</code> function — again, note the <code>+</code> operator
+between each layer. Explore some of the documentation (<code>?</code>)
+of the functions we use to better understand usage and examples.</p>
+<p><strong>Assignment 1: Create your own histogram of the
+<code>tree_data</code> dataset using <code>ggplot2</code>,
+showing:</strong></p>
 <ol style="list-style-type: decimal">
 <li>The distribution of the <code>Height</code> variable,</li>
 <li>20 bins,</li>
-<li>A fill color of your choosing <em>(hint: explore the <code>fill</code> and/or <code>color</code> arguments within the <code>geom_histogram()</code> function)</em>,</li>
+<li>A fill color of your choosing <em>(hint: explore the
+<code>fill</code> and/or <code>color</code> arguments within the
+<code>geom_histogram()</code> function)</em>,</li>
 <li>Labels (title, x-axis, etc.) that accurately describe the plot</li>
 </ol>
 <p>Save the plot as an image and embed it into your document!</p>
@@ -392,35 +485,59 @@ I moved the Working Directory and File Management topics to R Module 3; this one
 </div>
 <div id="introductory-statistics" class="section level2">
 <h2>Introductory Statistics</h2>
-<p>Now that we’ve covered some more fundamental R topics, we can discuss the quantitative methods of this R Module. We’ll keep it fairly light and talk about introductory descriptive statistics — <em>Measures of Central Tendency</em> and <em>Measures of Dispersion</em>.</p>
+<p>Now that we’ve covered some more fundamental R topics, we can discuss
+the quantitative methods of this R Module. We’ll keep it fairly light
+and talk about introductory descriptive statistics — <em>Measures of
+Central Tendency</em> and <em>Measures of Dispersion</em>.</p>
 <div id="measures-of-central-tendency" class="section level3">
 <h3>Measures of Central Tendency</h3>
-<p>These kinds of statistics give us insight into our set of data by giving us a single value which describes the “middle” of our data. These measures include the <strong>mean</strong>, <strong>median</strong>, and <strong>mode</strong>, which describe a different method of determining the “typical” value in the distribution, and all have their pros and cons. For more information, check out <a href="https://www.abs.gov.au/websitedbs/D3310114.nsf/Home/Statistical+Language+-+measures+of+central+tendency">this site</a>, which explains some more examples of Measures of Central Tendency.</p>
+<p>These kinds of statistics give us insight into our set of data by
+giving us a single value which describes the “middle” of our data. These
+measures include the <strong>mean</strong>, <strong>median</strong>, and
+<strong>mode</strong>, which describe a different method of determining
+the “typical” value in the distribution, and all have their pros and
+cons. For more information, check out <a
+href="https://www.abs.gov.au/websitedbs/D3310114.nsf/Home/Statistical+Language+-+measures+of+central+tendency">this
+site</a>, which explains some more examples of Measures of Central
+Tendency.</p>
 <div id="the-mean" class="section level4">
 <h4>The Mean</h4>
-<p>The <strong>mean</strong> is defined as the sum of each observation, divided by the number of observations (i.e., the <em>arithmetic average</em>).</p>
+<p>The <strong>mean</strong> is defined as the sum of each observation,
+divided by the number of observations (i.e., the <em>arithmetic
+average</em>).</p>
 <pre class="r"><code>numbers &lt;- c(1, 2, 6, 12, 4, 8, 9, 3, 5, 4, 7)
 
 sum(numbers) / length(numbers)</code></pre>
 <pre><code>## [1] 5.545455</code></pre>
 <pre class="r"><code>mean(numbers)</code></pre>
 <pre><code>## [1] 5.545455</code></pre>
-<p>The mean is sensitive to outliers and skewed distributions, so it’s not always the best to use.</p>
+<p>The mean is sensitive to outliers and skewed distributions, so it’s
+not always the best to use.</p>
 </div>
 <div id="the-median" class="section level4">
 <h4>The Median</h4>
-<p>The <strong>median</strong> can be thought of as the value closest to the “middle” of our distribution; it is the value which divides the data in half, such that half of our data lies on one side of the mean, and half on the other.</p>
+<p>The <strong>median</strong> can be thought of as the value closest to
+the “middle” of our distribution; it is the value which divides the data
+in half, such that half of our data lies on one side of the mean, and
+half on the other.</p>
 <pre class="r"><code>numbers &lt;- c(1, 2, 6, 12, 4, 8, 9, 3, 5, 4, 7)
 
 sort(numbers)</code></pre>
 <pre><code>##  [1]  1  2  3  4  4  5  6  7  8  9 12</code></pre>
 <pre class="r"><code>median(numbers)</code></pre>
 <pre><code>## [1] 5</code></pre>
-<p>Compared to the mean, the median is less sensitive to outliers, making it better suited to data that is skewed in a particular direction.</p>
+<p>Compared to the mean, the median is less sensitive to outliers,
+making it better suited to data that is skewed in a particular
+direction.</p>
 </div>
 <div id="the-mode" class="section level4">
 <h4>The Mode</h4>
-<p>The <strong>mode</strong> is simply the most commonly occurring value within a given distribution; if we were to count how many times each number appears, the mode would be the number with the most occurrences. The mode is also the measure best suited for <em>categorical</em> data — data such as names or factors that cannot be as easily measured and compared.</p>
+<p>The <strong>mode</strong> is simply the most commonly occurring value
+within a given distribution; if we were to count how many times each
+number appears, the mode would be the number with the most occurrences.
+The mode is also the measure best suited for <em>categorical</em> data —
+data such as names or factors that cannot be as easily measured and
+compared.</p>
 <pre class="r"><code>## Unfortunately, R does not have a built-in `mode()` function, so we&#39;ll have
 ## to make our own
 ## Don&#39;t worry too much on what this does, it&#39;s just an example, and is only
@@ -441,33 +558,44 @@ find_mode(actors)</code></pre>
 </div>
 <div id="assignment" class="section level3">
 <h3>Assignment</h3>
-<p><strong>Assignment 2: Visualize and Explore the <code>mtcars</code> Dataset and Create Plots Using <code>ggplot2</code></strong></p>
+<p><strong>Assignment 2: Visualize and Explore the <code>mtcars</code>
+Dataset and Create Plots Using <code>ggplot2</code></strong></p>
 <ol style="list-style-type: decimal">
-<li>Create a new Script called <code>mtcars.R</code>, saving your following work within that Script<br />
+<li>Create a new Script called <code>mtcars.R</code>, saving your
+following work within that Script<br />
 </li>
-<li>Assign <code>mtcars</code> to an object (e.g., “cars”) using the <code>&lt;-</code> operator<br />
+<li>Assign <code>mtcars</code> to an object (e.g., “cars”) using the
+<code>&lt;-</code> operator<br />
 </li>
-<li>Choose three variables from <code>mtcars</code> (remember the <code>$</code> operator), and for each:<br />
+<li>Choose three variables from <code>mtcars</code> (remember the
+<code>$</code> operator), and for each:<br />
 1. Find the mean, median, and <strong>mode</strong><br />
-
 <ul>
-<li>You may need to look online for how to find the mode in R! The base <code>mode()</code> function does something very different!<br />
-
+<li>You may need to look online for how to find the mode in R! The base
+<code>mode()</code> function does something very different!<br />
 <ol start="2" style="list-style-type: decimal">
-<li>Create a histogram in <code>ggplot2</code> of that variable, <strong>with appropriate labels, title, etc.</strong></li>
+<li>Create a histogram in <code>ggplot2</code> of that variable,
+<strong>with appropriate labels, title, etc.</strong></li>
 </ol></li>
 </ul></li>
-<li>Choose two variables from <code>mtcars</code> and create a scatterplot in <code>ggplot2</code> showing their relation<br />
+<li>Choose two variables from <code>mtcars</code> and create a
+scatterplot in <code>ggplot2</code> showing their relation<br />
 - <strong>Include title, labels, etc.</strong><br />
-- <em>Hint:</em> scatter plots are made with the <code>geom_point()</code> function.<br />
-- Use Google, Stack Exchange, and the built-in Help function to see examples and usage for how to make these plots<br />
+- <em>Hint:</em> scatter plots are made with the
+<code>geom_point()</code> function.<br />
+- Use Google, Stack Exchange, and the built-in Help function to see
+examples and usage for how to make these plots<br />
 </li>
 <li>Include a screenshot of your <code>mtcars.R</code> Script.<br />
-- Remember that it’s good practice to have any <code>library()</code> call at the top of your script!<br />
-- Scripts should be able to be read from top to bottom, so if you define an object (<code>&lt;-</code>) make sure you’re not referencing that object earlier in the script than when you initialize it.<br />
+- Remember that it’s good practice to have any <code>library()</code>
+call at the top of your script!<br />
+- Scripts should be able to be read from top to bottom, so if you define
+an object (<code>&lt;-</code>) make sure you’re not referencing that
+object earlier in the script than when you initialize it.<br />
 </li>
 </ol>
-<p>Submit <strong>all</strong> assignment questions to Google Classroom! Be sure to include your name, the question number, and all figures!</p>
+<p>Submit <strong>all</strong> assignment questions to Google Classroom!
+Be sure to include your name, the question number, and all figures!</p>
 </div>
 </div>
 </div>

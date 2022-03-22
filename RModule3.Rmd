@@ -8,9 +8,15 @@ klippy::klippy()
 
 ## File Management
 
-### Importing Data
+When we work with real-life data, it's important to know how to both read data from our computer and write data from R Studio as a file. File management is an essential part of any workflow, especially as the scope and scale of analyses increases. Sometimes each file can be quite large – often several dozen or hundred megabytes or more – so it's important to analyze data in a modular fashion (our computers have limited memory, disk space, processing power, and speed, after all). Fortunately, many tools exists within R and R Studio to make these tasks easier. In this R Module, you'll learn some skills and R Packages that are frequently used to import and export data from your R environment.
+
+## Importing and Exporting Data
+
+
 
 ### Readr
+
+The `readr` package provides some excellent functionality reading and writing data from and to files; while many of its functions exist in base R, `readr` is markedly faster, and provides more functionality for importing different types of data in a "tidy" manner.
 
 
 ## Mapping with `sf`
