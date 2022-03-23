@@ -86,6 +86,8 @@ Feel free to use this site (as well as Google, Stack Exchange, etc.!) when creat
 
 Using the `trees` dataset, let's create a scatter plot of tree height vs tree volume. Add the following into your script and hit run; you should be left with a plot! I'll explain what is happening.
 
+If you've never used ggplot2 (or any other package) before, you'll first need to install it with `install.packages("ggplot2")`. You'll only need to do this once, and afterwards you can call it with library(ggplot2)
+
 ```{r trees-gg}
 library(ggplot2)
 

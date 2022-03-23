@@ -10,14 +10,17 @@ klippy::klippy()
 
 When we work with real-life data, it's important to know how to both read data from our computer and write data from R Studio as a file. File management is an essential part of any workflow, especially as the scope and scale of analyses increases. Sometimes each file can be quite large – often several dozen or hundred megabytes or more – so it's important to analyze data in a modular fashion (our computers have limited memory, disk space, processing power, and speed, after all). Fortunately, many tools exists within R and R Studio to make these tasks easier. In this R Module, you'll learn some skills and R Packages that are frequently used to import and export data from your R environment.
 
+Let's go ahead and initialize a new R Project (`File > New Project...`) and call it *R Module 3*.
+
 ## Importing and Exporting Data
 
 
 
-### Readr
+### `readr`
 
-The `readr` package provides some excellent functionality reading and writing data from and to files; while many of its functions exist in base R, `readr` is markedly faster, and provides more functionality for importing different types of data in a "tidy" manner.
+The `readr` package provides some excellent functionality reading and writing data from and to files; while many of its functions exist in base R, `readr` is markedly faster, and provides more functionality for importing different types of data in a "tidy" manner ("tidy" is a programming concept in R that we'll get to later).
 
+`readr` comes with functions that allow for easy manipulation of primarily table-based data, such as `.csv` and `.tsv` files, allowing us to work with data that we make in Excel or Google Sheets. 
 
 ## Mapping with `sf`
 

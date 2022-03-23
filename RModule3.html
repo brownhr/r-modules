@@ -13,7 +13,7 @@
 
 <title>RModule3.knit</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -63,6 +63,7 @@ if (window.hljs) {
 
 
 
+
 <link rel="stylesheet" href="air_square.css" type="text/css" />
 
 
@@ -87,6 +88,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -239,7 +243,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -263,7 +267,7 @@ $(document).ready(function () {
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     R Modules
      
     <span class="caret"></span>
@@ -318,16 +322,24 @@ disk space, processing power, and speed, after all). Fortunately, many
 tools exists within R and R Studio to make these tasks easier. In this R
 Module, you’ll learn some skills and R Packages that are frequently used
 to import and export data from your R environment.</p>
+<p>Let’s go ahead and initialize a new R Project
+(<code>File &gt; New Project...</code>) and call it <em>R Module
+3</em>.</p>
 </div>
 <div id="importing-and-exporting-data" class="section level2">
 <h2>Importing and Exporting Data</h2>
 <div id="readr" class="section level3">
-<h3>Readr</h3>
+<h3><code>readr</code></h3>
 <p>The <code>readr</code> package provides some excellent functionality
 reading and writing data from and to files; while many of its functions
 exist in base R, <code>readr</code> is markedly faster, and provides
 more functionality for importing different types of data in a “tidy”
-manner.</p>
+manner (“tidy” is a programming concept in R that we’ll get to
+later).</p>
+<p><code>readr</code> comes with functions that allow for easy
+manipulation of primarily table-based data, such as <code>.csv</code>
+and <code>.tsv</code> files, allowing us to work with data that we make
+in Excel or Google Sheets.</p>
 </div>
 </div>
 <div id="mapping-with-sf" class="section level2">
@@ -359,7 +371,7 @@ class="section level2">
 </div>
 </div>
 
-<p>Copyright &copy; 2022 brownhr. v.0.0.3</p>
+<p>&copy; 2022 brownhr. v.0.0.5</p>
 
 
 
