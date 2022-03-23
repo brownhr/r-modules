@@ -14,11 +14,11 @@ Let's go ahead and initialize a new R Project (`File > New Project...`) and call
 
 ## Importing and Exporting Data
 
-
+Working in future R Modules, classes, and projects, you'll need to be able to load, save, and share data. Fortunately, there are tools to load this data for almost any data type, from .csv's to shapefiles, raster images, and many more. We'll go over a couple of the most useful tools and packages used in data management to work with files in R.
 
 ### `readr`
 
-The `readr` package provides some excellent functionality reading and writing data from and to files; while many of its functions exist in base R, `readr` is markedly faster, and provides more functionality for importing different types of data in a "tidy" manner ("tidy" is a programming concept in R that we'll get to later).
+The `readr` package provides some excellent functionality reading and writing data from and to files; while many of its functions exist in base R, `readr` is markedly faster, and provides more functionality for importing different types of data in a "tidy" manner ("tidy" is a programming concept in R that we'll get to later). For more information about `readr`, visit https://readr.tidyverse.org
 
 `readr` comes with functions that allow for easy manipulation of primarily table-based data, such as `.csv` and `.tsv` files, allowing us to work with data that we make in Excel or Google Sheets. 
 
