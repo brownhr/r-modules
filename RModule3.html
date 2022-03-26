@@ -328,14 +328,31 @@ to import and export data from your R environment.</p>
 </div>
 <div id="importing-and-exporting-data" class="section level2">
 <h2>Importing and Exporting Data</h2>
+<p>Working in future R Modules, classes, and projects, you’ll need to be
+able to load, save, and share data. Fortunately, there are tools to load
+this data for almost any data type, from .csv’s to shapefiles, raster
+images, and many more. We’ll go over a couple of the most useful tools
+and packages used in data management to work with files in R.</p>
+<p>You’ll have a folder called <code>data</code>, which contains a file
+called <code>mtcars.csv</code>. When working within R, it’s important to
+know how to access files and folders. When you create a project, the
+folder you set it up within is designated as your <strong>working
+directory</strong>, which is a way of easily accessing files for your
+project without writing the file’s full path. For example, instead of
+accessing the file with
+<code>C:/Users/brownhr/Documents/R Module 3/example.file</code>, if
+you’re in the working directory “R Module 3” (which can be checked with
+<code>getwd()</code>), you can simply type <code>example.file</code></p>
 <div id="readr" class="section level3">
 <h3><code>readr</code></h3>
 <p>The <code>readr</code> package provides some excellent functionality
 reading and writing data from and to files; while many of its functions
 exist in base R, <code>readr</code> is markedly faster, and provides
 more functionality for importing different types of data in a “tidy”
-manner (“tidy” is a programming concept in R that we’ll get to
-later).</p>
+manner (“tidy” is a programming concept in R that we’ll get to later).
+For more information about <code>readr</code>, visit <a
+href="https://readr.tidyverse.org"
+class="uri">https://readr.tidyverse.org</a></p>
 <p><code>readr</code> comes with functions that allow for easy
 manipulation of primarily table-based data, such as <code>.csv</code>
 and <code>.tsv</code> files, allowing us to work with data that we make

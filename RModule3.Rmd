@@ -16,11 +16,24 @@ Let's go ahead and initialize a new R Project (`File > New Project...`) and call
 
 Working in future R Modules, classes, and projects, you'll need to be able to load, save, and share data. Fortunately, there are tools to load this data for almost any data type, from .csv's to shapefiles, raster images, and many more. We'll go over a couple of the most useful tools and packages used in data management to work with files in R.
 
+In this lab, you'll use a folder called `data`, which contains a file called `mtcars.csv`. When working within R, it's important to know how to access files and folders. When you create a project, the folder you set it up within is designated as your **working directory**, which is a way of easily accessing files for your project without writing the file's full path. For example, instead of accessing the file with `C:/Users/brownhr/Documents/R Module 3/data/example.file`, if you're in the working directory "R Module 3" (which can be checked with `getwd()`), you can simply type `data/example.file`.
+
+**N.B.** within R, it is very important to distinguish between `/` and `\`; `\` is called an "escape character" and is used in more advanced text entry such as Regex. If you want to enter a file path, use either `C:/Example/File/path` or `C:\\Example\\File\\path`; adding two backslashes is necessary in this case.
+
 ### `readr`
 
 The `readr` package provides some excellent functionality reading and writing data from and to files; while many of its functions exist in base R, `readr` is markedly faster, and provides more functionality for importing different types of data in a "tidy" manner ("tidy" is a programming concept in R that we'll get to later). For more information about `readr`, visit https://readr.tidyverse.org
 
 `readr` comes with functions that allow for easy manipulation of primarily table-based data, such as `.csv` and `.tsv` files, allowing us to work with data that we make in Excel or Google Sheets. 
+
+Let's go ahead and learn by example! Within your R Module 3 folder (or wherever you initialized your R Project), copy over the `data` folder. Set up an R Script called `Task1.R` and enter the following:
+
+``` {r}
+library(readr)
+
+path <- "data/mtcars.csv"
+
+```
 
 ## Mapping with `sf`
 
