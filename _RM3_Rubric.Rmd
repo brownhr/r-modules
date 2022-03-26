@@ -1,0 +1,10 @@
+---
+title: "R Module 3 Rubric"
+output: word_document 
+---
+
+# R Module 3 Rubric
+
+## Task 1
+
+1. Load and display `mtcars.csv` with `readr`

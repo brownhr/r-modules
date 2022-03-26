@@ -11,7 +11,7 @@
 
 
 
-<title>RModule3.knit</title>
+<title>R Module 3 Rubric</title>
 
 <script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -32,10 +32,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
-<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
-<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
-<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -300,129 +296,19 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">R Module 3 Rubric</h1>
 
 </div>
 
 
-<div id="r-module-3" class="section level1">
-<h1>R Module 3</h1>
-<script>
-  addClassKlippyTo("pre.r, pre.markdown");
-  addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
-</script>
-<div id="file-management" class="section level2">
-<h2>File Management</h2>
-<p>When we work with real-life data, it’s important to know how to both
-read data from our computer and write data from R Studio as a file. File
-management is an essential part of any workflow, especially as the scope
-and scale of analyses increases. Sometimes each file can be quite large
-– often several dozen or hundred megabytes or more – so it’s important
-to analyze data in a modular fashion (our computers have limited memory,
-disk space, processing power, and speed, after all). Fortunately, many
-tools exists within R and R Studio to make these tasks easier. In this R
-Module, you’ll learn some skills and R Packages that are frequently used
-to import and export data from your R environment.</p>
-<p>Let’s go ahead and initialize a new R Project
-(<code>File &gt; New Project...</code>) and call it <em>R Module
-3</em>.</p>
-</div>
-<div id="importing-and-exporting-data" class="section level2">
-<h2>Importing and Exporting Data</h2>
-<p>Working in future R Modules, classes, and projects, you’ll need to be
-able to load, save, and share data. Fortunately, there are tools to load
-this data for almost any data type, from .csv’s to shapefiles, raster
-images, and many more. We’ll go over a couple of the most useful tools
-and packages used in data management to work with files in R.</p>
-<p>In this lab, you’ll use a folder called <code>data</code>, which
-contains a file called <code>mtcars.csv</code>. When working within R,
-it’s important to know how to access files and folders. When you create
-a project, the folder you set it up within is designated as your
-<strong>working directory</strong>, which is a way of easily accessing
-files for your project without writing the file’s full path. For
-example, instead of accessing the file with
-<code>C:/Users/brownhr/Documents/R Module 3/data/example.file</code>, if
-you’re in the working directory “R Module 3” (which can be checked with
-<code>getwd()</code>), you can simply type
-<code>data/example.file</code>.</p>
-<p><strong>N.B.</strong> within R, it is very important to distinguish
-between <code>/</code> and <code>\</code>; <code>\</code> is called an
-“escape character” and is used in more advanced text entry such as
-Regex. If you want to enter a file path, use either
-<code>C:/Example/File/path</code> or
-<code>C:\\Example\\File\\path</code>; adding two backslashes is
-necessary in this case.</p>
-<div id="readr" class="section level3">
-<h3><code>readr</code></h3>
-<p>The <code>readr</code> package provides some excellent functionality
-reading and writing data from and to files; while many of its functions
-exist in base R, <code>readr</code> is markedly faster, and provides
-more functionality for importing different types of data in a “tidy”
-manner (“tidy” is a programming concept in R that we’ll get to later).
-For more information about <code>readr</code>, visit <a
-href="https://readr.tidyverse.org"
-class="uri">https://readr.tidyverse.org</a></p>
-<p><code>readr</code> comes with functions that allow for easy
-manipulation of primarily table-based data, such as <code>.csv</code>
-and <code>.tsv</code> files, allowing us to work with data that we make
-in Excel or Google Sheets.</p>
-<p>Let’s go ahead and learn by example! Within your R Module 3 folder
-(or wherever you initialized your R Project), copy over the
-<code>data</code> folder. Set up an R Script called <code>Task1.R</code>
-and enter the following:</p>
-<pre class="r"><code>library(readr)
-
-data_path &lt;- &quot;data/mtcars.csv&quot;
-
-cars_data &lt;- read_csv(file = data_path)</code></pre>
-<pre><code>## Rows: 32 Columns: 11
-## -- Column specification --------------------------------------------------------
-## Delimiter: &quot;,&quot;
-## dbl (11): mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb
-## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre><code>## # A tibble: 32 x 11
-##      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
-##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
-##  2  21       6  160    110  3.9   2.88  17.0     0     1     4     4
-##  3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
-##  4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1
-##  5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2
-##  6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1
-##  7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4
-##  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
-##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
-## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
-## # ... with 22 more rows</code></pre>
-</div>
-</div>
-<div id="mapping-with-sf" class="section level2">
-<h2>Mapping with <code>sf</code></h2>
-<div id="choropleth-mapping" class="section level3">
-<h3>Choropleth Mapping</h3>
-</div>
-<div id="importing-and-exporting-shapefiles" class="section level3">
-<h3>Importing and Exporting Shapefiles</h3>
-</div>
-</div>
-<div id="probability-and-probability-distributions"
-class="section level2">
-<h2>Probability and Probability Distributions</h2>
-<div id="mapping-techniques" class="section level3">
-<h3>Mapping Techniques</h3>
-</div>
-<div id="discrete-distributions" class="section level3">
-<h3>Discrete Distributions</h3>
-<ul>
-<li>Uniform</li>
-<li>Binomial</li>
-<li>Poisson</li>
-</ul>
-</div>
-<div id="continuous-distributions" class="section level3">
-<h3>Continuous Distributions</h3>
-</div>
+<div id="r-module-3-rubric" class="section level1">
+<h1>R Module 3 Rubric</h1>
+<div id="task-1" class="section level2">
+<h2>Task 1</h2>
+<ol style="list-style-type: decimal">
+<li>Load and display <code>mtcars.csv</code> with
+<code>readr</code></li>
+</ol>
 </div>
 </div>
 
