@@ -1,7 +1,5 @@
 ---
 title: "GHY 5800 R Modules"
-
-
 ---
 
 ```{r setup-index, include=FALSE}

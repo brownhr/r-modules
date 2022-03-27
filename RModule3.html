@@ -296,7 +296,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div id="header">
+<div id="section-header">
 
 
 
@@ -304,13 +304,13 @@ $(document).ready(function () {
 </div>
 
 
-<div id="r-module-3" class="section level1">
+<div id="section-r-module-3" class="section level1">
 <h1>R Module 3</h1>
 <script>
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
-<div id="file-management" class="section level2">
+<div id="section-file-management" class="section level2">
 <h2>File Management</h2>
 <p>When we work with real-life data, it’s important to know how to both
 read data from our computer and write data from R Studio as a file. File
@@ -326,7 +326,7 @@ to import and export data from your R environment.</p>
 (<code>File &gt; New Project...</code>) and call it <em>R Module
 3</em>.</p>
 </div>
-<div id="importing-and-exporting-data" class="section level2">
+<div id="section-importing-and-exporting-data" class="section level2">
 <h2>Importing and Exporting Data</h2>
 <p>Working in future R Modules, classes, and projects, you’ll need to be
 able to load, save, and share data. Fortunately, there are tools to load
@@ -351,7 +351,7 @@ Regex. If you want to enter a file path, use either
 <code>C:/Example/File/path</code> or
 <code>C:\\Example\\File\\path</code>; adding two backslashes is
 necessary in this case.</p>
-<div id="readr" class="section level3">
+<div id="section-readr" class="section level3">
 <h3><code>readr</code></h3>
 <p>The <code>readr</code> package provides some excellent functionality
 reading and writing data from and to files; while many of its functions
@@ -365,6 +365,31 @@ class="uri">https://readr.tidyverse.org</a></p>
 manipulation of primarily table-based data, such as <code>.csv</code>
 and <code>.tsv</code> files, allowing us to work with data that we make
 in Excel or Google Sheets.</p>
+</div>
+</div>
+<div id="section-mapping-with-sf" class="section level2">
+<h2>Mapping with <code>sf</code></h2>
+<div id="section-choropleth-mapping" class="section level3">
+<h3>Choropleth Mapping</h3>
+</div>
+<div id="section-importing-and-exporting-shapefiles"
+class="section level3">
+<h3>Importing and Exporting Shapefiles</h3>
+</div>
+</div>
+<div id="section-probability-and-probability-distributions"
+class="section level2">
+<h2>Probability and Probability Distributions</h2>
+<div id="section-mapping-techniques" class="section level3">
+<h3>Mapping Techniques</h3>
+</div>
+<div id="section-discrete-distributions" class="section level3">
+<h3>Discrete Distributions</h3>
+<ul>
+<li>Uniform</li>
+<li>Binomial</li>
+<li>Poisson</li>
+</ul>
 <p>Let’s go ahead and learn by example! Within your R Module 3 folder
 (or wherever you initialized your R Project), copy over the
 <code>data</code> folder. Set up an R Script called <code>Task1.R</code>
@@ -374,13 +399,6 @@ and enter the following:</p>
 data_path &lt;- &quot;data/mtcars.csv&quot;
 
 cars_data &lt;- read_csv(file = data_path)</code></pre>
-<pre><code>## Rows: 32 Columns: 11
-## -- Column specification --------------------------------------------------------
-## Delimiter: &quot;,&quot;
-## dbl (11): mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb
-## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre><code>## # A tibble: 32 x 11
 ##      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
 ##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -395,32 +413,9 @@ cars_data &lt;- read_csv(file = data_path)</code></pre>
 ##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
 ## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
 ## # ... with 22 more rows</code></pre>
+<p><iframe data-deferred-src="appf37636737d15da78197c38ef34310a73/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe></p>
 </div>
-</div>
-<div id="mapping-with-sf" class="section level2">
-<h2>Mapping with <code>sf</code></h2>
-<div id="choropleth-mapping" class="section level3">
-<h3>Choropleth Mapping</h3>
-</div>
-<div id="importing-and-exporting-shapefiles" class="section level3">
-<h3>Importing and Exporting Shapefiles</h3>
-</div>
-</div>
-<div id="probability-and-probability-distributions"
-class="section level2">
-<h2>Probability and Probability Distributions</h2>
-<div id="mapping-techniques" class="section level3">
-<h3>Mapping Techniques</h3>
-</div>
-<div id="discrete-distributions" class="section level3">
-<h3>Discrete Distributions</h3>
-<ul>
-<li>Uniform</li>
-<li>Binomial</li>
-<li>Poisson</li>
-</ul>
-</div>
-<div id="continuous-distributions" class="section level3">
+<div id="section-continuous-distributions" class="section level3">
 <h3>Continuous Distributions</h3>
 </div>
 </div>
@@ -449,7 +444,7 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function () {
-  window.buildTabsets("TOC");
+  window.buildTabsets("section-TOC");
 });
 
 $(document).ready(function () {

@@ -1,4 +1,13 @@
+---
+runtime: shiny
+---
+
 # R Module 3
+
+```{r su3, echo = F}
+library(shiny)
+library(ggplot2)
+```
 
 
 ```{r klrm3, echo = F, include = T}
@@ -26,19 +35,6 @@ The `readr` package provides some excellent functionality reading and writing da
 
 `readr` comes with functions that allow for easy manipulation of primarily table-based data, such as `.csv` and `.tsv` files, allowing us to work with data that we make in Excel or Google Sheets. 
 
-Let's go ahead and learn by example! Within your R Module 3 folder (or wherever you initialized your R Project), copy over the `data` folder. Set up an R Script called `Task1.R` and enter the following:
-
-``` {r task-1-1}
-library(readr)
-
-data_path <- "data/mtcars.csv"
-
-cars_data <- read_csv(file = data_path)
-```
-
-```{r, echo = F}
-cars_data
-```
 
 ## Mapping with `sf`
 
@@ -56,5 +52,57 @@ cars_data
 - Uniform
 - Binomial
 - Poisson
+
+
+Let's go ahead and learn by example! Within your R Module 3 folder (or wherever you initialized your R Project), copy over the `data` folder. Set up an R Script called `Task1.R` and enter the following:
+
+``` {r task-1-1, warning = F, message = F}
+library(readr)
+
+data_path <- "data/mtcars.csv"
+
+cars_data <- read_csv(file = data_path)
+```
+
+```{r, echo = F}
+cars_data
+```
+
+```{r poisson, echo = FALSE}
+
+
+
+
+
+
+
+library(shiny)
+
+ui <- fluidPage(
+  numericInput(
+  "lambda",
+  label = "Value for Lambda:",
+  min = 1,
+  max = 30,
+  value = 1,
+  step = 1
+),
+plotOutput("plot")
+)
+
+server <- function(input, output, session) {
+  output$plot <-  renderPlot({
+  pois <- rpois(10000, lambda = input$lambda)
+  qplot(pois)
+})
+}
+
+shinyApp(ui, server)
+
+
+
+```
+
+
 
 ### Continuous Distributions
