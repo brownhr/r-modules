@@ -4,8 +4,7 @@
 # R Module 3
 
 ```{r su3, echo = F}
-library(shiny)
-library(ggplot2)
+library(sf)
 ```
 
 
@@ -36,6 +35,42 @@ The `readr` package provides some excellent functionality reading and writing da
 
 
 ## Mapping with `sf`
+
+Simple Features for R, or `sf`, is an R package that allows for much easier geospatial analysis than older packages like `rgdal`. `sf` works with "simple features" -- vector objects in GIS like points, lines, polygons, etc. -- and stores their "geometry" -- their list of coordinates -- as a column in a data frame. This allows for geospatial data to be processed in exactly the same way as non-spatial data; you can run functions and analyses on the attribute table of a shapefile without needing to convert or export to any intermediate formats, for example. 
+
+`sf` can work with shapefiles and other vector formats made by ArcGIS Pro, QGIS, etc., so if you have a shapefile, you can import it into R with `read_sf()`, perform your analysis, and export any sort of spatial result with `write_sf()`. 
+
+Even better, there's compatability with `ggplot2`! Suppose we have two shapefiles that we wish to map: `NC_Counties` and `US_States`. Combining them is easy in `ggplot2`:
+
+```{r sf-example}
+
+# Load sf and the tidyverse, which contains packages like ggplot2 and dplyr
+
+library(tidyverse)
+library(sf)
+
+
+# Read in the shapefiles with sf
+
+US_States <- read_sf("data/US_States.shp")
+NC_Counties <- read_sf("data/NC_Counties.shp")
+
+
+# We can create a 'blank' ggplot object and define the data and mappings
+# separately, which is useful if we have more than one input file or want to
+# display more than one dataset.
+
+ggplot() +
+  geom_sf(data = US_States, fill = "white") + 
+  geom_sf(data = NC_Counties, aes(fill = Population), color = NA) +
+  coord_sf(xlim = c(-86, -74), ylim = c(32, 38)) +
+  theme_bw()
+
+
+```
+
+
+Read more about `sf` by going to https://r-spatial.github.io/sf/
 
 ### Choropleth Mapping
 

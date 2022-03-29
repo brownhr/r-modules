@@ -306,6 +306,7 @@ $(document).ready(function () {
 
 <div id="r-module-3" class="section level1">
 <h1>R Module 3</h1>
+<pre><code>## Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1; sf_use_s2() is TRUE</code></pre>
 <script>
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
@@ -372,6 +373,48 @@ data easy, and is much faster at reading and writing than the base
 </div>
 <div id="mapping-with-sf" class="section level2">
 <h2>Mapping with <code>sf</code></h2>
+<p>Simple Features for R, or <code>sf</code>, is an R package that
+allows for much easier geospatial analysis than older packages like
+<code>rgdal</code>. <code>sf</code> works with “simple features” –
+vector objects in GIS like points, lines, polygons, etc. – and stores
+their “geometry” – their list of coordinates – as a column in a data
+frame. This allows for geospatial data to be processed in exactly the
+same way as non-spatial data; you can run functions and analyses on the
+attribute table of a shapefile without needing to convert or export to
+any intermediate formats, for example.</p>
+<p><code>sf</code> can work with shapefiles and other vector formats
+made by ArcGIS Pro, QGIS, etc., so if you have a shapefile, you can
+import it into R with <code>read_sf()</code>, perform your analysis, and
+export any sort of spatial result with <code>write_sf()</code>.</p>
+<p>Even better, there’s compatability with <code>ggplot2</code>! Suppose
+we have two shapefiles that we wish to map: <code>NC_Counties</code> and
+<code>US_States</code>. Combining them is easy in
+<code>ggplot2</code>:</p>
+<pre class="r"><code># Load sf and the tidyverse, which contains packages like ggplot2 and dplyr
+
+library(tidyverse)
+library(sf)
+
+
+# Read in the shapefiles with sf
+
+US_States &lt;- read_sf(&quot;data/US_States.shp&quot;)
+NC_Counties &lt;- read_sf(&quot;data/NC_Counties.shp&quot;)
+
+
+# We can create a &#39;blank&#39; ggplot object and define the data and mappings
+# separately, which is useful if we have more than one input file or want to
+# display more than one dataset.
+
+ggplot() +
+  geom_sf(data = US_States, fill = &quot;white&quot;) + 
+  geom_sf(data = NC_Counties, aes(fill = Population), color = NA) +
+  coord_sf(xlim = c(-86, -74), ylim = c(32, 38)) +
+  theme_bw()</code></pre>
+<p><img src="RModule3_files/figure-html/sf-example-1.png" width="672" /></p>
+<p>Read more about <code>sf</code> by going to <a
+href="https://r-spatial.github.io/sf/"
+class="uri">https://r-spatial.github.io/sf/</a></p>
 <div id="choropleth-mapping" class="section level3">
 <h3>Choropleth Mapping</h3>
 </div>
