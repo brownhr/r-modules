@@ -2,7 +2,8 @@
 
 ```{r setup-rm1, include=FALSE}
 knitr::opts_chunk$set(
-  fig.align = "center"
+  fig.align = "center",
+  message = F
 )
 
 ```

@@ -4,7 +4,8 @@ title: "GHY 5800 R Modules"
 
 ```{r setup-index, include=FALSE}
 knitr::opts_chunk$set(
-  fig.align = "center"
+  fig.align = "center",
+  message = F
 )
 
 ```
