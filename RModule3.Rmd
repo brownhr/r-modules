@@ -5,6 +5,7 @@
 
 ```{r su3, echo = F, message=F, warning=F}
 library(sf)
+library(tidyverse)
 ```
 
 
@@ -83,7 +84,7 @@ Read more about `sf` by going to https://r-spatial.github.io/sf/
 
 2. For the `US_States` layer, the `fill` argument stands on its own, while for `NC_Counties`, it's inside the `aes()` function. Why is this the case -- what's the difference between these two layers?
 
-3. What's the purpose of the `coord_sf()` function? 
+3. What's the purpose of the `coord_sf()` function? Use `?coord_sf()` to view documentation and usage, and describe its arguments. 
 
 
 
