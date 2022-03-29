@@ -306,7 +306,6 @@ $(document).ready(function () {
 
 <div id="r-module-3" class="section level1">
 <h1>R Module 3</h1>
-<pre><code>## Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1; sf_use_s2() is TRUE</code></pre>
 <script>
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
@@ -410,16 +409,32 @@ ggplot() +
   geom_sf(data = US_States, fill = &quot;white&quot;) + 
   geom_sf(data = NC_Counties, aes(fill = Population), color = NA) +
   coord_sf(xlim = c(-86, -74), ylim = c(32, 38)) +
-  theme_bw()</code></pre>
-<p><img src="RModule3_files/figure-html/sf-example-1.png" width="672" /></p>
+  theme_bw() + 
+  labs(title = &quot;Population per County for North Carolina&quot;)</code></pre>
+<p><img src="RModule3_files/figure-html/sf-example-1.png" width="100%" /></p>
+<p>Looks good so far! You’ll make a few maps of your own later in the
+Module, so feel free to read more about how <code>geom_sf()</code> and
+the other <code>ggplot2</code> and <code>sf</code> functions work.</p>
 <p>Read more about <code>sf</code> by going to <a
 href="https://r-spatial.github.io/sf/"
 class="uri">https://r-spatial.github.io/sf/</a></p>
+<p><strong>Answer the following questions, and include them in your
+final document:</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>For the <code>US_States</code> layer, the <code>fill</code>
+argument stands on its own, while for <code>NC_Counties</code>, it’s
+inside the <code>aes()</code> function. Why is this the case – what’s
+the difference between these two layers?</p></li>
+<li><p>What’s the purpose of the <code>coord_sf()</code>
+function?</p></li>
+</ol>
 <div id="choropleth-mapping" class="section level3">
 <h3>Choropleth Mapping</h3>
 </div>
 <div id="importing-and-exporting-shapefiles" class="section level3">
 <h3>Importing and Exporting Shapefiles</h3>
+<hr />
+<hr />
 </div>
 </div>
 <div id="probability-and-probability-distributions"
@@ -461,7 +476,12 @@ cars_data &lt;- read_csv(file = data_path)</code></pre>
 </div>
 <div id="continuous-distributions" class="section level3">
 <h3>Continuous Distributions</h3>
+<hr />
+<hr />
 </div>
+</div>
+<div id="assignment" class="section level2">
+<h2>Assignment</h2>
 </div>
 </div>
 

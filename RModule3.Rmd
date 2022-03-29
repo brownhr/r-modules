@@ -3,7 +3,7 @@
 
 # R Module 3
 
-```{r su3, echo = F}
+```{r su3, echo = F, message=F, warning=F}
 library(sf)
 ```
 
@@ -42,7 +42,7 @@ Simple Features for R, or `sf`, is an R package that allows for much easier geos
 
 Even better, there's compatability with `ggplot2`! Suppose we have two shapefiles that we wish to map: `NC_Counties` and `US_States`. Combining them is easy in `ggplot2`:
 
-```{r sf-example}
+```{r sf-example, out.width="100%"}
 
 # Load sf and the tidyverse, which contains packages like ggplot2 and dplyr
 
@@ -64,18 +64,31 @@ ggplot() +
   geom_sf(data = US_States, fill = "white") + 
   geom_sf(data = NC_Counties, aes(fill = Population), color = NA) +
   coord_sf(xlim = c(-86, -74), ylim = c(32, 38)) +
-  theme_bw()
+  theme_bw() + 
+  labs(title = "Population per County for North Carolina")
 
 
 ```
 
+Looks good so far! You'll make a few maps of your own later in the Module, so feel free to read more about how `geom_sf()` and the other `ggplot2` and `sf` functions work.
 
 Read more about `sf` by going to https://r-spatial.github.io/sf/
+
+**Answer the following questions, and include them in your final document:**
+
+1. For the `US_States` layer, the `fill` argument stands on its own, while for `NC_Counties`, it's inside the `aes()` function. Why is this the case -- what's the difference between these two layers?
+
+2. What's the purpose of the `coord_sf()` function? 
+
+
 
 ### Choropleth Mapping
 
 ### Importing and Exporting Shapefiles
 
+***
+
+***
 
 ## Probability and Probability Distributions
 
@@ -108,5 +121,11 @@ cars_data
 ```
 
 
-
 ### Continuous Distributions
+
+***
+
+***
+
+
+## Assignment
