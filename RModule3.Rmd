@@ -76,9 +76,14 @@ Read more about `sf` by going to https://r-spatial.github.io/sf/
 
 **Answer the following questions, and include them in your final document:**
 
-1. For the `US_States` layer, the `fill` argument stands on its own, while for `NC_Counties`, it's inside the `aes()` function. Why is this the case -- what's the difference between these two layers?
+1. Within your `data/` folder, open the file `NC_Counties.prj` with a program like Notepad or Notepad++.
+    - What kind of information does this file contain?
+    - Why is it important to include these "auxiliary" files?
+    - What would happen if you forgot to include the `.prj` file?
 
-2. What's the purpose of the `coord_sf()` function? 
+2. For the `US_States` layer, the `fill` argument stands on its own, while for `NC_Counties`, it's inside the `aes()` function. Why is this the case -- what's the difference between these two layers?
+
+3. What's the purpose of the `coord_sf()` function? 
 
 
 
