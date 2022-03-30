@@ -36,6 +36,15 @@
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-grid-3.4.1/bootstrap-grid.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -406,10 +415,10 @@ NC_Counties &lt;- read_sf(&quot;data/NC_Counties.shp&quot;)
 # display more than one dataset.
 
 ggplot() +
-  geom_sf(data = US_States, fill = &quot;white&quot;) + 
+  geom_sf(data = US_States, fill = &quot;white&quot;) +
   geom_sf(data = NC_Counties, aes(fill = Population), color = NA) +
   coord_sf(xlim = c(-86, -74), ylim = c(32, 38)) +
-  theme_bw() + 
+  theme_bw() +
   labs(title = &quot;Population per County for North Carolina&quot;)</code></pre>
 <p><img src="RModule3_files/figure-html/sf-example-1.png" width="100%" /></p>
 <p>Looks good so far! You’ll make a few maps of your own later in the
@@ -455,11 +464,11 @@ class="section level2">
 </div>
 <div id="discrete-distributions" class="section level3">
 <h3>Discrete Distributions</h3>
-<ul>
-<li>Uniform</li>
-<li>Binomial</li>
-<li>Poisson</li>
-</ul>
+<div id="uniform" class="section level4">
+<h4>Uniform</h4>
+</div>
+<div id="binomial" class="section level4">
+<h4>Binomial</h4>
 <p>Let’s go ahead and learn by example! Within your R Module 3 folder
 (or wherever you initialized your R Project), copy over the
 <code>data</code> folder. Set up an R Script called <code>Task1.R</code>
@@ -484,10 +493,25 @@ cars_data &lt;- read_csv(file = data_path)</code></pre>
 ## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
 ## # ... with 22 more rows</code></pre>
 </div>
+<div id="poisson-distribution" class="section level4">
+<h4>Poisson Distribution</h4>
+<div class="container-fluid crosstalk-bscols">
+<div class="row">
+<div class="col-xs-12">
+<div id="htmlwidget-677f23b93d32104594fb" style="width:100%;height:400px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-677f23b93d32104594fb">{"x":{"visdat":{"462c5dc055d7":["function () ","plotlyVisDat"]},"cur_data":"462c5dc055d7","attrs":{"462c5dc055d7":{"x":{},"y":{},"hoverinfo":"text","text":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Number of Occurances"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Density"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[0.00673794699908547,0.0336897349954273,0.0842243374885683,0.140373895814281,0.175467369767851,0.175467369767851,0.146222808139876,0.104444862957054,0.0652780393481587,0.0362655774156437,0.0181327887078219,0.00824217668537357,0.00343424028557233,0.00132086164829705,0.000471736302963232,0.000157245434321077,4.91391982253366e-05,1.44527053603931e-05,4.01464037788698e-06,1.05648430997026e-06,2.64121077492563e-07],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"text":["Density: 0.01","Density: 0.03","Density: 0.08","Density: 0.14","Density: 0.18","Density: 0.18","Density: 0.15","Density: 0.1","Density: 0.07","Density: 0.04","Density: 0.02","Density: 0.01","Density: 0","Density: 0","Density: 0","Density: 0","Density: 0","Density: 0","Density: 0","Density: 0","Density: 0"],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div id="continuous-distributions" class="section level3">
 <h3>Continuous Distributions</h3>
 <hr />
 <hr />
+<!--
+
+-->
 </div>
 </div>
 <div id="assignment" class="section level2">

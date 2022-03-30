@@ -6,6 +6,8 @@
 ```{r su3, echo = F, message=F, warning=F}
 library(sf)
 library(tidyverse)
+library(plotly)
+library(crosstalk)
 ```
 
 
@@ -62,13 +64,11 @@ NC_Counties <- read_sf("data/NC_Counties.shp")
 # display more than one dataset.
 
 ggplot() +
-  geom_sf(data = US_States, fill = "white") + 
+  geom_sf(data = US_States, fill = "white") +
   geom_sf(data = NC_Counties, aes(fill = Population), color = NA) +
   coord_sf(xlim = c(-86, -74), ylim = c(32, 38)) +
-  theme_bw() + 
+  theme_bw() +
   labs(title = "Population per County for North Carolina")
-
-
 ```
 
 Looks good so far! You'll make a few maps of your own later in the Module, so feel free to read more about how `geom_sf()` and the other `ggplot2` and `sf` functions work.
@@ -102,9 +102,8 @@ Read more about `sf` by going to https://r-spatial.github.io/sf/
 
 ### Discrete Distributions
 
-- Uniform
-- Binomial
-- Poisson
+#### Uniform
+#### Binomial
 
 
 Let's go ahead and learn by example! Within your R Module 3 folder (or wherever you initialized your R Project), copy over the `data` folder. Set up an R Script called `Task1.R` and enter the following:
@@ -121,9 +120,44 @@ cars_data <- read_csv(file = data_path)
 cars_data
 ```
 
-```{r poisson, message F, warning = F, echo = FALSE}
-# Make Poisson plot using plotly
 
+#### Poisson Distribution
+
+
+```{r setup-poisson, message F, warning = F, echo = FALSE}
+# Make Poisson plot using plotly
+library(glue)
+
+
+num_occurances <- 0:20 %>%
+  as.data.frame() %>%
+  `colnames<-`("Occurances")
+
+# poiscol <- function(.df, n) {
+#   name <- paste("pois_", n)
+#   mutate(.df, !!name := dpois(Occurances, n))
+# }
+# 
+# for (i in seq(1, 6, 1)) {
+#   poiscol(num_occurances, i)
+# }
+
+
+
+bscols(
+  plot_ly(
+    data = num_occurances,
+    x = ~ Occurances,
+    y = ~ dpois(Occurances, lambda = 5),
+    hoverinfo = "text",
+    text = ~ paste("Density:", dpois(Occurances, lambda = 5) %>% round(digits = 2))
+  ) %>%
+    add_bars() %>%
+    layout(
+      xaxis = list(title = "Number of Occurances"),
+      yaxis = list(title = "Density")
+    )
+)
 ```
 
 
@@ -133,5 +167,42 @@ cars_data
 
 ***
 
+<!--
+```{r leaflet, eval = F, echo = F, include = F, message=F, warning=F}
+library(leaflet)
+shared_nc <- SharedData$new(NC_Counties %>%
+  mutate(NAME = str_remove(NAME, ", North Carolina")) %>%
+  arrange(Population))
+bscols(
+  leaflet(shared_nc, width = "100%", height = 300) %>%
+    addTiles() %>%
+    addPolygons(
+      color = "gray40", weight = 1, smoothFactor = 0.5,
+      opacity = 1, fillOpacity = 0.9,
+      fillColor = ~ colorQuantile("Blues", Population)(Population),
+      highlightOptions = highlightOptions(color = "white", weight = 2, bringToFront = TRUE),
+      label = ~ paste(
+        NAME,
+        "\nPopulation:", Population
+      )
+    ),
+  plot_ly(
+    data = shared_nc,
+    y = ~ (Population %>% log10()),
+    x = ~NAME,
+    hoverinfo = "text",
+    text = ~ paste(
+      "County:", NAME,
+      "<br>Population:", Population
+    )
+  ) %>% add_markers(size = 3) %>%
+    layout(
+      xaxis = list(title = "County Name"),
+      yaxis = list(title = "Total Population (Log10)"),
+      legend = list(font = list(size = 16))
+    )
+)
+```
+-->
 
 ## Assignment
