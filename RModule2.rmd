@@ -1,4 +1,5 @@
 ---
+title: "R Module 2: Scripts and Projects"
 output:
   html_document:
       toc: true

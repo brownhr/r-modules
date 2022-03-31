@@ -1,4 +1,5 @@
 ---
+title: "Probability and Confidence Intervals"
 output:
   html_document:
       toc: true

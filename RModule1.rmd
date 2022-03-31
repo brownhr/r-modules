@@ -1,4 +1,5 @@
 ---
+title: "R Module 1: Intro to R"
 output:
   html_document:
       toc: true

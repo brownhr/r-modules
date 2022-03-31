@@ -1,4 +1,5 @@
 ---
+title: "File Management and Mapping Spatial Data"
 output:
   html_document:
       toc: true
