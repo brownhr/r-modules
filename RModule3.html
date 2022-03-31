@@ -373,6 +373,9 @@ div.tocify {
     <li>
       <a href="RModule4.html">R Module 4</a>
     </li>
+    <li>
+      <a href="RModule5.html">R Module 5</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -412,6 +415,7 @@ to import and export data from your R environment.</p>
 <p>Let’s go ahead and initialize a new R Project
 (<code>File &gt; New Project...</code>) and call it <em>R Module
 3</em>.</p>
+<hr />
 </div>
 <div id="importing-and-exporting-data" class="section level2">
 <h2>Importing and Exporting Data</h2>
@@ -455,6 +459,7 @@ in Excel or Google Sheets. Especially when working with large files, or
 large numbers of files, <code>readr</code> makes importing and exporting
 data easy, and is much faster at reading and writing than the base
 <code>R</code> functions.</p>
+<hr />
 </div>
 </div>
 <div id="mapping-with-sf" class="section level2">
@@ -527,26 +532,25 @@ its arguments.</p></li>
 </ol>
 <div id="choropleth-mapping" class="section level3">
 <h3>Choropleth Mapping</h3>
-</div>
-<div id="importing-and-exporting-shapefiles" class="section level3">
-<h3>Importing and Exporting Shapefiles</h3>
+<!--
+
+Describe a bit of choropleth mapping here; classes, quantiles, etc. 
+
+-->
 <hr />
 <hr />
 </div>
 </div>
-<div id="probability-and-probability-distributions"
-class="section level2">
-<h2>Probability and Probability Distributions</h2>
-<div id="mapping-techniques" class="section level3">
-<h3>Mapping Techniques</h3>
 </div>
-<div id="discrete-distributions" class="section level3">
-<h3>Discrete Distributions</h3>
-<div id="uniform" class="section level4">
-<h4>Uniform</h4>
+<div id="probability-and-distributions" class="section level1">
+<h1>Probability and Distributions</h1>
+<div id="discrete-distributions" class="section level2">
+<h2>Discrete Distributions</h2>
+<div id="uniform" class="section level3">
+<h3>Uniform</h3>
 </div>
-<div id="binomial" class="section level4">
-<h4>Binomial</h4>
+<div id="binomial" class="section level3">
+<h3>Binomial</h3>
 <p>Let’s go ahead and learn by example! Within your R Module 3 folder
 (or wherever you initialized your R Project), copy over the
 <code>data</code> folder. Set up an R Script called <code>Task1.R</code>
@@ -571,8 +575,8 @@ cars_data &lt;- read_csv(file = data_path)</code></pre>
 ## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
 ## # ... with 22 more rows</code></pre>
 </div>
-<div id="poisson-distribution" class="section level4">
-<h4>Poisson Distribution</h4>
+<div id="poisson-distribution" class="section level3">
+<h3>Poisson Distribution</h3>
 <p>A Poisson distribution refers to a kind of discrete distribution that
 shows the probability of a given number of events <span
 class="math inline">\(k\)</span> occurring, given the parameter lambda,
@@ -598,25 +602,29 @@ used to calculate the Poisson distribution.</p>
 <div class="container-fluid crosstalk-bscols">
 <div class="row">
 <div class="col-xs-12">
-<div id="htmlwidget-fb43a991c3577b6e72f7" style="width:100%;height:400px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-fb43a991c3577b6e72f7">{"x":{"visdat":{"37287bd5ca6":["function () ","plotlyVisDat"]},"cur_data":"37287bd5ca6","attrs":{"37287bd5ca6":{"x":{},"y":{},"hoverinfo":"text","text":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Number of Occurances"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Percent Chance"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"y":[8.20849986238988,20.5212496559747,25.6515620699684,21.3763017249736,13.3601885781085,6.68009428905426,2.78337262043928,0.994061650156885,0.310644265674026,0.0862900737983407,0.0215725184495851,0.00490284510217845,0.00102142606295385,0.000196428089029585,3.50764444695687e-05,5.84607407826147e-06],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"text":["8.21 %","20.52 %","25.65 %","21.38 %","13.36 %","6.68 %","2.78 %","0.99 %","0.31 %","0.09 %","0.02 %","0 %","0 %","0 %","0 %","0 %"],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-309b4dbbc7ec524a22cb" style="width:100%;height:400px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-309b4dbbc7ec524a22cb">{"x":{"visdat":{"e243dec7ca":["function () ","plotlyVisDat"]},"cur_data":"e243dec7ca","attrs":{"e243dec7ca":{"x":{},"y":{},"hoverinfo":"text","text":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Number of Occurances"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Percent Chance"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"y":[8.20849986238988,20.5212496559747,25.6515620699684,21.3763017249736,13.3601885781085,6.68009428905426,2.78337262043928,0.994061650156885,0.310644265674026,0.0862900737983407,0.0215725184495851,0.00490284510217845,0.00102142606295385,0.000196428089029585,3.50764444695687e-05,5.84607407826147e-06],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"text":["8.21 %","20.52 %","25.65 %","21.38 %","13.36 %","6.68 %","2.78 %","0.99 %","0.31 %","0.09 %","0.02 %","0 %","0 %","0 %","0 %","0 %"],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div id="continuous-distributions" class="section level3">
-<h3>Continuous Distributions</h3>
 <hr />
-<hr />
+</div>
+</div>
+<div id="continuous-distributions" class="section level2">
+<h2>Continuous Distributions</h2>
 <!--
 
 -->
+<hr />
+</div>
+<div id="mapping-techniques" class="section level2">
+<h2>Mapping Techniques</h2>
+<hr />
+<hr />
 </div>
 </div>
-<div id="assignment" class="section level2">
-<h2>Assignment</h2>
-</div>
+<div id="assignment" class="section level1">
+<h1>Assignment</h1>
 </div>
 
 <p>&copy; 2022 brownhr. v.0.0.5</p>

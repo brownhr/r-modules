@@ -364,6 +364,9 @@ div.tocify {
     <li>
       <a href="RModule4.html">R Module 4</a>
     </li>
+    <li>
+      <a href="RModule5.html">R Module 5</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -475,10 +478,11 @@ the variable <code>tree_data</code>. You can see this variable in the
 <p>Now, we’ll get into the real content of why scripts are useful! Let’s
 create some graphs and figures, but let’s use some specialized packages
 to do so.</p>
-<div style="page-break-after: always;"></div>
+<hr />
 </div>
-<div id="ggplot2" class="section level3">
-<h3>ggplot2</h3>
+</div>
+<div id="ggplot2" class="section level2">
+<h2>ggplot2</h2>
 <p>The amazing <code>ggplot2</code> package is designed to generate
 high-quality, visually appealing graphs, figures, and even maps! Using
 this package is somewhat different than the base R <code>plot()</code>
@@ -567,16 +571,17 @@ showing:</strong></p>
 I moved the Working Directory and File Management topics to R Module 3; this one seemed to be getting a bit lengthy, so I didn't want to add too much all at once!
 -->
 <hr />
+<hr />
 </div>
 </div>
-<div id="introductory-statistics" class="section level2">
-<h2>Introductory Statistics</h2>
+<div id="introductory-statistics" class="section level1">
+<h1>Introductory Statistics</h1>
 <p>Now that we’ve covered some more fundamental R topics, we can discuss
 the quantitative methods of this R Module. We’ll keep it fairly light
 and talk about introductory descriptive statistics — <em>Measures of
 Central Tendency</em> and <em>Measures of Dispersion</em>.</p>
-<div id="measures-of-central-tendency" class="section level3">
-<h3>Measures of Central Tendency</h3>
+<div id="measures-of-central-tendency" class="section level2">
+<h2>Measures of Central Tendency</h2>
 <p>These kinds of statistics give us insight into our set of data by
 giving us a single value which describes the “middle” of our data. These
 measures include the <strong>mean</strong>, <strong>median</strong>, and
@@ -586,8 +591,8 @@ cons. For more information, check out <a
 href="https://www.abs.gov.au/websitedbs/D3310114.nsf/Home/Statistical+Language+-+measures+of+central+tendency">this
 site</a>, which explains some more examples of Measures of Central
 Tendency.</p>
-<div id="the-mean" class="section level4">
-<h4>The Mean</h4>
+<div id="the-mean" class="section level3">
+<h3>The Mean</h3>
 <p>The <strong>mean</strong> is defined as the sum of each observation,
 divided by the number of observations (i.e., the <em>arithmetic
 average</em>).</p>
@@ -600,8 +605,8 @@ sum(numbers) / length(numbers)</code></pre>
 <p>The mean is sensitive to outliers and skewed distributions, so it’s
 not always the best to use.</p>
 </div>
-<div id="the-median" class="section level4">
-<h4>The Median</h4>
+<div id="the-median" class="section level3">
+<h3>The Median</h3>
 <p>The <strong>median</strong> can be thought of as the value closest to
 the “middle” of our distribution; it is the value which divides the data
 in half, such that half of our data lies on one side of the mean, and
@@ -616,8 +621,8 @@ sort(numbers)</code></pre>
 making it better suited to data that is skewed in a particular
 direction.</p>
 </div>
-<div id="the-mode" class="section level4">
-<h4>The Mode</h4>
+<div id="the-mode" class="section level3">
+<h3>The Mode</h3>
 <p>The <strong>mode</strong> is simply the most commonly occurring value
 within a given distribution; if we were to count how many times each
 number appears, the mode would be the number with the most occurrences.
@@ -640,11 +645,12 @@ find_mode(numbers)</code></pre>
 find_mode(actors)</code></pre>
 <pre><code>## [1] &quot;Chris&quot;</code></pre>
 <hr />
+<hr />
 </div>
 </div>
 </div>
-<div id="assignment" class="section level2">
-<h2>Assignment</h2>
+<div id="assignment" class="section level1">
+<h1>Assignment</h1>
 <p><strong>Assignment 2: Visualize and Explore the <code>mtcars</code>
 Dataset and Create Plots Using <code>ggplot2</code></strong></p>
 <ol style="list-style-type: decimal">
@@ -683,7 +689,6 @@ object earlier in the script than when you initialize it.<br />
 </ol>
 <p>Submit <strong>all</strong> assignment questions to Google Classroom!
 Be sure to include your name, the question number, and all figures!</p>
-</div>
 </div>
 
 <p>&copy; 2022 brownhr. v.0.0.5</p>

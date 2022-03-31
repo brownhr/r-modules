@@ -19,12 +19,30 @@ klippy::klippy()
 
 ### Factors and Levels in R
 
-### Recoding using `dplyr`
+***
 
-### Visualizing Qualitative Data with `ggplot2`
+## Recoding using `dplyr`
 
-## Survey Development, Sampling, and Statistical Tests
 
-### Sampling Techniques
+***
 
-### Statistisal Tests for Surveys
+## Visualizing Qualitative Data with `ggplot2`
+
+***
+***
+
+
+# Survey Development, Sampling, and Statistical Tests
+
+## Sampling Techniques
+
+***
+
+
+## Statistisal Tests for Surveys
+
+***
+***
+
+
+# Assignment

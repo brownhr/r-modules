@@ -22,6 +22,8 @@ navbar:
         href: RModule3.html
       - text: "R Module 4"
         href: RModule4.html
+      - text: "R Module 5"
+        href: RModule5.html
 output:
   html_document:
     theme: lumen

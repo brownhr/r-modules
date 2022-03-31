@@ -29,6 +29,8 @@ When we work with real-life data, it's important to know how to both read data f
 
 Let's go ahead and initialize a new R Project (`File > New Project...`) and call it *R Module 3*.
 
+***
+
 ## Importing and Exporting Data
 
 Working in future R Modules, classes, and projects, you'll need to be able to load, save, and share data. Fortunately, there are tools to load this data for almost any data type, from .csv's to shapefiles, raster images, and many more. We'll go over a couple of the most useful tools and packages used in data management to work with files in R.
@@ -43,6 +45,7 @@ The `readr` package provides some excellent functionality reading and writing da
 
 `readr` comes with functions that allow for easy manipulation of primarily table-based data, such as `.csv` and `.tsv` files, allowing us to work with data that we make in Excel or Google Sheets. Especially when working with large files, or large numbers of files, `readr` makes importing and exporting data easy, and is much faster at reading and writing than the base `R` functions.
 
+***
 
 ## Mapping with `sf`
 
@@ -94,23 +97,26 @@ Read more about `sf` by going to https://r-spatial.github.io/sf/
 3. What's the purpose of the `coord_sf()` function? Use `?coord_sf()` to view documentation and usage, and describe its arguments. 
 
 
-
 ### Choropleth Mapping
 
-### Importing and Exporting Shapefiles
+<!--
+
+Describe a bit of choropleth mapping here; classes, quantiles, etc. 
+
+-->
+
 
 ***
-
 ***
 
-## Probability and Probability Distributions
+# Probability and Distributions
 
-### Mapping Techniques
 
-### Discrete Distributions
+## Discrete Distributions
 
-#### Uniform
-#### Binomial
+### Uniform
+
+### Binomial
 
 
 Let's go ahead and learn by example! Within your R Module 3 folder (or wherever you initialized your R Project), copy over the `data` folder. Set up an R Script called `Task1.R` and enter the following:
@@ -128,7 +134,7 @@ cars_data
 ```
 
 
-#### Poisson Distribution
+### Poisson Distribution
 
 A Poisson distribution refers to a kind of discrete distribution that shows the probability of a given number of events $k$ occurring, given the parameter lambda, $\lambda$. $\lambda$ can be thought of as the "average number of events"; for example, if the average number of goals in a World Cup match is 2.5, then $\lambda = 2.5$. Mathematically, the Poisson distribution is modeled by:
 $$p(k; \lambda) = \frac{e^{-\lambda}\lambda^{k}}{{k}!},$$
@@ -178,12 +184,11 @@ bscols(
 )
 ```
 
-
-### Continuous Distributions
-
 ***
 
-***
+## Continuous Distributions
+
+
 
 <!--
 ```{r leaflet, eval = F, echo = F, include = F, message=F, warning=F}
@@ -223,4 +228,14 @@ bscols(
 ```
 -->
 
-## Assignment
+***
+
+## Mapping Techniques
+
+
+
+***
+***
+
+
+# Assignment

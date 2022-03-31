@@ -84,9 +84,9 @@ Before we go any further, let's save our script (`Cmd/CTRL-S`) as `tree_data.R`.
 
 Now, we'll get into the real content of why scripts are useful! Let's create some graphs and figures, but let's use some specialized packages to do so.
 
-\newpage
+***
 
-### ggplot2
+## ggplot2
  
 The amazing `ggplot2` package is designed to generate high-quality, visually appealing graphs, figures, and even maps! Using this package is somewhat different than the base R `plot()` and `hist()` functions, but once you understand the core concept of how `ggplot2` works, it'll be easy to create your own graphs!
 
@@ -146,17 +146,19 @@ I moved the Working Directory and File Management topics to R Module 3; this one
 -->
 
 
-------------
+***
+***
 
-## Introductory Statistics
+
+# Introductory Statistics
 
 Now that we've covered some more fundamental R topics, we can discuss the quantitative methods of this R Module. We'll keep it fairly light and talk about introductory descriptive statistics — *Measures of Central Tendency* and *Measures of Dispersion*.
 
-### Measures of Central Tendency
+## Measures of Central Tendency
 
 These kinds of statistics give us insight into our set of data by giving us a single value which describes the "middle" of our data. These measures include the **mean**, **median**, and **mode**, which describe a different method of determining the "typical" value in the distribution, and all have their pros and cons. For more information, check out [this site](https://www.abs.gov.au/websitedbs/D3310114.nsf/Home/Statistical+Language+-+measures+of+central+tendency), which explains some more examples of Measures of Central Tendency.
 
-#### The Mean
+### The Mean
 
 The **mean** is defined as the sum of each observation, divided by the number of observations (i.e., the *arithmetic average*).
 
@@ -171,7 +173,7 @@ mean(numbers)
 
 The mean is sensitive to outliers and skewed distributions, so it's not always the best to use. 
 
-#### The Median
+### The Median
 
 The **median** can be thought of as the value closest to the "middle" of our distribution; it is the value which divides the data in half, such that half of our data lies on one side of the mean, and half on the other. 
 
@@ -187,7 +189,7 @@ median(numbers)
 Compared to the mean, the median is less sensitive to outliers, making it better suited to data that is skewed in a particular direction. 
 
 
-#### The Mode
+### The Mode
 
 The **mode** is simply the most commonly occurring value within a given distribution; if we were to count how many times each number appears, the mode would be the number with the most occurrences. The mode is also the measure best suited for *categorical* data — data such as names or factors that cannot be as easily measured and compared.
 
@@ -212,9 +214,11 @@ find_mode(actors)
 ```
 
 
-------------
+***
+***
 
-## Assignment
+
+# Assignment
 
 **Assignment 2: Visualize and Explore the `mtcars` Dataset and Create Plots Using `ggplot2`**
 

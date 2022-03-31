@@ -29,6 +29,8 @@ R, or the *R Project for Statistical Computing*, is a programming language desig
 
 R is popular in geographical data science, as there are many packages (add-on libraries of pre-built tools and functions) that can be used to perform GIS, Remote Sensing, or qualitative analyses.
 
+***
+
 ## R Studio
 
 R Studio is a popular IDE (*Integrated Development Environment*) that allows for more convenient programming in the R language. Rather than running R programs (*scripts*) from the command line, R Studio allows users to interactively write and execute scripts, as well as view data and file paths in a single environment. R Studio also allows users to manage and install packages, generate plots and figures, and "knit" code into a .PDF or .HTML for making reports.
@@ -40,9 +42,8 @@ R Studio is a popular IDE (*Integrated Development Environment*) that allows for
 For writing up documents and reports, text editors like Word and Google Docs do the job, but sometimes we need to include figures, data, or reports. Rather than constantly taking screenshots (and updating them when things change!) we can use R Markdown to create comprehensive documents that automatically include figures and tables *directly from the data*. R Markdown has a bit of a learning curve, especially compared to Word, but once we cover the basics, it becomes easy to make documents and reports (this R Module was written entirely in R Markdown!)
 -->
 ```
-\newpage
 
-------------
+***
 
 ## Getting Started
 
@@ -73,7 +74,8 @@ Above is a screenshot of RStudio's interface; notice that the main window is div
 
 The other tabs and panes are useful, but those listed above are the most commonly-used.
 
-------------
+***
+
 
 ## Basics of R
 
@@ -116,11 +118,11 @@ We can also see from this **Use R to produce the following simple data summaries
 
     -   *Hint: you need to wrap the `pie()` function around the `table()` function, because you need **frequencies** of each school, rather than just their label*
 
-------------------------------------------------------------------------
+***
+***
 
-\newpage
 
-## Importing and Visualizing Quantitative Data
+# Importing and Visualizing Quantitative Data
 
 Now, we'll work with a different dataset; the tutorials in this section are based on a built-in dataset called `faithful`, from the pre-loaded `datasets` package. It consists of a collection of observations of the Old Faithful geyser in Yellowstone National Park.
 
