@@ -553,18 +553,25 @@ Describe a bit of choropleth mapping here; classes, quantiles, etc.
 </div>
 <div id="binomial" class="section level3">
 <h3>Binomial</h3>
-<p>Let’s go ahead and learn by example! Within your R Module 3 folder
-(or wherever you initialized your R Project), copy over the
-<code>data</code> folder. Set up an R Script called <code>Task1.R</code>
-and enter the following:</p>
-<pre class="r"><code>library(readr)
+<!--
+Let's go ahead and learn by example! Within your R Module 3 folder (or wherever you initialized your R Project), copy over the `data` folder. Set up an R Script called `Task1.R` and enter the following:
 
-data_path &lt;- &quot;data/mtcars.csv&quot;
 
-cars_data &lt;- read_csv(file = data_path)</code></pre>
-<pre><code>## # A tibble: 32 x 11
+
+
+```r
+library(readr)
+
+data_path <- "data/mtcars.csv"
+
+cars_data <- read_csv(file = data_path)
+```
+
+
+```
+## # A tibble: 32 x 11
 ##      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
-##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 ##  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
 ##  2  21       6  160    110  3.9   2.88  17.0     0     1     4     4
 ##  3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
@@ -575,7 +582,9 @@ cars_data &lt;- read_csv(file = data_path)</code></pre>
 ##  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
 ##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
 ## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
-## # ... with 22 more rows</code></pre>
+## # ... with 22 more rows
+```
+-->
 </div>
 <div id="poisson-distribution" class="section level3">
 <h3>Poisson Distribution</h3>
@@ -604,8 +613,8 @@ used to calculate the Poisson distribution.</p>
 <div class="container-fluid crosstalk-bscols">
 <div class="row">
 <div class="col-xs-12">
-<div id="htmlwidget-6ff3e101fa1fc88855ee" style="width:100%;height:400px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6ff3e101fa1fc88855ee">{"x":{"visdat":{"48c041fc458a":["function () ","plotlyVisDat"]},"cur_data":"48c041fc458a","attrs":{"48c041fc458a":{"x":{},"y":{},"hoverinfo":"text","text":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Number of Occurances"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Percent Chance"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"y":[8.20849986238988,20.5212496559747,25.6515620699684,21.3763017249736,13.3601885781085,6.68009428905426,2.78337262043928,0.994061650156885,0.310644265674026,0.0862900737983407,0.0215725184495851,0.00490284510217845,0.00102142606295385,0.000196428089029585,3.50764444695687e-05,5.84607407826147e-06],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"text":["8.21 %","20.52 %","25.65 %","21.38 %","13.36 %","6.68 %","2.78 %","0.99 %","0.31 %","0.09 %","0.02 %","0 %","0 %","0 %","0 %","0 %"],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-f7d08c3ac718fd197e70" style="width:100%;height:400px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f7d08c3ac718fd197e70">{"x":{"visdat":{"23c01d6c4618":["function () ","plotlyVisDat"]},"cur_data":"23c01d6c4618","attrs":{"23c01d6c4618":{"x":{},"y":{},"hoverinfo":"text","text":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Number of Occurances"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Percent Chance"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"y":[8.20849986238988,20.5212496559747,25.6515620699684,21.3763017249736,13.3601885781085,6.68009428905426,2.78337262043928,0.994061650156885,0.310644265674026,0.0862900737983407,0.0215725184495851,0.00490284510217845,0.00102142606295385,0.000196428089029585,3.50764444695687e-05,5.84607407826147e-06],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"text":["8.21 %","20.52 %","25.65 %","21.38 %","13.36 %","6.68 %","2.78 %","0.99 %","0.31 %","0.09 %","0.02 %","0 %","0 %","0 %","0 %","0 %"],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>

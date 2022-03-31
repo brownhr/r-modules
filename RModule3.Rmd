@@ -119,8 +119,10 @@ Describe a bit of choropleth mapping here; classes, quantiles, etc.
 
 ### Binomial
 
-
+<!--
 Let's go ahead and learn by example! Within your R Module 3 folder (or wherever you initialized your R Project), copy over the `data` folder. Set up an R Script called `Task1.R` and enter the following:
+
+
 
 ``` {r task-1-1, warning = F, message = F}
 library(readr)
@@ -133,7 +135,7 @@ cars_data <- read_csv(file = data_path)
 ```{r, echo = F}
 cars_data
 ```
-
+-->
 
 ### Poisson Distribution
 
