@@ -11,20 +11,22 @@ navbar:
     - text: "R Modules"
     
       menu:
-      - text: "R Modules"
+      - text: "R and R Studio"
       - text: "R Module 1"
         href: RModule1.html
       - text: "R Module 2"
         href: RModule2.html
+      - text: "-------"
+      - text: "Mapping"
       - text: "R Module 3"
         href: RModule3.html
       - text: "R Module 4"
         href: RModule4.html
 output:
   html_document:
-    # css: bootstrap.css
     theme: lumen
     highlight: textmate
-    include:
+    includes:
+      in_header: header.html
       after_body: footer.html
 output_dir: "."
