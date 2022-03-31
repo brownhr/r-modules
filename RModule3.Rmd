@@ -186,6 +186,8 @@ bscols(
     )
 )
 ```
+Poisson Distribution with $\lambda$ = 2.5
+
 
 ***
 
