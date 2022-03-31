@@ -439,7 +439,7 @@ Regex. If you want to enter a file path, use either
 <code>C:\\Example\\File\\path</code>; adding two backslashes is
 necessary in this case.</p>
 <div id="readr" class="section level3">
-<h3><code>readr</code></h3>
+<h3><strong><code>readr</code></strong></h3>
 <p>The <code>readr</code> package provides some excellent functionality
 reading and writing data from and to files; while many of its functions
 exist in base R, <code>readr</code> is markedly faster, and provides
@@ -573,11 +573,33 @@ cars_data &lt;- read_csv(file = data_path)</code></pre>
 </div>
 <div id="poisson-distribution" class="section level4">
 <h4>Poisson Distribution</h4>
+<p>A Poisson distribution refers to a kind of discrete distribution that
+shows the probability of a given number of events <span
+class="math inline">\(k\)</span> occurring, given the parameter lambda,
+<span class="math inline">\(\lambda\)</span>. <span
+class="math inline">\(\lambda\)</span> can be thought of as the “average
+number of events”; for example, if the average number of goals in a
+World Cup match is 2.5, then <span class="math inline">\(\lambda =
+2.5\)</span>. Mathematically, the Poisson distribution is modeled by:
+<span class="math display">\[p(k; \lambda) =
+\frac{e^{-\lambda}\lambda^{k}}{{k}!},\]</span> where <span
+class="math inline">\(k\)</span> is the given number of events that we
+want to calculate the probability for. For example, if we want to find
+the probability of 5 goals being scored in a World Cup game, we can
+calculate the following in R:</p>
+<pre class="r"><code>p &lt;- dpois(x = 5, lambda = 2.5)
+
+print(p)</code></pre>
+<pre><code>## [1] 0.06680094</code></pre>
+<p>So, <span class="math inline">\(\approx6.68\%\)</span> of the time, 5
+goals will be scored. The functions <code>dpois()</code>,
+<code>ppois()</code>, <code>qpois()</code>, and <code>rpois()</code> are
+used to calculate the Poisson distribution.</p>
 <div class="container-fluid crosstalk-bscols">
 <div class="row">
 <div class="col-xs-12">
-<div id="htmlwidget-5ec70829c6aa79231d3f" style="width:100%;height:400px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5ec70829c6aa79231d3f">{"x":{"visdat":{"3586f2735b9":["function () ","plotlyVisDat"]},"cur_data":"3586f2735b9","attrs":{"3586f2735b9":{"x":{},"y":{},"hoverinfo":"text","text":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Number of Occurances"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Density"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[0.00673794699908547,0.0336897349954273,0.0842243374885683,0.140373895814281,0.175467369767851,0.175467369767851,0.146222808139876,0.104444862957054,0.0652780393481587,0.0362655774156437,0.0181327887078219,0.00824217668537357,0.00343424028557233,0.00132086164829705,0.000471736302963232,0.000157245434321077,4.91391982253366e-05,1.44527053603931e-05,4.01464037788698e-06,1.05648430997026e-06,2.64121077492563e-07],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"text":["Density: 0.01","Density: 0.03","Density: 0.08","Density: 0.14","Density: 0.18","Density: 0.18","Density: 0.15","Density: 0.1","Density: 0.07","Density: 0.04","Density: 0.02","Density: 0.01","Density: 0","Density: 0","Density: 0","Density: 0","Density: 0","Density: 0","Density: 0","Density: 0","Density: 0"],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-fb43a991c3577b6e72f7" style="width:100%;height:400px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fb43a991c3577b6e72f7">{"x":{"visdat":{"37287bd5ca6":["function () ","plotlyVisDat"]},"cur_data":"37287bd5ca6","attrs":{"37287bd5ca6":{"x":{},"y":{},"hoverinfo":"text","text":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Number of Occurances"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Percent Chance"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"y":[8.20849986238988,20.5212496559747,25.6515620699684,21.3763017249736,13.3601885781085,6.68009428905426,2.78337262043928,0.994061650156885,0.310644265674026,0.0862900737983407,0.0215725184495851,0.00490284510217845,0.00102142606295385,0.000196428089029585,3.50764444695687e-05,5.84607407826147e-06],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"text":["8.21 %","20.52 %","25.65 %","21.38 %","13.36 %","6.68 %","2.78 %","0.99 %","0.31 %","0.09 %","0.02 %","0 %","0 %","0 %","0 %","0 %"],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>

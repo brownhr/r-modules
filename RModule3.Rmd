@@ -37,7 +37,7 @@ In this lab, you'll use a folder called `data`, which contains a file called `mt
 
 **N.B.** within R, it is very important to distinguish between `/` and `\`; `\` is called an "escape character" and is used in more advanced text entry such as Regex. If you want to enter a file path, use either `C:/Example/File/path` or `C:\\Example\\File\\path`; adding two backslashes is necessary in this case.
 
-### `readr`
+### **`readr`**
 
 The `readr` package provides some excellent functionality reading and writing data from and to files; while many of its functions exist in base R, `readr` is markedly faster, and provides more functionality for importing different types of data in a "tidy" manner ("tidy" is a programming concept in R that we'll get to later). For more information about `readr`, visit https://readr.tidyverse.org
 
@@ -130,13 +130,24 @@ cars_data
 
 #### Poisson Distribution
 
+A Poisson distribution refers to a kind of discrete distribution that shows the probability of a given number of events $k$ occurring, given the parameter lambda, $\lambda$. $\lambda$ can be thought of as the "average number of events"; for example, if the average number of goals in a World Cup match is 2.5, then $\lambda = 2.5$. Mathematically, the Poisson distribution is modeled by:
+$$p(k; \lambda) = \frac{e^{-\lambda}\lambda^{k}}{{k}!},$$
+where $k$ is the given number of events that we want to calculate the probability for. For example, if we want to find the probability of 5 goals being scored in a World Cup game, we can calculate the following in R:
+
+```{r}
+p <- dpois(x = 5, lambda = 2.5)
+
+print(p)
+
+```
+So, $\approx6.68\%$ of the time, 5 goals will be scored. The functions `dpois()`, `ppois()`, `qpois()`, and `rpois()` are used to calculate the Poisson distribution.
 
 ```{r setup-poisson, message F, warning = F, echo = FALSE}
 # Make Poisson plot using plotly
 library(glue)
 
 
-num_occurances <- 0:20 %>%
+num_occurances <- 0:15 %>%
   as.data.frame() %>%
   `colnames<-`("Occurances")
 
@@ -155,14 +166,14 @@ bscols(
   plot_ly(
     data = num_occurances,
     x = ~ Occurances,
-    y = ~ dpois(Occurances, lambda = 5),
+    y = ~ (dpois(Occurances, lambda = 2.5) * 100 %>% round(digits = 0)),
     hoverinfo = "text",
-    text = ~ paste("Density:", dpois(Occurances, lambda = 5) %>% round(digits = 2))
+    text = ~ paste((dpois(Occurances, lambda = 2.5) * 100) %>% round(digits = 2), "%")
   ) %>%
     add_bars() %>%
     layout(
       xaxis = list(title = "Number of Occurances"),
-      yaxis = list(title = "Density")
+      yaxis = list(title = "Percent Chance")
     )
 )
 ```

@@ -214,7 +214,7 @@ find_mode(actors)
 
 ------------
 
-### Assignment
+## Assignment
 
 **Assignment 2: Visualize and Explore the `mtcars` Dataset and Create Plots Using `ggplot2`**
 
