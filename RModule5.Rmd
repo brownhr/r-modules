@@ -1,0 +1,42 @@
+---
+output:
+  html_document:
+      toc: true
+      toc_float: true
+      toc_collapsed: true
+      toc_depth: 3
+      number_sections: false
+---
+
+# R Module 5
+
+
+## Graphing confidence intervals
+
+***
+
+## Mutating data with `dplyr::mutate()`
+
+
+### Adding columns programatically
+
+
+***
+***
+
+
+# Probability and Confidence Intervals
+
+
+## Central Limit Theorem
+
+***
+
+## Confidence Intervals
+
+
+
+***
+***
+
+# Assignment
