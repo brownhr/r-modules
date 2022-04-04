@@ -17,17 +17,21 @@ navbar:
       - text: "R Module 2"
         href: RModule2.html
       - text: "-------"
-      - text: "Mapping"
+      - text: "Basic Statistics"
       - text: "R Module 3"
         href: RModule3.html
       - text: "R Module 4"
         href: RModule4.html
       - text: "R Module 5"
         href: RModule5.html
+      # - text: "-------"
+      # - text: "Intermediate R"
+      # - text: "R Module 6"
+      #   href: RModule6.html
 output:
   html_document:
-    theme: lumen
-    highlight: textmate
+    theme: flatly
+    highlight: default
     includes:
       in_header: header.html
       after_body: footer.html
