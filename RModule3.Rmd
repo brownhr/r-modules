@@ -18,19 +18,17 @@ library(plotly)
 library(crosstalk)
 ```
 
-
 ```{r klrm3, echo = F, include = T}
 klippy::klippy()
 ```
 
-
 ## File Management
 
-When we work with real-life data, it's important to know how to both read data from our computer and write data from R Studio as a file. File management is an essential part of any workflow, especially as the scope and scale of analyses increases. Sometimes each file can be quite large – often several dozen or hundred megabytes or more – so it's important to analyze data in a modular fashion (our computers have limited memory, disk space, processing power, and speed, after all). Fortunately, many tools exists within R and R Studio to make these tasks easier. In this R Module, you'll learn some skills and R Packages that are frequently used to import and export data from your R environment.
+When we work with real-life data, it's important to know how to both read data from our computer and write data from R Studio as a file. File management is an essential part of any workflow, especially as the scope and scale of analyses increases. Sometimes each file can be quite large -- often several dozen or hundred megabytes or more -- so it's important to analyze data in a modular fashion (our computers have limited memory, disk space, processing power, and speed, after all). Fortunately, many tools exists within R and R Studio to make these tasks easier. In this R Module, you'll learn some skills and R Packages that are frequently used to import and export data from your R environment.
 
 Let's go ahead and initialize a new R Project (`File > New Project...`) and call it *R Module 3*.
 
-***
+------------------------------------------------------------------------
 
 ## Importing and Exporting Data
 
@@ -42,17 +40,17 @@ In this lab, you'll use a folder called `data`, which contains a file called `mt
 
 ### **`readr`**
 
-The `readr` package provides some excellent functionality reading and writing data from and to files; while many of its functions exist in base R, `readr` is markedly faster, and provides more functionality for importing different types of data in a "tidy" manner ("tidy" is a programming concept in R that we'll get to later). For more information about `readr`, visit https://readr.tidyverse.org
+The `readr` package provides some excellent functionality reading and writing data from and to files; while many of its functions exist in base R, `readr` is markedly faster, and provides more functionality for importing different types of data in a "tidy" manner ("tidy" is a programming concept in R that we'll get to later). For more information about `readr`, visit <https://readr.tidyverse.org>
 
 `readr` comes with functions that allow for easy manipulation of primarily table-based data, such as `.csv` and `.tsv` files, allowing us to work with data that we make in Excel or Google Sheets. Especially when working with large files, or large numbers of files, `readr` makes importing and exporting data easy, and is much faster at reading and writing than the base `R` functions.
 
-***
+------------------------------------------------------------------------
 
 ## Mapping with `sf`
 
-Simple Features for R, or `sf`, is an R package that allows for much easier geospatial analysis than older packages like `rgdal`. `sf` works with "simple features" -- vector objects in GIS like points, lines, polygons, etc. -- and stores their "geometry" -- their list of coordinates -- as a column in a data frame. This allows for geospatial data to be processed in exactly the same way as non-spatial data; you can run functions and analyses on the attribute table of a shapefile without needing to convert or export to any intermediate formats, for example. 
+Simple Features for R, or `sf`, is an R package that allows for much easier geospatial analysis than older packages like `rgdal`. `sf` works with "simple features" -- vector objects in GIS like points, lines, polygons, etc. -- and stores their "geometry" -- their list of coordinates -- as a column in a data frame. This allows for geospatial data to be processed in exactly the same way as non-spatial data; you can run functions and analyses on the attribute table of a shapefile without needing to convert or export to any intermediate formats, for example.
 
-`sf` can work with shapefiles and other vector formats made by ArcGIS Pro, QGIS, etc., so if you have a shapefile, you can import it into R with `read_sf()`, perform your analysis, and export any sort of spatial result with `write_sf()`. 
+`sf` can work with shapefiles and other vector formats made by ArcGIS Pro, QGIS, etc., so if you have a shapefile, you can import it into R with `read_sf()`, perform your analysis, and export any sort of spatial result with `write_sf()`.
 
 Even better, there's compatability with `ggplot2`! Suppose we have two shapefiles that we wish to map: `NC_Counties` and `US_States`. Combining them is easy in `ggplot2`:
 
@@ -84,38 +82,54 @@ ggplot() +
 
 Looks good so far! You'll make a few maps of your own later in the Module, so feel free to read more about how `geom_sf()` and the other `ggplot2` and `sf` functions work.
 
-Read more about `sf` by going to https://r-spatial.github.io/sf/
+Read more about `sf` by going to <https://r-spatial.github.io/sf/>
 
 **Answer the following questions, and include them in your final document:**
 
-1. Within your `data/` folder, open the file `NC_Counties.prj` with a program like Notepad or Notepad++.
-    - What kind of information does this file contain?
-    - Why is it important to include these "auxiliary" files?
-    - What would happen if you forgot to include the `.prj` file?
+1.  Within your `data/` folder, open the file `NC_Counties.prj` with a program like Notepad or Notepad++.
 
-2. For the `US_States` layer, the `fill` argument stands on its own, while for `NC_Counties`, it's inside the `aes()` function. Why is this the case -- what's the difference between these two layers?
+    -   What kind of information does this file contain?
+    -   Why is it important to include these "auxiliary" files?
+    -   What would happen if you forgot to include the `.prj` file?
 
-3. What's the purpose of the `coord_sf()` function? Use `?coord_sf()` to view documentation and usage, and describe its arguments. 
+2.  For the `US_States` layer, the `fill` argument stands on its own, while for `NC_Counties`, it's inside the `aes()` function. Why is this the case -- what's the difference between these two layers?
 
+3.  What's the purpose of the `coord_sf()` function? Use `?coord_sf()` to view documentation and usage, and describe its arguments.
 
 ### Choropleth Mapping
 
-<!--
-
-Describe a bit of choropleth mapping here; classes, quantiles, etc. 
-
--->
+Choropleth maps are a type of thematic map that is used to display distinct geographic regions, such as states, counties, or countries. The colors used in choropleth mapping are **classified**; rather than a continuous range, the values are grouped into different classes, so that similar values share a color.
 
 
-***
-***
+```{r choropleth, echo=FALSE, message=FALSE}
+library(viridis)
+library(tmap)
+
+data <- US_States %>%
+  mutate(w_km = AWATER / (1000*1000)) %>%
+  st_transform(crs = st_crs("ESRI:102004"))
+
+tm_shape(data) +
+  tm_polygons(col = "w_km", n = 5, style = "pretty", title = "Water Area (sq. km.)")
+
+
+```
+
+
+------------------------------------------------------------------------
+
+## Mapping Techniques
+
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
 
 # Probability and Distributions
 
-
 ## Discrete Distributions
 
-Discrete probability distributions count occurrences that have countable or finite outcomes, such as the population of states within the U.S., days of rainfall, or average number of pets in households. 
+Discrete probability distributions count occurrences that have countable or finite outcomes, such as the population of states within the U.S., days of rainfall, or average number of pets in households.
 
 ### Uniform
 
@@ -140,7 +154,6 @@ ggplot(unif, aes(x = Input, y = Output)) +
 
 ```
 
-
 ### Binomial
 
 ```{r binom, echo = F}
@@ -159,14 +172,9 @@ ggplot(binom, aes(x = Value, y = Occurrances)) +
 
 ```
 
-
-
-
 ### Poisson Distribution
 
-A Poisson distribution refers to a kind of discrete distribution that shows the probability of a given number of events $k$ occurring, given the parameter lambda, $\lambda$. $\lambda$ can be thought of as the "average number of events"; for example, if the average number of goals in a World Cup match is 2.5, then $\lambda = 2.5$. Mathematically, the Poisson distribution is modeled by:
-$$p(k; \lambda) = \frac{e^{-\lambda}\lambda^{k}}{{k}!},$$
-where $k$ is the given number of events that we want to calculate the probability for. For example, if we want to find the probability of 5 goals being scored in a World Cup game, we can calculate the following in R:
+A Poisson distribution refers to a kind of discrete distribution that shows the probability of a given number of events $k$ occurring, given the parameter lambda, $\lambda$. $\lambda$ can be thought of as the "average number of events"; for example, if the average number of goals in a World Cup match is 2.5, then $\lambda = 2.5$. Mathematically, the Poisson distribution is modeled by: $$p(k; \lambda) = \frac{e^{-\lambda}\lambda^{k}}{{k}!},$$ where $k$ is the given number of events that we want to calculate the probability for. For example, if we want to find the probability of 5 goals being scored in a World Cup game, we can calculate the following in R:
 
 ```{r}
 p <- dpois(x = 5, lambda = 2.5)
@@ -174,6 +182,7 @@ p <- dpois(x = 5, lambda = 2.5)
 print(p)
 
 ```
+
 So, $\approx6.68\%$ of the time, 5 goals will be scored. The functions `dpois()`, `ppois()`, `qpois()`, and `rpois()` are used to calculate the Poisson distribution.
 
 ```{r setup-poisson, message F, warning = F, echo = FALSE}
@@ -181,14 +190,14 @@ So, $\approx6.68\%$ of the time, 5 goals will be scored. The functions `dpois()`
 
 pois <- 0:30 %>%
   as.data.frame() %>%
-  `colnames<-`("Value") %>% 
+  `colnames<-`("Input") %>% 
   mutate(
-    Occurrances = dpois(Value, lambda = 2.5)
+    Output = dpois(Input, lambda = 2.5)
   )
 
 
 
-ggplot(pois, aes(x = Value, y = Occurrances)) + 
+ggplot(pois, aes(x = Input, y = Output)) + 
   geom_col(
     fill = "steelblue"
   ) + 
@@ -197,25 +206,36 @@ ggplot(pois, aes(x = Value, y = Occurrances)) +
   )
 
 ```
+
 Poisson Distribution with $\lambda$ = 2.5
 
-
-***
+------------------------------------------------------------------------
 
 ## Continuous Distributions
 
-Continuous distributions differ from discrete distributions in that outcomes can lie on a continuous range of values, for example, average daily temperature, atmospheric pressure, or elevation of state capitols. 
+Continuous distributions differ from discrete distributions in that outcomes can lie on a continuous range of values, for example, average daily temperature, atmospheric pressure, or elevation of state capitols.
+
+```{r continuous, echo = FALSE}
+
+norm <- seq(-2,2,.1) %>% 
+  as.data.frame() %>% 
+  `colnames<-`("Input") %>% 
+  mutate(
+    Output = dnorm(Input)
+  )
+
+ggplot(norm, aes(x = Input, y = Output)) + 
+  geom_col(fill = "steelblue") +
+  labs(
+    title = "Continuous Normal Distribution"
+  )
+
+```
 
 
 
-***
+------------------------------------------------------------------------
 
-## Mapping Techniques
-
-
-
-***
-***
-
+------------------------------------------------------------------------
 
 # Assignment
