@@ -505,16 +505,19 @@ href="https://r-spatial.github.io/sf/"
 class="uri">https://r-spatial.github.io/sf/</a></p>
 <p><strong>Answer the following questions, and include them in your
 final document:</strong></p>
+<blockquote>
 <ol style="list-style-type: decimal">
-<li><p>Within your <code>data/</code> folder, open the file
+<li>Within your <code>data/</code> folder, open the file
 <code>NC_Counties.prj</code> with a program like Notepad or
-Notepad++.</p>
+Notepad++.</li>
+</ol>
 <ul>
 <li>What kind of information does this file contain?</li>
 <li>Why is it important to include these “auxiliary” files?</li>
 <li>What would happen if you forgot to include the <code>.prj</code>
 file?</li>
-</ul></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
 <li><p>For the <code>US_States</code> layer, the <code>fill</code>
 argument stands on its own, while for <code>NC_Counties</code>, it’s
 inside the <code>aes()</code> function. Why is this the case – what’s
@@ -523,20 +526,63 @@ the difference between these two layers?</p></li>
 <code>?coord_sf()</code> to view documentation and usage, and describe
 its arguments.</p></li>
 </ol>
-<div id="choropleth-mapping" class="section level3">
-<h3>Choropleth Mapping</h3>
+</blockquote>
+<hr />
+</div>
+<div id="choropleth-mapping" class="section level2">
+<h2>Choropleth Mapping</h2>
 <p>Choropleth maps are a type of thematic map that is used to display
 distinct geographic regions, such as states, counties, or countries. The
 colors used in choropleth mapping are <strong>classified</strong>;
 rather than a continuous range, the values are grouped into different
 classes, so that similar values share a color.</p>
+<p>The <code>tmap</code> package is very useful for choropleth mapping,
+and offers a lot of functionality for customizing maps.</p>
+<pre class="r"><code>library(tmap)
+
+# This function reprojects our shapefile into a different coordinate reference
+# system (CRS), and is useful when performing GIS-related tasks. In this case,
+# it&#39;s just to make the map look a little nicer.
+data &lt;- US_States %&gt;%
+  st_transform(crs = st_crs(&quot;ESRI:102004&quot;))
+
+tm_shape(data) +
+  tm_polygons(
+    # We&#39;re setting the color (col) mapping to the column &quot;Population&quot;. Notice
+    # that you have to enquote the variable name here, which is different than in
+    # ggplot2.
+    col = &quot;Population&quot;,
+    
+    # You can use RColorBrewer::brewer.pal.info to view many different kinds of
+    # color palettes available in R.
+    palette = &quot;Blues&quot;,
+    
+    # This argument is used to normalize; i.e. convert from population to
+    # population density. It&#39;s better to do this as a separate step in your
+    # data, but can be done here for quick mapping purposes.
+    convert2density = TRUE,
+    
+    # This sets the number of classes in our data.
+    n = 6,
+    
+    # What method to use to create the classes. Note that some options might
+    # overwrite your choice of n, so pay attention to how many classes your map
+    # actually has!
+    style = &quot;quantile&quot;,
+  ) +
+  tm_layout(
+    title = &quot;Population per Sq. km.&quot;, title.position = c(&quot;center&quot;, &quot;top&quot;),
+    legend.title.color = NA
+  )</code></pre>
 <p><img src="RModule3_files/figure-html/choropleth-1.png" width="672" /></p>
-<hr />
 </div>
-</div>
-<div id="mapping-techniques" class="section level2">
-<h2>Mapping Techniques</h2>
-<hr />
+<div id="section" class="section level2">
+<h2><!--
+------------------------------------------------------------------------
+
+## Mapping Techniques
+
+--></h2>
 <hr />
 </div>
 </div>
@@ -598,6 +644,18 @@ capitols.</p>
 </div>
 <div id="assignment" class="section level1">
 <h1>Assignment</h1>
+<p>In addition to questions 1-3 above, answer the following. Write up
+your responses, and submit your document to Google Classroom:</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Using <code>ggplot2</code>, generate a histogram of the distribution
+of county population. Include axis labels, a title, and your name.</li>
+<li>What type (continuous or discrete) does this distribution follow? Is
+the data normally distributed? If not, what kind of transformation can
+help “normalize” our data?</li>
+<li>With a shapefile of your own (using ArcGIS, the <code>tigris</code>
+or <code>tidycensus</code> packages, or other), create a choropleth map
+using 5 classes.</li>
+</ol>
 </div>
 
 <p>&copy; 2022 brownhr. v.0.0.5</p>

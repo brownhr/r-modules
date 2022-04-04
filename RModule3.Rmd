@@ -96,31 +96,61 @@ Read more about `sf` by going to <https://r-spatial.github.io/sf/>
 
 3.  What's the purpose of the `coord_sf()` function? Use `?coord_sf()` to view documentation and usage, and describe its arguments.
 
-### Choropleth Mapping
+
+***
+
+## Choropleth Mapping
 
 Choropleth maps are a type of thematic map that is used to display distinct geographic regions, such as states, counties, or countries. The colors used in choropleth mapping are **classified**; rather than a continuous range, the values are grouped into different classes, so that similar values share a color.
 
-
-```{r choropleth, echo=FALSE, message=FALSE}
-library(viridis)
+The `tmap` package is very useful for choropleth mapping, and offers a lot of functionality for customizing maps.
+```{r choropleth, message=FALSE}
 library(tmap)
 
+# This function reprojects our shapefile into a different coordinate reference
+# system (CRS), and is useful when performing GIS-related tasks. In this case,
+# it's just to make the map look a little nicer.
 data <- US_States %>%
-  mutate(w_km = AWATER / (1000*1000)) %>%
   st_transform(crs = st_crs("ESRI:102004"))
 
 tm_shape(data) +
-  tm_polygons(col = "w_km", n = 5, style = "pretty", title = "Water Area (sq. km.)")
+  tm_polygons(
+    # We're setting the color (col) mapping to the column "Population". Notice
+    # that you have to enquote the variable name here, which is different than in
+    # ggplot2.
+    col = "Population",
+    
+    # You can use RColorBrewer::brewer.pal.info to view many different kinds of
+    # color palettes available in R.
+    palette = "Blues",
+    
+    # This argument is used to normalize; i.e. convert from population to
+    # population density. It's better to do this as a separate step in your
+    # data, but can be done here for quick mapping purposes.
+    convert2density = TRUE,
+    
+    # This sets the number of classes in our data.
+    n = 6,
+    
+    # What method to use to create the classes. Note that some options might
+    # overwrite your choice of n, so pay attention to how many classes your map
+    # actually has!
+    style = "quantile",
+  ) +
+  tm_layout(
+    title = "Population per Sq. km.", title.position = c("center", "top"),
+    legend.title.color = NA
+  )
 
 
 ```
 
-
+<!--
 ------------------------------------------------------------------------
 
 ## Mapping Techniques
 
-
+-->
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
@@ -239,3 +269,9 @@ ggplot(norm, aes(x = Input, y = Output)) +
 ------------------------------------------------------------------------
 
 # Assignment
+
+In addition to questions 1-3 above, answer the following. Write up your responses, and submit your document to Google Classroom:
+
+4. Using `ggplot2`, generate a histogram of the distribution of county population. Include axis labels, a title, and your name.
+5. What type (continuous or discrete) does this distribution follow? Is the data normally distributed? If not, what kind of transformation can help "normalize" our data?
+6. With a shapefile of your own (using ArcGIS, the `tigris` or `tidycensus` packages, or other), create a choropleth map using 5 classes. 
