@@ -115,27 +115,52 @@ Describe a bit of choropleth mapping here; classes, quantiles, etc.
 
 ## Discrete Distributions
 
+Discrete probability distributions count occurrences that have countable or finite outcomes, such as the population of states within the U.S., days of rainfall, or average number of pets in households. 
+
 ### Uniform
+
+```{r unif, echo = F}
+
+unif <- seq(-1,2,.01) %>% 
+  as.data.frame() %>% 
+  `colnames<-`("Input") %>% 
+  mutate(
+    Output = dunif(Input)
+  )
+
+ggplot(unif, aes(x = Input, y = Output)) + 
+  geom_line(
+    color = "steelblue"
+  ) + 
+  # coord_cartesian(xlim = c(-1, 2),
+  #                 ylim = c(-0.5, 1)) +
+  labs(
+    title = "Uniform Distribution"
+  )
+
+```
+
 
 ### Binomial
 
-<!--
-Let's go ahead and learn by example! Within your R Module 3 folder (or wherever you initialized your R Project), copy over the `data` folder. Set up an R Script called `Task1.R` and enter the following:
+```{r binom, echo = F}
+
+binom <- 0:30 %>% 
+  as.data.frame() %>% 
+  `colnames<-`("Value") %>% 
+  mutate(
+    Occurrances = dbinom(Value, size = 30, prob = .5)
+  )
+
+ggplot(binom, aes(x = Value, y = Occurrances)) +
+  geom_col( fill = "steelblue") + 
+  labs(title = "Binomial Distribution")
 
 
-
-``` {r task-1-1, warning = F, message = F}
-library(readr)
-
-data_path <- "data/mtcars.csv"
-
-cars_data <- read_csv(file = data_path)
 ```
 
-```{r, echo = F}
-cars_data
-```
--->
+
+
 
 ### Poisson Distribution
 
@@ -153,38 +178,24 @@ So, $\approx6.68\%$ of the time, 5 goals will be scored. The functions `dpois()`
 
 ```{r setup-poisson, message F, warning = F, echo = FALSE}
 # Make Poisson plot using plotly
-library(glue)
 
-
-num_occurances <- 0:15 %>%
+pois <- 0:30 %>%
   as.data.frame() %>%
-  `colnames<-`("Occurances")
-
-# poiscol <- function(.df, n) {
-#   name <- paste("pois_", n)
-#   mutate(.df, !!name := dpois(Occurances, n))
-# }
-# 
-# for (i in seq(1, 6, 1)) {
-#   poiscol(num_occurances, i)
-# }
+  `colnames<-`("Value") %>% 
+  mutate(
+    Occurrances = dpois(Value, lambda = 2.5)
+  )
 
 
 
-bscols(
-  plot_ly(
-    data = num_occurances,
-    x = ~ Occurances,
-    y = ~ (dpois(Occurances, lambda = 2.5) * 100 %>% round(digits = 0)),
-    hoverinfo = "text",
-    text = ~ paste((dpois(Occurances, lambda = 2.5) * 100) %>% round(digits = 2), "%")
-  ) %>%
-    add_bars() %>%
-    layout(
-      xaxis = list(title = "Number of Occurances"),
-      yaxis = list(title = "Percent Chance")
-    )
-)
+ggplot(pois, aes(x = Value, y = Occurrances)) + 
+  geom_col(
+    fill = "steelblue"
+  ) + 
+  labs(
+    title = "Poisson Distribution"
+  )
+
 ```
 Poisson Distribution with $\lambda$ = 2.5
 
@@ -193,45 +204,9 @@ Poisson Distribution with $\lambda$ = 2.5
 
 ## Continuous Distributions
 
+Continuous distributions differ from discrete distributions in that outcomes can lie on a continuous range of values, for example, average daily temperature, atmospheric pressure, or elevation of state capitols. 
 
 
-<!--
-```{r leaflet, eval = F, echo = F, include = F, message=F, warning=F}
-library(leaflet)
-shared_nc <- SharedData$new(NC_Counties %>%
-  mutate(NAME = str_remove(NAME, ", North Carolina")) %>%
-  arrange(Population))
-bscols(
-  leaflet(shared_nc, width = "100%", height = 300) %>%
-    addTiles() %>%
-    addPolygons(
-      color = "gray40", weight = 1, smoothFactor = 0.5,
-      opacity = 1, fillOpacity = 0.9,
-      fillColor = ~ colorQuantile("Blues", Population)(Population),
-      highlightOptions = highlightOptions(color = "white", weight = 2, bringToFront = TRUE),
-      label = ~ paste(
-        NAME,
-        "\nPopulation:", Population
-      )
-    ),
-  plot_ly(
-    data = shared_nc,
-    y = ~ (Population %>% log10()),
-    x = ~NAME,
-    hoverinfo = "text",
-    text = ~ paste(
-      "County:", NAME,
-      "<br>Population:", Population
-    )
-  ) %>% add_markers(size = 3) %>%
-    layout(
-      xaxis = list(title = "County Name"),
-      yaxis = list(title = "Total Population (Log10)"),
-      legend = list(font = list(size = 16))
-    )
-)
-```
--->
 
 ***
 

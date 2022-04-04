@@ -39,15 +39,6 @@
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
-<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<script src="site_libs/plotly-binding-4.10.0/plotly.js"></script>
-<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
-<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="site_libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="site_libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-grid-3.4.1/bootstrap-grid.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 <link rel="shortcut icon" href="logo.svg" />
@@ -548,43 +539,16 @@ Describe a bit of choropleth mapping here; classes, quantiles, etc.
 <h1>Probability and Distributions</h1>
 <div id="discrete-distributions" class="section level2">
 <h2>Discrete Distributions</h2>
+<p>Discrete probability distributions count occurrences that have
+countable or finite outcomes, such as the population of states within
+the U.S., days of rainfall, or average number of pets in households.</p>
 <div id="uniform" class="section level3">
 <h3>Uniform</h3>
+<p><img src="RModule3_files/figure-html/unif-1.png" width="672" /></p>
 </div>
 <div id="binomial" class="section level3">
 <h3>Binomial</h3>
-<!--
-Let's go ahead and learn by example! Within your R Module 3 folder (or wherever you initialized your R Project), copy over the `data` folder. Set up an R Script called `Task1.R` and enter the following:
-
-
-
-
-```r
-library(readr)
-
-data_path <- "data/mtcars.csv"
-
-cars_data <- read_csv(file = data_path)
-```
-
-
-```
-## # A tibble: 32 x 11
-##      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
-##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
-##  2  21       6  160    110  3.9   2.88  17.0     0     1     4     4
-##  3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
-##  4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1
-##  5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2
-##  6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1
-##  7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4
-##  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
-##  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
-## 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
-## # ... with 22 more rows
-```
--->
+<p><img src="RModule3_files/figure-html/binom-1.png" width="672" /></p>
 </div>
 <div id="poisson-distribution" class="section level3">
 <h3>Poisson Distribution</h3>
@@ -610,24 +574,18 @@ print(p)</code></pre>
 goals will be scored. The functions <code>dpois()</code>,
 <code>ppois()</code>, <code>qpois()</code>, and <code>rpois()</code> are
 used to calculate the Poisson distribution.</p>
-<div class="container-fluid crosstalk-bscols">
-<div class="row">
-<div class="col-xs-12">
-<div id="htmlwidget-f4e0707a87fe29dcd2e4" style="width:100%;height:400px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f4e0707a87fe29dcd2e4">{"x":{"visdat":{"376418c64309":["function () ","plotlyVisDat"]},"cur_data":"376418c64309","attrs":{"376418c64309":{"x":{},"y":{},"hoverinfo":"text","text":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Number of Occurances"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Percent Chance"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"y":[8.20849986238988,20.5212496559747,25.6515620699684,21.3763017249736,13.3601885781085,6.68009428905426,2.78337262043928,0.994061650156885,0.310644265674026,0.0862900737983407,0.0215725184495851,0.00490284510217845,0.00102142606295385,0.000196428089029585,3.50764444695687e-05,5.84607407826147e-06],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"text":["8.21 %","20.52 %","25.65 %","21.38 %","13.36 %","6.68 %","2.78 %","0.99 %","0.31 %","0.09 %","0.02 %","0 %","0 %","0 %","0 %","0 %"],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
-</div>
-<p>Poisson Distribution with <span
-class="math inline">\(\lambda\)</span> = 2.5</p>
+<p><img src="RModule3_files/figure-html/setup-poisson,%20message%20F-1.png" width="672" />
+Poisson Distribution with <span class="math inline">\(\lambda\)</span> =
+2.5</p>
 <hr />
 </div>
 </div>
 <div id="continuous-distributions" class="section level2">
 <h2>Continuous Distributions</h2>
-<!--
-
--->
+<p>Continuous distributions differ from discrete distributions in that
+outcomes can lie on a continuous range of values, for example, average
+daily temperature, atmospheric pressure, or elevation of state
+capitols.</p>
 <hr />
 </div>
 <div id="mapping-techniques" class="section level2">
