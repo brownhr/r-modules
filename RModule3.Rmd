@@ -275,6 +275,7 @@ ggplot(norm, aes(x = Input, y = Output)) +
 **In addition to questions 1-3 above, answer the following. Write up your responses, and submit your document to Google Classroom:**
 
 4. Using `ggplot2`, generate a histogram of the distribution of county population. Include axis labels, a title, and your name.
+
 5. What type (continuous or discrete) does this distribution follow? Is the data normally distributed? If not, what kind of transformation can help "normalize" our data?
 6. With a shapefile of your own (using ArcGIS, the `tigris` or `tidycensus` packages, or other), create a choropleth map using 5 classes, including a title and a legend. Create a map for both *quantile* and *equal-interval* classification, and briefly describe the difference in distribution between your two maps.
 7. Repeat Question 6, using a different choice of classes.
