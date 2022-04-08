@@ -14,7 +14,14 @@ library(tidyverse)
 knitr::opts_chunk$set(
   fig.align = 'center'
 )
+
+us_counties_population <- read_csv("data/us_county_pop.csv")
+
 themeblue <- "#2c3e50"
+```
+
+```{r kl5, echo = F, include = TRUE}
+klippy::klippy()
 ```
 
 ***
@@ -225,30 +232,161 @@ We can interpret this as meaning there is a 95% probability of a single observed
   a. 20% of the area of the curve is to the left of an unknown value of x
   b. 67% of the area of the curve is to the right of an unknown value of x
 
+
+***
+***
+
 # Confidence Intervals
 
+Understanding the normal distribution is important to understanding confidence intervals. Why? Recall that we can usually assume that our sampling distribution of a variable is normal even if the actual population distribution isn't normal. If the underlying probability function that governs the sampling process is normal, we can use the logic described above to assess how likely a range around a given sample mean -- which is a point estimate of our population -- will actually contain the true population mean.
 
-## Central Limit Theorem
+Suppose we've collected a random sample of 10 recent graduates and asked what their annual salary is. We can enter our results in R by creating a vector:
 
-***
+```{r salary}
+x <- c(44617, 7066, 17594, 2726, 1178, 18898, 5033, 37151, 4514, 4000)
+```
 
-## Finding CIs in R
+Our goal is to use our sample to create an estimate of the population mean (i.e., the average salary of all recent graduates), and create a measure of how confident we are that the population mean is within a particular interval around our estimate. Put another way, we need to create a point estimate of the population from our sample and then create confidence intervals using that estimate. 
+
+In addition to our sample values, we are told that the standard deviation for salary among our population is $15,000, but that the population mean salary is unknown. For the sake of argument, let's assume the population distribution is approximately normal. Let's save this as `sdev`:
+```{r}
+sdev <- 15000
+```
+
+
+With this information, let's calculate a 70% confidence interval around our sample mean. This means that we want to find two currently unknown values for our sample mean ($\bar{X}$, or "X-bar"). 70 time out of 100 samples, we expect the actual population mean to fall in between these two values. In other words, we're interested in finding the values of $x$ that correspond to this area under the normal curve:
+
+
+```{r ci, echo = F, out.width="70%"}
+z.alpha.2 <- qnorm(p = 0.85,
+                  mean= 0,
+                  sd = 1)
+plot_vals <- seq(from = -4, to =  4, length  = 200)
+
+
+ggplot(data.frame(plot_vals), aes(plot_vals)) +
+  stat_function(
+    fun = dnorm,
+    xlim = c(-1 * z.alpha.2, z.alpha.2),
+    geom = "area",
+    fill = "brown1",
+    alpha = 0.75
+  ) +
+  stat_function(fun = dnorm) + 
+  annotate(
+    x = 0,
+    y = 0.2,
+    geom = "text",
+    size = 5,
+    label = "70%",
+    color = "snow"
+  ) +
+  labs(
+    x = "x"
+  ) + 
+  theme_minimal()
+```
 
 
 
-***
-***
+## Finding *CI*s in R
+
+Let's approach this with a bit of `R` programming. Suppose we have a set of data and want to regularly find a confidence interval of a given size (e.g., 70% or 95%). The formula for a confidence interval under these assumptions is:
+$$ \bar{X} = \pm z\frac{\alpha}{2}\frac{\sigma}{\sqrt{n}}$$
+If we want a confidence interval (*CI*) of 70%, our alpha needs to be 0.3 (*CI* = $1 - \alpha$). $\alpha$ then refers to the areas both to the left and to the right of our unknown $\bar{X}$ values (or the area "outside" our shaded region). Since the total area we're interested in is 30%, we need to divide $\alpha$ by two. In other words, we need the z-scores for $x < 15\%$ and $x > 85\%$. Remember, we can use `qnorm()` for this:
+
+```{r}
+z.alpha.2 <- qnorm(p = 0.85,
+                  mean= 0,
+                  sd = 1)
+```
+
+We can also easily calculate the mean:
+```{r}
+xbar <- mean(x)
+xbar
+```
+
+So, we know the z-scores for our interval and the sample mean, $\bar{X}$. Since we also know the standard deviation $\sigma$, we can simply plug these into our formula to provide our answer in real units of x (in this case, dollars).
+
+```{r bounds}
+
+lbound <- xbar - (z.alpha.2 * (sdev / sqrt(10)))
+ubound <- xbar + (z.alpha.2 * (sdev / sqrt(10)))
+
+lbound
+ubound
+
+```
+What does this mean? We are 70% confident that the actual (population) mean salary of all recent graduates lies within the range between \$9361.46 and \$19193.94
 
 <!--
-## Mutating data with `dplyr::mutate()`
-
-
-### Adding columns programatically
-
-
-***
-***
+Maggie, I put a backslash in front of the $ so it's not interpreted as a latex equation. 
 -->
+
+### Writing a function in R
+
+Let's take everything we've done so far and compose an R function. Rather than running everything line-by-line, we can call this function with the arguments we set, which makes this a lot more repeatable, reproducible, and reduces our chance of errors.
+
+To create a function in R, we use the form:
+
+```
+func_name <- function(arg1, arg2, etc.) {
+  contents of our function...
+}
+```
+We can call this function by first, defining the function in our environment by hitting `Ctrl-Enter` within an R script, and second, using the function just like any other R function.
+
+Let's try it out! We'll call our function `confidence.` We need a couple arguments (inputs, options, etc.), including: our data, `x`, our population standard deviation (15,000), and our desired confidence interval (70%, or 0.7)
+
+```{r function}
+confidence <- function(x, sdev = 15000, ci) {
+  # Notice that we've set the sdev argument to 15000, which means we've given
+  # the function a default argument. We don't need to specify sdev whenever we
+  # call the function, but if we do, it'll overwrite our default argument.
+  
+  # The length function gives us the number of elements, or n in our equation for CIs
+  n <- length(x)
+  xbar <- mean(x)
+  alpha <- (1 - ci) / 2
+  z.alpha.2 <- qnorm(p = 1 - alpha,
+                     mean = 0,
+                     sd = 1)
+  lbound = 
+    xbar - (z.alpha.2 * (sdev / sqrt(n)))
+  ubound = 
+    xbar + (z.alpha.2 * (sdev / sqrt(n)))
+  
+
+  # Let's round to 2 decimals, so we have dollars and cents
+  lbound <- round(lbound, digits = 2)
+  ubound <- round(ubound, digits = 2)
+  
+  return(c(lbound, ubound))
+}
+```
+
+
+Let's try our new function!
+
+```{r}
+confidence(x = x,
+           sdev = 15000,
+           ci = 0.7)
+```
+
+Neat!
+
+
+Writing functions is **by far** the best thing to do to perform tasks efficiently. Imagine you needed to calculate confidence intervals for hundreds of datasets; by writing functions and doing things in scripts, you can automate the entire process!
+
+
+***
+***
 
 
 # Assignment
+
+In addition to the questions above, answer the following in your lab report:
+
+3. Use the salary data from above to create 90%, 95%, and 99% confidence intervals. Provide each interval, along with your code. What happens to the interval range as you increase the confidence percentage?

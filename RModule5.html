@@ -35,6 +35,10 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 <link rel="shortcut icon" href="logo.svg" />
@@ -382,6 +386,10 @@ div.tocify {
 </div>
 
 
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
 <hr />
 <div id="calculating-probability-of-a-normal-distribution"
 class="section level1">
@@ -517,35 +525,156 @@ x</li>
 <li>67% of the area of the curve is to the right of an unknown value of
 x</li>
 </ol>
+<hr />
+<hr />
 </div>
 </div>
 <div id="confidence-intervals" class="section level1">
 <h1>Confidence Intervals</h1>
-<div id="central-limit-theorem" class="section level2">
-<h2>Central Limit Theorem</h2>
+<p>Understanding the normal distribution is important to understanding
+confidence intervals. Why? Recall that we can usually assume that our
+sampling distribution of a variable is normal even if the actual
+population distribution isn’t normal. If the underlying probability
+function that governs the sampling process is normal, we can use the
+logic described above to assess how likely a range around a given sample
+mean – which is a point estimate of our population – will actually
+contain the true population mean.</p>
+<p>Suppose we’ve collected a random sample of 10 recent graduates and
+asked what their annual salary is. We can enter our results in R by
+creating a vector:</p>
+<pre class="r"><code>x &lt;- c(44617, 7066, 17594, 2726, 1178, 18898, 5033, 37151, 4514, 4000)</code></pre>
+<p>Our goal is to use our sample to create an estimate of the population
+mean (i.e., the average salary of all recent graduates), and create a
+measure of how confident we are that the population mean is within a
+particular interval around our estimate. Put another way, we need to
+create a point estimate of the population from our sample and then
+create confidence intervals using that estimate.</p>
+<p>In addition to our sample values, we are told that the standard
+deviation for salary among our population is $15,000, but that the
+population mean salary is unknown. For the sake of argument, let’s
+assume the population distribution is approximately normal. Let’s save
+this as <code>sdev</code>:</p>
+<pre class="r"><code>sdev &lt;- 15000</code></pre>
+<p>With this information, let’s calculate a 70% confidence interval
+around our sample mean. This means that we want to find two currently
+unknown values for our sample mean (<span
+class="math inline">\(\bar{X}\)</span>, or “X-bar”). 70 time out of 100
+samples, we expect the actual population mean to fall in between these
+two values. In other words, we’re interested in finding the values of
+<span class="math inline">\(x\)</span> that correspond to this area
+under the normal curve:</p>
+<p><img src="RModule5_files/figure-html/ci-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<div id="finding-cis-in-r" class="section level2">
+<h2>Finding <em>CI</em>s in R</h2>
+<p>Let’s approach this with a bit of <code>R</code> programming. Suppose
+we have a set of data and want to regularly find a confidence interval
+of a given size (e.g., 70% or 95%). The formula for a confidence
+interval under these assumptions is: <span class="math display">\[
+\bar{X} = \pm z\frac{\alpha}{2}\frac{\sigma}{\sqrt{n}}\]</span> If we
+want a confidence interval (<em>CI</em>) of 70%, our alpha needs to be
+0.3 (<em>CI</em> = <span class="math inline">\(1 - \alpha\)</span>).
+<span class="math inline">\(\alpha\)</span> then refers to the areas
+both to the left and to the right of our unknown <span
+class="math inline">\(\bar{X}\)</span> values (or the area “outside” our
+shaded region). Since the total area we’re interested in is 30%, we need
+to divide <span class="math inline">\(\alpha\)</span> by two. In other
+words, we need the z-scores for <span class="math inline">\(x &lt;
+15\%\)</span> and <span class="math inline">\(x &gt; 85\%\)</span>.
+Remember, we can use <code>qnorm()</code> for this:</p>
+<pre class="r"><code>z.alpha.2 &lt;- qnorm(p = 0.85,
+                  mean= 0,
+                  sd = 1)</code></pre>
+<p>We can also easily calculate the mean:</p>
+<pre class="r"><code>xbar &lt;- mean(x)
+xbar</code></pre>
+<pre><code>## [1] 14277.7</code></pre>
+<p>So, we know the z-scores for our interval and the sample mean, <span
+class="math inline">\(\bar{X}\)</span>. Since we also know the standard
+deviation <span class="math inline">\(\sigma\)</span>, we can simply
+plug these into our formula to provide our answer in real units of x (in
+this case, dollars).</p>
+<pre class="r"><code>lbound &lt;- xbar - (z.alpha.2 * (sdev / sqrt(10)))
+ubound &lt;- xbar + (z.alpha.2 * (sdev / sqrt(10)))
+
+lbound</code></pre>
+<pre><code>## [1] 9361.465</code></pre>
+<pre class="r"><code>ubound</code></pre>
+<pre><code>## [1] 19193.94</code></pre>
+<p>What does this mean? We are 70% confident that the actual
+(population) mean salary of all recent graduates lies within the range
+between $9361.46 and $19193.94</p>
+<!--
+Maggie, I put a backslash in front of the $ so it's not interpreted as a latex equation. 
+-->
+<div id="writing-a-function-in-r" class="section level3">
+<h3>Writing a function in R</h3>
+<p>Let’s take everything we’ve done so far and compose an R function.
+Rather than running everything line-by-line, we can call this function
+with the arguments we set, which makes this a lot more repeatable,
+reproducible, and reduces our chance of errors.</p>
+<p>To create a function in R, we use the form:</p>
+<pre><code>func_name &lt;- function(arg1, arg2, etc.) {
+  contents of our function...
+}</code></pre>
+<p>We can call this function by first, defining the function in our
+environment by hitting <code>Ctrl-Enter</code> within an R script, and
+second, using the function just like any other R function.</p>
+<p>Let’s try it out! We’ll call our function <code>confidence.</code> We
+need a couple arguments (inputs, options, etc.), including: our data,
+<code>x</code>, our population standard deviation (15,000), and our
+desired confidence interval (70%, or 0.7)</p>
+<pre class="r"><code>confidence &lt;- function(x, sdev = 15000, ci) {
+  # Notice that we&#39;ve set the sdev argument to 15000, which means we&#39;ve given
+  # the function a default argument. We don&#39;t need to specify sdev whenever we
+  # call the function, but if we do, it&#39;ll overwrite our default argument.
+  
+  # The length function gives us the number of elements, or n in our equation for CIs
+  n &lt;- length(x)
+  xbar &lt;- mean(x)
+  alpha &lt;- (1 - ci) / 2
+  z.alpha.2 &lt;- qnorm(p = 1 - alpha,
+                     mean = 0,
+                     sd = 1)
+  lbound = 
+    xbar - (z.alpha.2 * (sdev / sqrt(n)))
+  ubound = 
+    xbar + (z.alpha.2 * (sdev / sqrt(n)))
+  
+
+  # Let&#39;s round to 2 decimals, so we have dollars and cents
+  lbound &lt;- round(lbound, digits = 2)
+  ubound &lt;- round(ubound, digits = 2)
+  
+  return(c(lbound, ubound))
+}</code></pre>
+<p>Let’s try our new function!</p>
+<pre class="r"><code>confidence(x = x,
+           sdev = 15000,
+           ci = 0.7)</code></pre>
+<pre><code>## [1]  9361.46 19193.94</code></pre>
+<p>Neat!</p>
+<p>Writing functions is <strong>by far</strong> the best thing to do to
+perform tasks efficiently. Imagine you needed to calculate confidence
+intervals for hundreds of datasets; by writing functions and doing
+things in scripts, you can automate the entire process!</p>
+<hr />
 <hr />
 </div>
-<div id="finding-cis-in-r" class="section level2">
-<h2>Finding CIs in R</h2>
-<hr />
-<hr />
-<!--
-## Mutating data with `dplyr::mutate()`
-
-
-### Adding columns programatically
-
-
-***
-***
--->
 </div>
 </div>
 <div id="assignment" class="section level1">
 <h1>Assignment</h1>
+<p>In addition to the questions above, answer the following in your lab
+report:</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Use the salary data from above to create 90%, 95%, and 99%
+confidence intervals. Provide each interval, along with your code. What
+happens to the interval range as you increase the confidence
+percentage?</li>
+</ol>
 </div>
 
-<p>&copy; 2022 brownhr. v.0.0.6</p>
+<p>&copy; 2022 brownhr & M. Sugg. v.0.0.7</p>
 
 
 </div>
