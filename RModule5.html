@@ -382,31 +382,163 @@ div.tocify {
 </div>
 
 
-<div id="r-module-5" class="section level1">
-<h1>R Module 5</h1>
-<div id="graphing-confidence-intervals" class="section level2">
-<h2>Graphing confidence intervals</h2>
+<hr />
+<div id="calculating-probability-of-a-normal-distribution"
+class="section level1">
+<h1>Calculating Probability of a Normal Distribution</h1>
+<p>For this R module, we’ll use <code>R</code> to simplify a somewhat
+complicated task – creating confidence intervals around a point estimate
+of population parameters. For all the examples below, we’ll keep things
+simple by assuming that the population parameters we’re interested in is
+the population mean, and that the best (i.e., least biased and most
+efficient) point estimator of that parameter is the sample mean.</p>
+<p>Before we get started, let’s revisit the properties of the normal
+distribution: a symmetrical distribution around an expected value mean
+and a standard deviation. We can generate an example of this
+distribution in <code>R</code>:</p>
+<pre class="r"><code># This code generates 200 equally-spaced values between -4 and 4, which we&#39;ll
+# use as the &#39;input values&#39;
+
+x &lt;- seq(from = -4,
+         to = 4,
+         length = 200)</code></pre>
+<p>Next, we’ll calculate the normal probability density of
+<code>x</code> using <code>dnorm()</code>. This calculates the
+likelihood that each value of <code>x</code> will be observed, and
+assigns it to the variable <code>y</code>. Note that we must specify the
+mean and standard deviation; we’ll set them to 0 and 1,
+respectively.</p>
+<pre class="r"><code>y &lt;- dnorm(x = x,
+           mean = 0,
+           sd = 1)</code></pre>
+<p>We can plot these to see the classic “bell-shaped” curve.</p>
+<pre class="r"><code># qplot is a great function if you&#39;re more familiar with base R plot(), but can
+# be used in tandem with ggplot functions.
+
+qplot(
+  x = x,
+  y = y,
+  geom = &quot;line&quot;,
+  
+  # Don&#39;t worry too much about what the I() function does here, it&#39;s just a
+  # qplot thing :)
+  color = I(&quot;red&quot;)
+)
+
+# But if you want to keep it simple, you can plot with base R.
+
+plot(x, y, type = &quot;l&quot;, col = &quot;red&quot;)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="RModule5_files/figure-html/plots-1.png" alt="ggplot2 (left) vs base R (right)" width="672" />
+<p class="caption">
+ggplot2 (left) vs base R (right)
+</p>
+</div>
+<p>For normally distributed data, we can estimate the probability of
+observing a range of values by calculating the area under the curve that
+corresponds to those values. For example, consider the area under the
+curve below. What is the probability that any value of x will be <span
+class="math inline">\(\leq\)</span> 0?</p>
+<p><img src="RModule5_files/figure-html/area1-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<p>It should be 50% because the curve is symmetric, right? We can test
+this in <code>R</code> with <code>pnorm()</code>, which calculates the
+probability of a value occurring to the left of the input
+<code>q</code>:</p>
+<pre class="r"><code>pnorm(q = 0,
+      mean = 0,
+      sd = 1)</code></pre>
+<pre><code>## [1] 0.5</code></pre>
+<p>Or, 50%.</p>
+<p>We could substitute a value for <code>q</code>, and
+<code>pnorm()</code> would calculate the probability of that value (if
+you want, the “area under the curve” to the left of that value).</p>
+<p>But what if we want the probability for a specific range such as from
+-1 to +1 such as the figure below?</p>
+<p><img src="RModule5_files/figure-html/area2-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<p>All we’d need to do is subtract the probability of the value on the
+right by the probability of the value on the left:</p>
+<p><img src="RModule5_files/figure-html/area3-1.png" width="85%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p_1 &lt;- pnorm(1, mean = 0, sd = 1)
+
+p_2 &lt;- pnorm(-1, mean = 0, sd = 1)
+
+
+p_1 - p_2</code></pre>
+<pre><code>## [1] 0.6826895</code></pre>
+<p>We can interpret this as meaning there being a 68.27% probability of
+a single observed value of <code>x</code> as falling between -1 and
++1.</p>
+<div id="questions" class="section level2">
+<h2>Questions</h2>
+<ol style="list-style-type: decimal">
+<li>Adapt the code above to calculate the area under the curve
+(probability) for the following intervals of <code>x</code>:
+<ul>
+<li>(-2, 2)</li>
+<li>(-3, 3)</li>
+<li>(-4, 4)</li>
+</ul></li>
+</ol>
 <hr />
 </div>
-<div id="mutating-data-with-dplyrmutate" class="section level2">
-<h2>Mutating data with <code>dplyr::mutate()</code></h2>
-<div id="adding-columns-programatically" class="section level3">
-<h3>Adding columns programatically</h3>
-<hr />
-<hr />
+</div>
+<div id="qnorm" class="section level1">
+<h1><code>qnorm()</code></h1>
+<p>What if we know the probabilities we want to achieve, but don’t know
+the values of <code>x</code> associated with these probabilities?
+Consider the figure below; 95% of the area of the curve lies to the left
+of what value of <code>x</code>?</p>
+<p><img src="RModule5_files/figure-html/qnorm1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We can use <code>qnorm()</code>, which is the “inverse” of
+<code>pnorm()</code> – <code>qnorm()</code> returns the value of
+<code>x</code> to the left of a probability <code>p</code> (the area
+under the curve, visually speaking).</p>
+<pre class="r"><code>qnorm(p = 0.95,
+      mean = 0,
+      sd = 1)</code></pre>
+<pre><code>## [1] 1.644854</code></pre>
+<p>We can interpret this as meaning there is a 95% probability of a
+single observed value of <code>x</code> as falling between -4 and
+1.644854 (note, these values of <code>x</code> are also z-scores, since
+our mean is 0 and our standard deviation is 1). Because the area under
+the curve must sum to 1, we can also say that the probability of
+observing a value <code>x</code> that is more than 1.644854 is 5% (100%
+- 95%).</p>
+<div id="questions-1" class="section level2">
+<h2>Questions</h2>
+<ol start="2" style="list-style-type: decimal">
+<li>Use <code>qnorm()</code> to calclulate the values of <code>x</code>
+for each of the following circumstances. Provide both the calculated
+values of <code>x</code> and your R code.</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>20% of the area of the curve is to the left of an unknown value of
+x</li>
+<li>67% of the area of the curve is to the right of an unknown value of
+x</li>
+</ol>
 </div>
 </div>
-</div>
-<div id="probability-and-confidence-intervals" class="section level1">
-<h1>Probability and Confidence Intervals</h1>
+<div id="confidence-intervals" class="section level1">
+<h1>Confidence Intervals</h1>
 <div id="central-limit-theorem" class="section level2">
 <h2>Central Limit Theorem</h2>
 <hr />
 </div>
-<div id="confidence-intervals" class="section level2">
-<h2>Confidence Intervals</h2>
+<div id="finding-cis-in-r" class="section level2">
+<h2>Finding CIs in R</h2>
 <hr />
 <hr />
+<!--
+## Mutating data with `dplyr::mutate()`
+
+
+### Adding columns programatically
+
+
+***
+***
+-->
 </div>
 </div>
 <div id="assignment" class="section level1">

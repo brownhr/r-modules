@@ -9,6 +9,18 @@ output:
       number_sections: false
 ---
 
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(
+  fig.align = 'center'
+)
+themeblue <- "#2c3e50"
+```
+
+***
+
+# Calculating Probability of a Normal Distribution
+
 
 For this R module, we'll use `R` to simplify a somewhat complicated task -- creating confidence intervals around a point estimate of population parameters. For all the examples below, we'll keep things simple by assuming that the population parameters we're interested in is the population mean, and that the best (i.e., least biased and most efficient) point estimator of that parameter is the sample mean.
 
@@ -80,15 +92,15 @@ cowplot::plot_grid(plotlist = list(q, b))
 
 ```
 
-For normally distributed data, we can estimate the probability of observing a range of values by calculating the area under the curve that corresponds to those values. For example, consider the area under the curve below. What is the probability that any value of x will be $\leq 0$?
+For normally distributed data, we can estimate the probability of observing a range of values by calculating the area under the curve that corresponds to those values. For example, consider the area under the curve below. What is the probability that any value of x will be $\leq$ 0?
 
-```{r area1, echo = FALSE}
+```{r area1, echo = FALSE, out.width = "85%"}
 ggplot(data.frame(x), aes(x)) +
   stat_function(
     fun = dnorm,
     xlim = c(-4, 0),
     geom = "area",
-    fill = "royalblue4",
+    fill = themeblue,
     alpha = 0.75
   ) +
   stat_function(fun = dnorm)
@@ -104,17 +116,19 @@ pnorm(q = 0,
 ```
 Or, 50%. 
 
-We could substitute a value for `q` and `pnorm()` would calculate the probability of that value (if you want, the "area under the curve" to the left of that value). But what if we want the probability for a specific range such as from -1 to +1 such as the figure below?
+We could substitute a value for `q`, and `pnorm()` would calculate the probability of that value (if you want, the "area under the curve" to the left of that value).
+
+But what if we want the probability for a specific range such as from -1 to +1 such as the figure below?
 
 
-```{r area2, echo = FALSE}
+```{r area2, echo = FALSE, out.width = "85%"}
 
 ggplot(data.frame(x), aes(x)) +
   stat_function(
     fun = dnorm,
     xlim = c(-1, 1),
     geom = "area",
-    fill = "royalblue4",
+    fill = themeblue,
     alpha = 0.75
   ) +
   stat_function(fun = dnorm)
@@ -124,24 +138,34 @@ ggplot(data.frame(x), aes(x)) +
 
 All we'd need to do is subtract the probability of the value on the right by the probability of the value on the left:
 
-```{r area3, echo = FALSE}
+```{r area3, echo = FALSE, out.width = "85%"}
 
 ggplot(data.frame(x), aes(x)) +
   stat_function(
     fun = dnorm,
     xlim = c(-4, 1),
     geom = "area",
-    fill = "royalblue4",
+    fill = themeblue,
     alpha = 0.75
-  )+
+  ) +
   stat_function(fun = dnorm)  +
   stat_function(
     fun = dnorm,
-    xlim = c(-4,-1),
+    xlim = c(-4, -1),
     geom = "area",
     fill = "brown1",
     color = "brown1",
-    alpha = 0.875
+    size = 1.5,
+    alpha = 0.6
+  ) +
+  geom_segment(
+    x = -1,
+    xend = -1,
+    y = 0,
+    yend = dnorm(-1),
+    color = "brown1",
+    size = 1.5,
+    alpha = 0.6
   )
 
 ```
@@ -157,10 +181,65 @@ p_1 - p_2
 
 ```
 
+We can interpret this as meaning there being a 68.27% probability of a single observed value of `x` as falling between -1 and +1.
 
+## Questions
+
+1. Adapt the code above to calculate the area under the curve (probability) for the following intervals of `x`:
+    - (-2, 2)
+    - (-3, 3)
+    - (-4, 4)
 
 ***
 
+# `qnorm()`
+
+What if we know the probabilities we want to achieve, but don't know the values of `x` associated with these probabilities? Consider the figure below; 95% of the area of the curve lies to the left of what value of `x`?
+
+```{r qnorm1, echo = FALSE}
+ggplot(data.frame(x), aes(x)) +
+  stat_function(
+    fun = dnorm,
+    xlim = c(-4, qnorm(0.95)),
+    geom = "area",
+    fill = themeblue,
+    alpha = 0.75
+  ) +
+  stat_function(fun = dnorm)
+
+
+```
+
+We can use `qnorm()`, which is the "inverse" of `pnorm()` -- `qnorm()` returns the value of `x` to the left of a probability `p` (the area under the curve, visually speaking).
+
+```{r qnorm2}
+qnorm(p = 0.95,
+      mean = 0,
+      sd = 1)
+```
+We can interpret this as meaning there is a 95% probability of a single observed value of `x` as falling between -4 and 1.644854 (note, these values of `x` are also z-scores, since our mean is 0 and our standard deviation is 1). Because the area under the curve must sum to 1, we can also say that the probability of observing a value `x` that is more than 1.644854 is 5% (100% - 95%).
+
+## Questions
+
+2. Use `qnorm()` to calclulate the values of `x` for each of the following circumstances. Provide both the calculated values of `x` and your R code.
+  a. 20% of the area of the curve is to the left of an unknown value of x
+  b. 67% of the area of the curve is to the right of an unknown value of x
+
+# Confidence Intervals
+
+
+## Central Limit Theorem
+
+***
+
+## Finding CIs in R
+
+
+
+***
+***
+
+<!--
 ## Mutating data with `dplyr::mutate()`
 
 
@@ -169,20 +248,7 @@ p_1 - p_2
 
 ***
 ***
+-->
 
-
-# Probability and Confidence Intervals
-
-
-## Central Limit Theorem
-
-***
-
-## Confidence Intervals
-
-
-
-***
-***
 
 # Assignment
