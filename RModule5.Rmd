@@ -39,6 +39,7 @@ library(cowplot)
 library(gridGraphics)
 library(grid)
 
+# Maggie, this is just a roundabout way to get both a ggplot and base R plot beside each other; I don't expect anyone to use this kind of syntax :)
 
 q <- qplot(
   x = x,
@@ -79,9 +80,49 @@ cowplot::plot_grid(plotlist = list(q, b))
 
 ```
 
+For normally distributed data, we can estimate the probability of observing a range of values by calculating the area under the curve that corresponds to those values. For example, consider the area under the curve below. What is the probability that any value of x will be $\leq 0$?
+
+```{r area1, echo = FALSE}
+ggplot(data.frame(x), aes(x)) +
+  stat_function(
+    fun = dnorm,
+    xlim = c(-4, 0),
+    geom = "area",
+    fill = "royalblue4",
+    alpha = 0.75
+  ) +
+  stat_function(fun = dnorm)
+  
+```
+
+It should be 50% because the curve is symmetric, right? We can test this in `R` with `pnorm()`, which calculates the probability of a value occurring to the left of the input `q`:
+
+```{r pnorm}
+pnorm(q = 0,
+      mean = 0,
+      sd = 1)
+```
+Or, 50%. 
+
+We could substitute a value for `q` and `pnorm()` would calculate the probability of that value (if you want, the "area under the curve" to the left of that value). But what if we want the probability for a specific range such as from -1 to +1 such as the figure below?
 
 
-## Graphing confidence intervals
+```{r area2, echo = FALSE}
+
+ggplot(data.frame(x), aes(x)) +
+  stat_function(
+    fun = dnorm,
+    xlim = c(-1, 1),
+    geom = "area",
+    fill = "royalblue4",
+    alpha = 0.75
+  ) +
+  stat_function(fun = dnorm)
+  
+
+```
+
+
 
 ***
 
