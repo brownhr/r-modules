@@ -498,7 +498,7 @@ Consider the figure below; 95% of the area of the curve lies to the left
 of what value of <code>x</code>?</p>
 <p><img src="RModule5_files/figure-html/qnorm1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>We can use <code>qnorm()</code>, which is the “inverse” of
-<code>pnorm()</code> – <code>qnorm()</code> returns the value of
+<code>pnorm()</code>; <code>qnorm()</code> returns the value of
 <code>x</code> to the left of a probability <code>p</code> (the area
 under the curve, visually speaking).</p>
 <pre class="r"><code>qnorm(p = 0.95,
@@ -635,12 +635,12 @@ desired confidence interval (70%, or 0.7)</p>
   z.alpha.2 &lt;- qnorm(p = 1 - alpha,
                      mean = 0,
                      sd = 1)
-  lbound = 
+  lbound &lt;-
     xbar - (z.alpha.2 * (sdev / sqrt(n)))
-  ubound = 
+  ubound &lt;-
     xbar + (z.alpha.2 * (sdev / sqrt(n)))
   
-
+  
   # Let&#39;s round to 2 decimals, so we have dollars and cents
   lbound &lt;- round(lbound, digits = 2)
   ubound &lt;- round(ubound, digits = 2)

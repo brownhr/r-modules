@@ -212,12 +212,34 @@ ggplot(data.frame(x), aes(x)) +
     fill = themeblue,
     alpha = 0.75
   ) +
-  stat_function(fun = dnorm)
+  stat_function(fun = dnorm) + 
+  annotate(
+    geom = "text",
+    x = 0,
+    y = 0.2,
+    label = "95%",
+    color = "snow",
+    size = 5
+  ) + 
+  geom_vline(
+    xintercept = qnorm(0.95),
+    color = "brown1",
+    size = 1,
+    linetype = "dashed"
+  ) +
+  annotate(
+    geom = "text",
+    x = 2,
+    y = 0.21,
+    label = "x = ?",
+    color = "brown1",
+    size = 5
+  )
 
 
 ```
 
-We can use `qnorm()`, which is the "inverse" of `pnorm()` -- `qnorm()` returns the value of `x` to the left of a probability `p` (the area under the curve, visually speaking).
+We can use `qnorm()`, which is the "inverse" of `pnorm()`; `qnorm()` returns the value of `x` to the left of a probability `p` (the area under the curve, visually speaking).
 
 ```{r qnorm2}
 qnorm(p = 0.95,
@@ -352,12 +374,12 @@ confidence <- function(x, sdev = 15000, ci) {
   z.alpha.2 <- qnorm(p = 1 - alpha,
                      mean = 0,
                      sd = 1)
-  lbound = 
+  lbound <-
     xbar - (z.alpha.2 * (sdev / sqrt(n)))
-  ubound = 
+  ubound <-
     xbar + (z.alpha.2 * (sdev / sqrt(n)))
   
-
+  
   # Let's round to 2 decimals, so we have dollars and cents
   lbound <- round(lbound, digits = 2)
   ubound <- round(ubound, digits = 2)

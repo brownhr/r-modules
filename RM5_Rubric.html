@@ -11,7 +11,7 @@
 
 
 
-<title>Qualitative and Survey Data</title>
+<title>RM5_Rubric.knit</title>
 
 <script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,9 +29,6 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -228,69 +225,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -298,16 +232,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -377,53 +301,86 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Qualitative and Survey Data</h1>
 
 </div>
 
 
-<div id="r-module-4" class="section level1">
-<h1>R Module 4</h1>
-<div id="qualitative-data" class="section level2">
-<h2>Qualitative Data</h2>
-<div id="factors-and-levels-in-r" class="section level3">
-<h3>Factors and Levels in R</h3>
-<hr />
+<div id="r-module-5-rubric" class="section level1">
+<h1>R Module 5 Rubric</h1>
+<div id="questions" class="section level2">
+<h2>Questions</h2>
+<ol style="list-style-type: decimal">
+<li>Adapt the code above to calculate the area under the curve
+(probability) for the following intervals of <code>x</code>:
+<ul>
+<li>(-2, 2)</li>
+<li>(-3, 3)</li>
+<li>(-4, 4)</li>
+</ul></li>
+</ol>
+<pre class="r"><code>pnorm(2) - pnorm(-2)</code></pre>
+<pre><code>## [1] 0.9544997</code></pre>
+<pre class="r"><code>pnorm(3) - pnorm(-3)</code></pre>
+<pre><code>## [1] 0.9973002</code></pre>
+<pre class="r"><code>pnorm(4) - pnorm(-4)</code></pre>
+<pre><code>## [1] 0.9999367</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Use <code>qnorm()</code> to calclulate the values of <code>x</code>
+for each of the following circumstances. Provide both the calculated
+values of <code>x</code> and your R code.</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>20% of the area of the curve is to the left of an unknown value of
+x</li>
+<li>67% of the area of the curve is to the right of an unknown value of
+x</li>
+</ol>
+<pre class="r"><code>qnorm(0.2)</code></pre>
+<pre><code>## [1] -0.8416212</code></pre>
+<pre class="r"><code>1 - qnorm(0.67)</code></pre>
+<pre><code>## [1] 0.5600868</code></pre>
+<div style="page-break-after: always;"></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Use the salary data from above to create 90%, 95%, and 99%
+confidence intervals. Provide each interval, along with your code. What
+happens to the interval range as you increase the confidence
+percentage?</li>
+</ol>
+<pre class="r"><code>x &lt;- c(44617, 7066, 17594, 2726, 1178, 18898, 5033, 37151, 4514, 4000)
+
+confidence &lt;- function(x, sdev = 15000, ci) {
+  n &lt;- length(x)
+  xbar &lt;- mean(x)
+  alpha &lt;- (1 - ci) / 2
+  z.alpha.2 &lt;- qnorm(p = 1 - alpha,
+                     mean = 0,
+                     sd = 1)
+  lbound &lt;-
+    xbar - (z.alpha.2 * (sdev / sqrt(n)))
+  ubound &lt;-
+    xbar + (z.alpha.2 * (sdev / sqrt(n)))
+  
+  lbound &lt;- round(lbound, digits = 2)
+  ubound &lt;- round(ubound, digits = 2)
+  
+  return(c(lbound, ubound))
+}
+
+for (i in c(0.9, 0.95, 0.99)) {
+  print(confidence(x, ci = i))
+}</code></pre>
+<pre><code>## [1]  6475.47 22079.93
+## [1]  4980.77 23574.63
+## [1]  2059.47 26495.93</code></pre>
+<p><em>As we increase the confidence level, the confidence interval
+widens, because we need a larger range to be confident that the
+population mean lies within our range</em></p>
 </div>
-</div>
-<div id="recoding-using-dplyr" class="section level2">
-<h2>Recoding using <code>dplyr</code></h2>
-<hr />
-</div>
-<div id="visualizing-qualitative-data-with-ggplot2"
-class="section level2">
-<h2>Visualizing Qualitative Data with <code>ggplot2</code></h2>
-<hr />
-<hr />
-</div>
-</div>
-<div id="survey-development-sampling-and-statistical-tests"
-class="section level1">
-<h1>Survey Development, Sampling, and Statistical Tests</h1>
-<div id="sampling-techniques" class="section level2">
-<h2>Sampling Techniques</h2>
-<hr />
-</div>
-<div id="statistisal-tests-for-surveys" class="section level2">
-<h2>Statistisal Tests for Surveys</h2>
-<hr />
-<hr />
-</div>
-</div>
-<div id="assignment" class="section level1">
-<h1>Assignment</h1>
 </div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.7</p>
 
 
-</div>
-</div>
 
 </div>
 
@@ -456,35 +413,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
