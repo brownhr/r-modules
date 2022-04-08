@@ -9,7 +9,76 @@ output:
       number_sections: false
 ---
 
-# R Module 5
+
+For this R module, we'll use `R` to simplify a somewhat complicated task -- creating confidence intervals around a point estimate of population parameters. For all the examples below, we'll keep things simple by assuming that the population parameters we're interested in is the population mean, and that the best (i.e., least biased and most efficient) point estimator of that parameter is the sample mean.
+
+Before we get started, let's revisit the properties of the normal distribution: a symmetrical distribution around an expected value mean and a standard deviation. We can generate an example of this distribution in `R`:
+
+```{r seq}
+
+# This code generates 200 equally-spaced values between -4 and 4, which we'll
+# use as the 'input values'
+
+x <- seq(from = -4,
+         to = 4,
+         length = 200)
+
+```
+
+Next, we'll calculate the normal probability density of `x` using `dnorm()`. This calculates the likelihood that each value of `x` will be observed, and assigns it to the variable `y`. Note that we must specify the mean and standard deviation; we'll set them to 0 and 1, respectively. 
+
+```{r y}
+y <- dnorm(x = x,
+           mean = 0,
+           sd = 1)
+```
+
+We can plot these to see the classic "bell-shaped" curve. 
+```{r plot_setup, include = FALSE}
+library(cowplot)
+library(gridGraphics)
+library(grid)
+
+
+q <- qplot(
+  x = x,
+  y = y,
+  geom = "line",
+  color = I("red")
+)
+
+b <- ~{plot(x, y, type = "l", col = "red")} %>% 
+  ggdraw()
+
+```
+
+```{r normplot, eval = F}
+
+# qplot is a great function if you're more familiar with base R plot(), but can
+# be used in tandem with ggplot functions.
+
+qplot(
+  x = x,
+  y = y,
+  geom = "line",
+  
+  # Don't worry too much about what the I() function does here, it's just a
+  # qplot thing :)
+  color = I("red")
+)
+
+# But if you want to keep it simple, you can plot with base R.
+
+plot(x, y, type = "l", col = "red")
+
+```
+
+```{r plots, echo = F, fig.cap = "ggplot2 (left) vs base R (right)"}
+
+cowplot::plot_grid(plotlist = list(q, b))
+
+```
+
 
 
 ## Graphing confidence intervals
