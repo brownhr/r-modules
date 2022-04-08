@@ -9,12 +9,26 @@ output:
       number_sections: false
 ---
 
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(
+  echo = FALSE
+)
+
+library(tidyverse)
+
+
+airport_survey <- read_csv("data/airport_survey.csv", 
+    col_types = cols(`Date recorded` = col_date(format = "%m/%d/%Y")))
+
+
+```
+
+
+
 # R Module 4
 
 
-```{r klrm3, echo = F, include = T}
-klippy::klippy()
-```
 
 ## Qualitative Data
 
