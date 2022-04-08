@@ -122,6 +122,41 @@ ggplot(data.frame(x), aes(x)) +
 
 ```
 
+All we'd need to do is subtract the probability of the value on the right by the probability of the value on the left:
+
+```{r area3, echo = FALSE}
+
+ggplot(data.frame(x), aes(x)) +
+  stat_function(
+    fun = dnorm,
+    xlim = c(-4, 1),
+    geom = "area",
+    fill = "royalblue4",
+    alpha = 0.75
+  )+
+  stat_function(fun = dnorm)  +
+  stat_function(
+    fun = dnorm,
+    xlim = c(-4,-1),
+    geom = "area",
+    fill = "brown1",
+    color = "brown1",
+    alpha = 0.875
+  )
+
+```
+
+```{r pdiff}
+
+p_1 <- pnorm(1, mean = 0, sd = 1)
+
+p_2 <- pnorm(-1, mean = 0, sd = 1)
+
+
+p_1 - p_2
+
+```
+
 
 
 ***
