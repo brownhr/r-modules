@@ -26,11 +26,20 @@ airport_survey <- read_csv("data/airport_survey.csv",
 
 
 
-# R Module 4
+# Generating Reports using R Markdown
+
+For this R Module, we'll be taking on the role of ...
+
+## What is R Markdown?
+
+
+### Getting Started
+
+### Running Code
 
 
 
-## Qualitative Data
+# Qualitative Data
 
 ### Factors and Levels in R
 
