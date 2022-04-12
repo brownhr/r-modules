@@ -215,21 +215,21 @@ Are these results definitive enough for us to really reject the ANOVA null hypot
 
 # Assignment
 
-**In an R Markdown (.Rmd, see R Module 4) Report, repeat the steps above for either the `MNEM1990` or data of your own (e.g., land cover, census)`. Your Report should include:**
+**In an R Markdown (.Rmd, see R Module 4) Report, repeat the steps above for either the `MNEM1990` or data of your own (e.g., land cover, census)`. Output your report as a PDF (`output: pdf_document` in your `.Rmd` header). Your Report should include:**
 
 - The R code used to generate your results and plots
 - Interpretation of each of these tests; i.e., what does the statistic and $p$-value represent?
 
 1. Boxplot of regions or categories
-  - Add notches to your boxplots -- Explain why notches are important/what they add
+    - Add notches to your boxplots -- Explain why notches are important/what they add
 2. ANOVA output
-  - Report your F-Statistic and if you should reject or fail to reject the $H_0$.
+    - Report your F-Statistic and if you should reject or fail to reject the $H_0$.
 3. One-way Test with equal variances
 4. Bartlett's K-Squared
 5. One-way Test with unequal variances
 6. Shapiro-Wilk Normality Test
-  - If the data are non-normal, transform variables accordingly and re-run the test
-  - Illustrate data using density plot for both un-transformed and transformed data
+    - If the data are non-normal, transform variables accordingly and re-run the test
+    - Illustrate data using density plot for both un-transformed and transformed data
 7. Tukey Multiple Comparisons of Mean Test
-  - Describe which regions or categories are different
-  - Include a plot of your confidence intervals
+    - Describe which regions or categories are different
+    - Include a plot of your confidence intervals
