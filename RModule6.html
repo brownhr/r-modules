@@ -390,49 +390,120 @@ div.tocify {
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
+<div id="what-is-anova" class="section level1">
+<h1>What is <em>ANOVA</em>?</h1>
 <p>Analysis of Variance (<em>ANOVA</em>) describes a set of statistical
-models used to analyze the differences among means.</p>
+models used to analyze the differences among means. A number of
+functions exist in R (such as the aptly-named <code>anova()</code>) to
+conduct an ANOVA, each with strengths and weaknesses. Doing an ANOVA in
+R therefore involves more than just calling a single function. In this R
+Module, we’ll review the basic steps of an ANOVA and demonstrate the
+related tests you can use if your data doesn’t conform to the basic
+assumptions of the test outlined below.</p>
+<p>The basic form of ANOVA makes the following assumptions:</p>
+<ol style="list-style-type: decimal">
+<li>Observations within each sample are randomly selected and
+independent from each other</li>
+</ol>
+<ul>
+<li>In our case, this means they are not spatially autocorrelated,
+something we’ll go in-depth into in a future R Module.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Sample observations are normally distributed</li>
+<li>The variances of the samples are homogeneous</li>
+</ol>
+<p>We can test each of these assumptions statistically before proceeding
+with ANOVA.</p>
 <div id="importing-data" class="section level2">
 <h2>Importing Data</h2>
-<p>We’ve done a bit of data management in R before, but what happens if
-our data is a <code>.zip</code> file? Sure, we could extract it
-ourselves, but let’s take a look at how to do it in R (hint, it’s very
-easy!)</p>
-<p>Let’s create an object, <code>path</code>, that shows where we want
-our data to end up. We don’t actually need to use a variable (i.e., we
-can just put the path in the <code>unzip()</code> function), but it’s
-good practice to approach the problem programmatically.</p>
-<pre class="r"><code>path &lt;- &quot;data/NC_REGION&quot;</code></pre>
-<p>Let’s make sure our output directory exists; if it doesn’t we can
-create one. The exclamation mark “negates” our logical test, so this
-function reads, “If the folder stored in the variable ‘path’ doesn’t
-exist, then create that folder”</p>
-<pre class="r"><code>if(!dir.exists(path)) {
-  dir.create(path)
-}</code></pre>
-<p>Now, we can tell R what our zip file is called:</p>
-<pre class="r"><code>zip_file &lt;- &quot;data/NC_REGION.zip&quot;</code></pre>
-<p>Finally, we can use the <code>unzip()</code> function, which takes
-two inputs, <code>zipfile</code>, or the name of the file we want to
-unzip, and <code>exdir</code>, the ‘output folder’. Reading the
-documentation for this function, the <code>exdir</code> argument creates
-the folder if necessary, so our <code>if</code> statement above is
-redundant in this case . Not all functions do this, so it’s important to
-know how to initialize a directory in R (most functions will throw an
-error if the output directory doesn’t already exist).</p>
-<pre class="r"><code>unzip(zipfile = zip_file, exdir = path)</code></pre>
+<p>Before we get started talking about ANOVA in depth, let’s take a
+moment to read in the data we need. When our data are stored in a
+<code>.zip</code>, we need to extract the files. Of course, we could do
+this manually, but R can do this too!</p>
+<p>We can use the <code>unzip()</code> function, which takes two inputs,
+<code>zipfile</code>, or the name of the file we want to unzip, and
+<code>exdir</code>, the ‘output folder’. Reading the documentation for
+this function, the <code>exdir</code> argument creates the folder if
+necessary.</p>
+<pre class="r"><code>unzip(
+  zipfile = &quot;data/NC_REGION.zip&quot;,
+  
+  # The function choose.dir() allows us to interactively choose a folder;
+  # similarly, the file.choose() function gives us an interactive window to
+  # select a folder.
+  exdir = choose.dir()
+)</code></pre>
 <p>If we now navigate to the folder we extracted our <code>.zip</code>
 to, we’ll see a Shapefile called <code>NC_REGION.shp</code>. As always,
 when working with Shapefiles, you need to have all the auxiliary files
 nearby.</p>
+</div>
+<div id="testing-anova-assumptions" class="section level2">
+<h2>Testing ANOVA Assumptions</h2>
+<p>For the moment, let’s demonstrate ANOVA as if the data we have
+conform to these assumptions. Like in previous labs, we’ll load
+Shapefiles with the <code>sf</code> package.</p>
 <pre class="r"><code>library(sf)
 
-NC_REGION &lt;- read_sf(&quot;data/NC_REGION/NC_REGION.shp&quot;)</code></pre>
-<p>Alternatively, the <code>fs</code> package is a powerful tool for
-working with the file system. This is more generally useful if the
-directory in <code>path</code> changes, e.g., if we’re working with many
-different datasets.</p>
-<pre class="r"><code>NC_REGION &lt;- read_sf(fs::path(path, &quot;NC_REGION.shp&quot;))</code></pre>
+# Replace the argument inside `read_sf()` with the path to your Shapefile
+NC &lt;- read_sf(&quot;data/NC_REGION/NC_REGION.shp&quot;)</code></pre>
+<p>Let’s take a look at our data:</p>
+<pre class="r"><code>View(NC)</code></pre>
+<p>One thing we need to do is convert our <code>Region</code> column
+from <code>character</code> to <code>factor</code>:</p>
+<pre class="r"><code>NC$Region &lt;- as.factor(NC$Region)</code></pre>
+<p>Then, looking at our <code>Region</code> column, we can see the
+number of counties in each region. Because we have a different number of
+observations (counties) in each region, our design is ‘unbalanced’:</p>
+<pre class="r"><code>summary(NC$Region)</code></pre>
+<pre><code>## Coastal Plain     Mountains      Piedmont 
+##            41            23            36</code></pre>
+<p>Let’s check out how the manufacturing jobs stored in the variable
+<code>MNEM2000</code> interact with our new regional categorization by
+creating a boxplot. Even though boxpots use median values to display
+variation rather than mean values, they still show us the approximate
+‘middle’ of each variable by region and their respective dispersion.</p>
+<pre class="r"><code># We can use base R to make a simple boxplot
+
+boxplot(MNEM2000 ~ Region, data = NC)</code></pre>
+<p><img src="RModule6_files/figure-html/mnem-region-boxplot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The Piedmont region looks a bit more dispersed than the other two and
+the median is shifted higher. Is it enough for us to detect a difference
+using ANOVA? Let’s find out.</p>
+<p>Because we have an unbalanced design, the base R ANOVA function isn’t
+quite the best choice, but we’ll call it to see what it returns.</p>
+<pre class="r"><code>anova &lt;- aov(MNEM2000 ~ Region, data = NC)
+
+print(anova)</code></pre>
+<pre><code>## Call:
+##    aov(formula = MNEM2000 ~ Region, data = NC)
+## 
+## Terms:
+##                     Region  Residuals
+## Sum of Squares  1870914725 5528223748
+## Deg. of Freedom          2         97
+## 
+## Residual standard error: 7549.304
+## Estimated effects may be unbalanced</code></pre>
+<pre class="r"><code>summary(anova)</code></pre>
+<pre><code>##             Df    Sum Sq   Mean Sq F value   Pr(&gt;F)    
+## Region       2 1.871e+09 935457362   16.41 7.25e-07 ***
+## Residuals   97 5.528e+09  56991997                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Notice that the results first warn us about our unbalanced samples.
+In both sets of results, we’re given some key information. The input for
+the nominator in the ANOVA calculation is provided by
+<code>Region</code>, and the denominator is provided in
+<code>Residuals</code>. The calculated estimates of the variance between
+the sample means (nominator) and within the samples themselves
+(denominator) are provided the degrees of freedom needed to plot the
+F-distribution. In our case, we’ll have an F distribution of <span
+class="math inline">\((2,97)\)</span>. This distribution is used to
+calculate the critical value of F at an alpha of <span
+class="math inline">\(0.05\)</span>, the default for the test.</p>
+</div>
 </div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.7</p>

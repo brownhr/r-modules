@@ -37,11 +37,11 @@ We can test each of these assumptions statistically before proceeding with ANOVA
 
 ## Importing Data
 
-Before we get started talking about ANOVA in depth, let's take a moment to read in the data we need. We've done a bit of data management in R before, but what happens if our data is a `.zip` file?
+Before we get started talking about ANOVA in depth, let's take a moment to read in the data we need. When our data are stored in a `.zip`, we need to extract the files. Of course, we could do this manually, but R can do this too!
 
 We can use the `unzip()` function, which takes two inputs, `zipfile`, or the name of the file we want to unzip, and `exdir`, the 'output folder'. Reading the documentation for this function, the `exdir` argument creates the folder if necessary.
 
-``` {r}
+``` {r, eval = FALSE}
 unzip(
   zipfile = "data/NC_REGION.zip",
   
@@ -55,13 +55,54 @@ unzip(
 If we now navigate to the folder we extracted our `.zip` to, we'll see a Shapefile called `NC_REGION.shp`. As always, when working with Shapefiles, you need to have all the auxiliary files nearby.
 
 
+## Testing ANOVA Assumptions
+
+For the moment, let's demonstrate ANOVA as if the data we have conform to these assumptions. Like in previous labs, we'll load Shapefiles with the `sf` package. 
+
 ```{r message=FALSE}
 library(sf)
 
-# Replace the argument inside `read_sf()` with the path to your shapefile
-NC_REGION <- read_sf("data/NC_REGION/NC_REGION.shp")
+# Replace the argument inside `read_sf()` with the path to your Shapefile
+NC <- read_sf("data/NC_REGION/NC_REGION.shp")
 ```
 
-## Testing ANOVA Assumptions
+Let's take a look at our data:
+```{r, eval = FALSE}
+View(NC)
+```
 
-For the moment, let's demonstrate ANOVA as if the data we have conform to these assumptions. Like in previous labs, we'll load shapefiles with the 
+One thing we need to do is convert our `Region` column from `character` to `factor`:
+
+```{r}
+NC$Region <- as.factor(NC$Region)
+```
+
+Then, looking at our `Region` column, we can see the number of counties in each region. Because we have a different number of observations (counties) in each region, our design is 'unbalanced':
+
+```{r}
+summary(NC$Region)
+```
+
+
+Let's check out how the manufacturing jobs stored in the variable `MNEM2000` interact with our new regional categorization by creating a boxplot. Even though boxpots use median values to display variation rather than mean values, they still show us the approximate 'middle' of each variable by region and their respective dispersion. 
+
+```{r mnem-region-boxplot}
+# We can use base R to make a simple boxplot
+
+boxplot(MNEM2000 ~ Region, data = NC)
+```
+
+The Piedmont region looks a bit more dispersed than the other two and the median is shifted higher. Is it enough for us to detect a difference using ANOVA? Let's find out.
+
+Because we have an unbalanced design, the base R ANOVA function isn't quite the best choice, but we'll call it to see what it returns.
+
+```{r}
+anova <- aov(MNEM2000 ~ Region, data = NC)
+
+print(anova)
+```
+```{r}
+summary(anova)
+```
+
+Notice that the results first warn us about our unbalanced samples. In both sets of results, we're given some key information. The input for the nominator in the ANOVA calculation is provided by `Region`, and the denominator is provided in `Residuals`. The calculated estimates of the variance between the sample means (nominator) and within the samples themselves (denominator) are provided the degrees of freedom needed to plot the F-distribution. In our case, we'll have an F distribution of $(2,97)$. This distribution is used to calculate the critical value of F at an alpha of $0.05$, the default for the test. 
