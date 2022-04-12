@@ -1,0 +1,67 @@
+---
+title: "ANOVA in R"
+output:
+  html_document:
+      toc: true
+      toc_float: true
+      toc_collapsed: true
+      toc_depth: 3
+      number_sections: false
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(
+  fig.align = "center"
+)
+```
+
+```{r echo = F, include = TRUE}
+klippy::klippy()
+```
+
+# What is *ANOVA*?
+
+Analysis of Variance (*ANOVA*) describes a set of statistical models used to analyze the differences among means. A number of functions exist in R (such as the aptly-named `anova()`) to conduct an ANOVA, each with strengths and weaknesses. Doing an ANOVA in R therefore involves more than just calling a single function. In this R Module, we'll review the basic steps of an ANOVA and demonstrate the related tests you can use if your data doesn't conform to the basic assumptions of the test outlined below.
+
+The basic form of ANOVA makes the following assumptions:
+
+1. Observations within each sample are randomly selected and independent from each other
+  - In our case, this means they are not spatially autocorrelated, something we'll go in-depth into in a future R Module.
+2. Sample observations are normally distributed
+3. The variances of the samples are homogeneous
+
+We can test each of these assumptions statistically before proceeding with ANOVA.
+
+
+
+## Importing Data
+
+Before we get started talking about ANOVA in depth, let's take a moment to read in the data we need. We've done a bit of data management in R before, but what happens if our data is a `.zip` file?
+
+We can use the `unzip()` function, which takes two inputs, `zipfile`, or the name of the file we want to unzip, and `exdir`, the 'output folder'. Reading the documentation for this function, the `exdir` argument creates the folder if necessary.
+
+``` {r}
+unzip(
+  zipfile = "data/NC_REGION.zip",
+  
+  # The function choose.dir() allows us to interactively choose a folder;
+  # similarly, the file.choose() function gives us an interactive window to
+  # select a folder.
+  exdir = choose.dir()
+)
+```
+
+If we now navigate to the folder we extracted our `.zip` to, we'll see a Shapefile called `NC_REGION.shp`. As always, when working with Shapefiles, you need to have all the auxiliary files nearby.
+
+
+```{r message=FALSE}
+library(sf)
+
+# Replace the argument inside `read_sf()` with the path to your shapefile
+NC_REGION <- read_sf("data/NC_REGION/NC_REGION.shp")
+```
+
+## Testing ANOVA Assumptions
+
+For the moment, let's demonstrate ANOVA as if the data we have conform to these assumptions. Like in previous labs, we'll load shapefiles with the 
