@@ -11,13 +11,13 @@ navbar:
     - text: "R Modules"
     
       menu:
-      - text: "R and R Studio"
+      # - text: "R and R Studio"
       - text: "R Module 1"
         href: RModule1.html
       - text: "R Module 2"
         href: RModule2.html
-      - text: "-------"
-      - text: "Basic Statistics"
+      # - text: "-------"
+      # - text: "Basic Statistics"
       - text: "R Module 3"
         href: RModule3.html
       - text: "R Module 4"
@@ -26,8 +26,8 @@ navbar:
         href: RModule5.html
       # - text: "-------"
       # - text: "Intermediate R"
-      # - text: "R Module 6"
-      #   href: RModule6.html
+      - text: "R Module 6"
+        href: RModule6.html
 output:
   html_document:
     theme: flatly

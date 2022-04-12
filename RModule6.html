@@ -349,15 +349,12 @@ div.tocify {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">R and R Studio</li>
     <li>
       <a href="RModule1.html">R Module 1</a>
     </li>
     <li>
       <a href="RModule2.html">R Module 2</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Basic Statistics</li>
     <li>
       <a href="RModule3.html">R Module 3</a>
     </li>
@@ -366,6 +363,9 @@ div.tocify {
     </li>
     <li>
       <a href="RModule5.html">R Module 5</a>
+    </li>
+    <li>
+      <a href="RModule6.html">R Module 6</a>
     </li>
   </ul>
 </li>
@@ -505,15 +505,240 @@ calculate the critical value of F at an alpha of <span
 class="math inline">\(0.05\)</span>, the default for the test.</p>
 <p>The calculated F-Statistic is <code>16.41</code>, which means the
 numerator is about 16 times the denominator. This illustrates a big
-difference between regions and the p-value for that F statistic is
-7.2462977^{-7}, which is considerably less than <span
-class="math inline">\(0.05\)</span>. Thus, at <span
+difference between regions and the <span
+class="math inline">\(p\)</span>-value for that F statistic is <span
+class="math inline">\(7.25\times10^{-7}\)</span>, which is considerably
+less than <span class="math inline">\(0.05\)</span>. Thus, at <span
 class="math inline">\(\alpha = 0.05\)</span>, we can reject the null
 hypothesis.</p>
 </div>
+<div id="one-way-test" class="section level2">
+<h2>One-way Test</h2>
+<p>Another version of ANOVA is called the One-way test of variance,
+found in the <code>oneway.test()</code> function. This version tests
+whether two or more samples from normal distributions have the same
+means, but the variances are not necessarily assumed to be equal. Using
+this function with the <code>var.equal = TRUE</code> argument, the
+results should be identical to those from <code>aov()</code>:</p>
+<pre class="r"><code>oneway.test(MNEM2000 ~ Region, data = NC, var.equal = TRUE)</code></pre>
+<pre><code>## 
+##  One-way analysis of means
+## 
+## data:  MNEM2000 and Region
+## F = 16.414, num df = 2, denom df = 97, p-value = 7.246e-07</code></pre>
+<p>Setting <code>var.equal = FALSE</code> leads to differing
+results:</p>
+<pre class="r"><code>oneway.test(MNEM2000 ~ Region, data = NC, var.equal = FALSE)</code></pre>
+<pre><code>## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  MNEM2000 and Region
+## F = 11.237, num df = 2.000, denom df = 46.631, p-value = 0.000104</code></pre>
+<p>If we wish to test if our variances are homogeneous, we can use a
+test called the Bartlett’s test of Homoscedasticity. This test examines
+the null hypothesis that the variances in each of the set of samples are
+the same. As the test statistic gets larger, we’re more likely to reject
+the null hypothesis (i.e., as the statistic increases, the variances are
+more likely to not be homogeneous).</p>
+<pre class="r"><code>bartlett.test(MNEM2000 ~ Region, data = NC)</code></pre>
+<pre><code>## 
+##  Bartlett test of homogeneity of variances
+## 
+## data:  MNEM2000 by Region
+## Bartlett&#39;s K-squared = 48.261, df = 2, p-value = 3.314e-11</code></pre>
+<p>In this case, we should reject the null hypothesis, which mean we
+need to run <code>oneway.test()</code> with
+<code>va.equal = FALSE</code>.</p>
+<pre class="r"><code>oneway.test(MNEM2000 ~ Region, data = NC, var.equal = FALSE)</code></pre>
+<pre><code>## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  MNEM2000 and Region
+## F = 11.237, num df = 2.000, denom df = 46.631, p-value = 0.000104</code></pre>
+<p>By accommodating the differences in variances between the samples,
+our calculation for the F-Statistic changes (note the smaller degrees of
+freedom; 46.631 vs. 97). However, we can still reject the null
+hypothesis at <span class="math inline">\(\alpha = 0.05\)</span>. This
+suggests that manufacturing is different in at least one of the regions
+of North Carolina.</p>
+</div>
+<div id="testing-normality" class="section level2">
+<h2>Testing Normality</h2>
+<p>There’s one last condition to consider that could be impacting our
+results. ANOVA assumes that the sampled variable is normally
+distributed; we can check this as well. First, let’s make a simple
+density plot of <code>MNEM2000</code>. If it is approximately normal, we
+should see a roughly symmetric curve.</p>
+<pre class="r"><code>plot(
+  density(x = NC$MNEM2000)
+)</code></pre>
+<p><img src="RModule6_files/figure-html/density-plot-1.png" width="672" style="display: block; margin: auto;" />
+Our graph isn’t normal; note the positive skew. We can test the
+assumption of normality statistically using the <em>Shapiro-Wilk
+Normality Test</em>.</p>
+<pre class="r"><code>shapiro.test(NC$MNEM2000)</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  NC$MNEM2000
+## W = 0.74296, p-value = 6.126e-12</code></pre>
+<p>Because the <span class="math inline">\(p\)</span>-value is
+statistically significant, we can reject the null hypothesis (our
+distribution is not normal).</p>
+</div>
+<div id="normalizing-our-distribution" class="section level2">
+<h2>Normalizing our Distribution</h2>
+<p>Our variable is a long way from normal, but there are several methods
+to use to normalize our data. Common transformations include square root
+(<code>sqrt()</code>) and <span class="math inline">\(log_{}10\)</span>
+(<code>log10()</code>). Let’s try a square root transformation to see if
+it improves our results:</p>
+<pre class="r"><code># We can use the `mutate()` function from `dplyr` to add and change columns
+library(dplyr)
+NC &lt;- NC %&gt;% 
+  mutate(
+    sqrt_MNEM2000 = sqrt(MNEM2000)
+  )
+
+plot(density(NC$sqrt_MNEM2000))</code></pre>
+<p><img src="RModule6_files/figure-html/density-sqrt-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Let’s test it with Shapiro-Wilk:</p>
+<pre class="r"><code>shapiro.test(NC$sqrt_MNEM2000)</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  NC$sqrt_MNEM2000
+## W = 0.92926, p-value = 4.521e-05</code></pre>
+<p>We’re closer to normal, but not enough to fail to reject the <span
+class="math inline">\(H_0\)</span> from the Shapiro-Wilk test. Still,
+it’s better than before, so we should try our ANOVA again using the
+transformed manufacturing variable:</p>
+<pre class="r"><code>anova_sqrt &lt;- oneway.test(sqrt_MNEM2000 ~ Region, data = NC, var.equal = FALSE)
+anova_sqrt</code></pre>
+<pre><code>## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  sqrt_MNEM2000 and Region
+## F = 16.822, num df = 2.000, denom df = 52.498, p-value = 2.263e-06</code></pre>
+<p>Our test detects a stronger significant difference (i.e., lower <span
+class="math inline">\(p\)</span>-value). The tests are more sensitive to
+deviations from the assumption of normality than they are to the
+assumption of homogeneity of variances. Since our data still isn’t very
+normal, we may want to consider a nonparametric, “distribution-free”
+version of the test. Fortunately, there are versions of ANOVA that don’t
+require normally distributed data; we’ll use one called the
+Kruskal-Wallis test. It produces different test statistics, but the
+interpretation is very similar to <code>aov()</code> and
+<code>oneway.test()</code>.</p>
+<pre class="r"><code>kruskal.test(sqrt_MNEM2000 ~ Region, data = NC)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  sqrt_MNEM2000 by Region
+## Kruskal-Wallis chi-squared = 27.64, df = 2, p-value = 9.954e-07</code></pre>
+</div>
+<div id="post-hoc-test" class="section level2">
+<h2>Post-Hoc Test</h2>
+<p>It appears that we’re finding a similar effect when we use either a
+transformed variable or a nonparametric test. But which region (or
+regions) account for the difference? We have one last test to perform,
+called the Tukey Multiple Comparisons of the Means Test. This test
+creates confidence intervals for the difference of sample means for each
+pair of samples in turn. The <span class="math inline">\(H_0\)</span> is
+that the confidence interval should contain 0, based on the assumption
+that the samples are from the same population. A low <span
+class="math inline">\(p\)</span>-value for the confidence interval means
+that one of the two samples is different.</p>
+<pre class="r"><code>aov &lt;- aov(sqrt_MNEM2000 ~ Region, data = NC)
+
+tukey &lt;- TukeyHSD(aov)
+tukey</code></pre>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = sqrt_MNEM2000 ~ Region, data = NC)
+## 
+## $Region
+##                              diff       lwr      upr     p adj
+## Mountains-Coastal Plain  3.921318 -18.54440 26.38703 0.9093413
+## Piedmont-Coastal Plain  49.508376  29.81191 69.20484 0.0000001
+## Piedmont-Mountains      45.587058  22.56750 68.60661 0.0000241</code></pre>
+<p>The test <span class="math inline">\(p\)</span>-values are smallest
+when the Piedmont region is considered(i.e., Piedmont/Coastal Plains and
+Piedmont/Mountains). This suggests that the Piedmont is the region most
+likely to be different than the others. A visual comparison of the
+confidence intervals helps illustrate the point.</p>
+<pre class="r"><code>plot(tukey)</code></pre>
+<p><img src="RModule6_files/figure-html/tukey-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>If two regions are governed by the same probability distribution
+(same population), we would expect differences of their respective
+sample means to be close to 0. The Tukey test calculates pairwise
+confidence intervals for each possible pair combination. If the
+<em>CI</em>s don’t include zero,we have evidence that they are
+different. The Piedmont-Mountains CI and Piedmont-Coastal Plain CI (not
+labeled, but middle category on the plot) does not include 0 at all (it
+also has the lowest p-values in the results). The Mountains-Coastal
+Plain CI does include 0. The Piedmont region is different and the effect
+identified by the ANOVA tests is because of this difference.</p>
+<p>Are these results definitive enough for us to really reject the ANOVA
+null hypothesis? I would agree that results are consistent about the
+Piedmont region, and our ANOVA result would still remain significant if
+we dropped our alpha from 0.05 to, say, 0.01. If this was not the case,
+we could redraw the regions or perform different transformations of the
+manufacturing counts to produce different or more definitive results.
+This illustrates the sometimes iterative nature of statistics – the
+findings of one process can lead us back to revisit early efforts that
+require us to repeat our analysis again later.</p>
+<hr />
+<hr />
+</div>
+</div>
+<div id="assignment" class="section level1">
+<h1>Assignment</h1>
+<p><strong>In an R Markdown (.Rmd, see R Module 4) Report, repeat the
+steps above for either the <code>MNEM1990</code> or data of your own
+(e.g., land cover, census)`. Your Report should include:</strong></p>
+<ul>
+<li>The R code used to generate your results and plots</li>
+<li>Interpretation of each of these tests; i.e., what does the statistic
+and <span class="math inline">\(p\)</span>-value represent?</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>Boxplot of regions or categories</li>
+</ol>
+<ul>
+<li>Add notches to your boxplots – Explain why notches are
+important/what they add</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>ANOVA output</li>
+</ol>
+<ul>
+<li>Report your F-Statistic and if you should reject or fail to reject
+the <span class="math inline">\(H_0\)</span>.</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>One-way Test with equal variances</li>
+<li>Bartlett’s K-Squared</li>
+<li>One-way Test with unequal variances</li>
+<li>Shapiro-Wilk Normality Test</li>
+</ol>
+<ul>
+<li>If the data are non-normal, transform variables accordingly and
+re-run the test</li>
+<li>Illustrate data using density plot for both un-transformed and
+transformed data</li>
+</ul>
+<ol start="7" style="list-style-type: decimal">
+<li>Tukey Multiple Comparisons of Mean Test</li>
+</ol>
+<ul>
+<li>Describe which regions or categories are different</li>
+<li>Include a plot of your confidence intervals</li>
+</ul>
 </div>
 
-<p>&copy; 2022 brownhr & M. Sugg. v.0.0.7</p>
+<p>&copy; 2022 brownhr & M. Sugg. v.0.0.8</p>
 
 
 </div>

@@ -111,7 +111,7 @@ The calculated F-Statistic is `16.41`, which means the numerator is about 16 tim
 
 ## One-way Test
 
-Another version of ANOVA is called the One-way test of variance, found in the `oneway.test()` function. This version tests whether two or more samples from normal distributions have the same means, but the variances are not necessarily assumed to be equal [@R-base]. Using this function with the `var.equal = TRUE` argument, the results should be identical to those from `aov()`:
+Another version of ANOVA is called the One-way test of variance, found in the `oneway.test()` function. This version tests whether two or more samples from normal distributions have the same means, but the variances are not necessarily assumed to be equal. Using this function with the `var.equal = TRUE` argument, the results should be identical to those from `aov()`:
 
 ```{r}
 oneway.test(MNEM2000 ~ Region, data = NC, var.equal = TRUE)
@@ -132,6 +132,7 @@ In this case, we should reject the null hypothesis, which mean we need to run `o
 oneway.test(MNEM2000 ~ Region, data = NC, var.equal = FALSE)
 ```
 By accommodating the differences in variances between the samples, our calculation for the F-Statistic changes (note the smaller degrees of freedom; 46.631 vs. 97). However, we can still reject the null hypothesis at $\alpha = 0.05$. This suggests that manufacturing is different in at least one of the regions of North Carolina.
+
 
 ## Testing Normality
 
@@ -154,8 +155,8 @@ Because the $p$-value is statistically significant, we can reject the null hypot
 
 Our variable is a long way from normal, but there are several methods to use to normalize our data. Common transformations include square root (`sqrt()`) and $log_{}10$ (`log10()`). Let's try a square root transformation to see if it improves our results:
 
-```{r}
-# We can use teh `mutate()` function from `dplyr` to add and change columns
+```{r density-sqrt}
+# We can use the `mutate()` function from `dplyr` to add and change columns
 library(dplyr)
 NC <- NC %>% 
   mutate(
@@ -184,6 +185,9 @@ Our test detects a stronger significant difference (i.e., lower $p$-value). The 
 kruskal.test(sqrt_MNEM2000 ~ Region, data = NC)
 ```
 
+
+## Post-Hoc Test
+
 It appears that we're finding a similar effect when we use either a transformed variable or a nonparametric test. But which region (or regions) account for the difference? We have one last test to perform, called the Tukey Multiple Comparisons of the Means Test. This test creates confidence intervals for the difference of sample means for each pair of samples in turn. The $H_0$ is that the confidence interval should contain 0, based on the assumption that the samples are from the same population. A low $p$-value for the confidence interval means that one of the two samples is different.
 
 ```{r}
@@ -193,6 +197,22 @@ tukey <- TukeyHSD(aov)
 tukey
 ```
 
+The test $p$-values are smallest when the Piedmont region is considered(i.e., Piedmont/Coastal Plains and Piedmont/Mountains). This suggests that the Piedmont is the region most likely to be different than the others. A visual comparison of the confidence intervals helps illustrate the point.
+
+```{r tukey}
+plot(tukey)
+```
+
+If two regions are governed by the same probability distribution (same population), we would expect differences of their respective sample means to be close to 0.  The Tukey test calculates pairwise confidence intervals for each possible pair combination.  If the *CI*s don’t include zero,we have evidence that they are different. The Piedmont-Mountains CI and Piedmont-Coastal Plain CI (not labeled, but middle category on the plot) does not include 0 at all (it also has the lowest p-values in the results).  The Mountains-Coastal Plain CI does include 0.  The Piedmont region is different and the effect identified by the ANOVA tests is because of this difference.
+
+Are these results definitive enough for us to really reject the ANOVA null hypothesis? I would agree that results are consistent about the Piedmont region, and our ANOVA result would still remain significant if we dropped our alpha from 0.05 to, say, 0.01.    If this was not the case, we could redraw the regions or perform different transformations of the manufacturing counts to produce different or more definitive results.  This illustrates the sometimes iterative nature of statistics – the findings of one process can lead us back to revisit early efforts that require us to repeat our analysis again later.
+
+
+
+
+***
+***
+
 # Assignment
 
 **In an R Markdown (.Rmd, see R Module 4) Report, repeat the steps above for either the `MNEM1990` or data of your own (e.g., land cover, census)`. Your Report should include:**
@@ -200,3 +220,16 @@ tukey
 - The R code used to generate your results and plots
 - Interpretation of each of these tests; i.e., what does the statistic and $p$-value represent?
 
+1. Boxplot of regions or categories
+  - Add notches to your boxplots -- Explain why notches are important/what they add
+2. ANOVA output
+  - Report your F-Statistic and if you should reject or fail to reject the $H_0$.
+3. One-way Test with equal variances
+4. Bartlett's K-Squared
+5. One-way Test with unequal variances
+6. Shapiro-Wilk Normality Test
+  - If the data are non-normal, transform variables accordingly and re-run the test
+  - Illustrate data using density plot for both un-transformed and transformed data
+7. Tukey Multiple Comparisons of Mean Test
+  - Describe which regions or categories are different
+  - Include a plot of your confidence intervals
