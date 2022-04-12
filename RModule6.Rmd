@@ -106,3 +106,97 @@ summary(anova)
 ```
 
 Notice that the results first warn us about our unbalanced samples. In both sets of results, we're given some key information. The input for the nominator in the ANOVA calculation is provided by `Region`, and the denominator is provided in `Residuals`. The calculated estimates of the variance between the sample means (nominator) and within the samples themselves (denominator) are provided the degrees of freedom needed to plot the F-distribution. In our case, we'll have an F distribution of $(2,97)$. This distribution is used to calculate the critical value of F at an alpha of $0.05$, the default for the test. 
+
+The calculated F-Statistic is `16.41`, which means the numerator is about 16 times the denominator. This illustrates a big difference between regions and the $p$-value for that F statistic is $7.25\times10^{-7}$, which is considerably less than $0.05$. Thus, at $\alpha = 0.05$, we can reject the null hypothesis.
+
+## One-way Test
+
+Another version of ANOVA is called the One-way test of variance, found in the `oneway.test()` function. This version tests whether two or more samples from normal distributions have the same means, but the variances are not necessarily assumed to be equal [@R-base]. Using this function with the `var.equal = TRUE` argument, the results should be identical to those from `aov()`:
+
+```{r}
+oneway.test(MNEM2000 ~ Region, data = NC, var.equal = TRUE)
+```
+Setting `var.equal = FALSE` leads to differing results:
+```{r}
+oneway.test(MNEM2000 ~ Region, data = NC, var.equal = FALSE)
+```
+
+If we wish to test if our variances are homogeneous, we can use a test called the Bartlett's test of Homoscedasticity. This test examines the null hypothesis that the variances in each of the set of samples are the same. As the test statistic gets larger, we're more likely to reject the null hypothesis (i.e., as the statistic increases, the variances are more likely to not be homogeneous).
+
+```{r}
+bartlett.test(MNEM2000 ~ Region, data = NC)
+```
+
+In this case, we should reject the null hypothesis, which mean we need to run `oneway.test()` with `va.equal = FALSE`.
+```{r}
+oneway.test(MNEM2000 ~ Region, data = NC, var.equal = FALSE)
+```
+By accommodating the differences in variances between the samples, our calculation for the F-Statistic changes (note the smaller degrees of freedom; 46.631 vs. 97). However, we can still reject the null hypothesis at $\alpha = 0.05$. This suggests that manufacturing is different in at least one of the regions of North Carolina.
+
+## Testing Normality
+
+There's one last condition to consider that could be impacting our results. ANOVA assumes that the sampled variable is normally distributed; we can check this as well. First, let's make a simple density plot of `MNEM2000`. If it is approximately normal, we should see a roughly symmetric curve.
+
+```{r density-plot}
+plot(
+  density(x = NC$MNEM2000)
+)
+```
+Our graph isn't normal; note the positive skew. We can test the assumption of normality statistically using the *Shapiro-Wilk Normality Test*.
+
+```{r}
+shapiro.test(NC$MNEM2000)
+```
+
+Because the $p$-value is statistically significant, we can reject the null hypothesis (our distribution is not normal).
+
+## Normalizing our Distribution
+
+Our variable is a long way from normal, but there are several methods to use to normalize our data. Common transformations include square root (`sqrt()`) and $log_{}10$ (`log10()`). Let's try a square root transformation to see if it improves our results:
+
+```{r}
+# We can use teh `mutate()` function from `dplyr` to add and change columns
+library(dplyr)
+NC <- NC %>% 
+  mutate(
+    sqrt_MNEM2000 = sqrt(MNEM2000)
+  )
+
+plot(density(NC$sqrt_MNEM2000))
+```
+
+Let's test it with Shapiro-Wilk:
+
+```{r}
+shapiro.test(NC$sqrt_MNEM2000)
+```
+
+We're closer to normal, but not enough to fail to reject the $H_0$ from the Shapiro-Wilk test. Still, it's better than before, so we should try our ANOVA again using the transformed manufacturing variable:
+
+```{r}
+anova_sqrt <- oneway.test(sqrt_MNEM2000 ~ Region, data = NC, var.equal = FALSE)
+anova_sqrt
+```
+
+Our test detects a stronger significant difference (i.e., lower $p$-value). The tests are more sensitive to deviations from the assumption of normality than they are to the assumption of homogeneity of variances. Since our data still isn't very normal, we may want to consider a nonparametric, "distribution-free" version of the test. Fortunately, there are versions of ANOVA that don't require normally distributed data; we'll use one called the Kruskal-Wallis test. It produces different test statistics, but the interpretation is very similar to `aov()` and `oneway.test()`.
+
+```{r}
+kruskal.test(sqrt_MNEM2000 ~ Region, data = NC)
+```
+
+It appears that we're finding a similar effect when we use either a transformed variable or a nonparametric test. But which region (or regions) account for the difference? We have one last test to perform, called the Tukey Multiple Comparisons of the Means Test. This test creates confidence intervals for the difference of sample means for each pair of samples in turn. The $H_0$ is that the confidence interval should contain 0, based on the assumption that the samples are from the same population. A low $p$-value for the confidence interval means that one of the two samples is different.
+
+```{r}
+aov <- aov(sqrt_MNEM2000 ~ Region, data = NC)
+
+tukey <- TukeyHSD(aov)
+tukey
+```
+
+# Assignment
+
+**In an R Markdown (.Rmd, see R Module 4) Report, repeat the steps above for either the `MNEM1990` or data of your own (e.g., land cover, census)`. Your Report should include:**
+
+- The R code used to generate your results and plots
+- Interpretation of each of these tests; i.e., what does the statistic and $p$-value represent?
+

@@ -24,7 +24,8 @@ knitr::write_bib(x = c(
   "plotly",
   "leaflet",
   "crosstalk",
-  "pagedown"
+  "pagedown",
+  "base"
 ),
 file = "bibliography.bib")
 
