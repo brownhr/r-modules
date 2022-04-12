@@ -7,6 +7,8 @@ nocite: '@*'
 
 https://github.com/brownhr/r-modules
 
+Built with R `r getRversion()`
+
 ## Citations & Packages
 
 ```{r write-bib, echo = F, warning=F, message=F}
