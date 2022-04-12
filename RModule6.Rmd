@@ -215,7 +215,7 @@ Are these results definitive enough for us to really reject the ANOVA null hypot
 
 # Assignment
 
-**In an R Markdown (.Rmd, see R Module 4) Report, repeat the steps above for either the `MNEM1990` or data of your own (e.g., land cover, census)`. Output your report as a PDF (`output: pdf_document` in your `.Rmd` header). Your Report should include:**
+**In an R Markdown (.Rmd, see R Module 4) Report, repeat the steps above for either the `MNEM1990` or data of your own (e.g., land cover, census). Output your report as a PDF (`output: pdf_document` in your `.Rmd` header). Your Report should include:**
 
 - The R code used to generate your results and plots
 - Interpretation of each of these tests; i.e., what does the statistic and $p$-value represent?
