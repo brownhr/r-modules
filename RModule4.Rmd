@@ -1,5 +1,5 @@
 ---
-title: "Qualitative and Survey Data"
+title: "R Markdown Reports and Survey Data"
 output:
   html_document:
       toc: true
