@@ -1,5 +1,5 @@
 ---
-title: "Bivariate Regression"
+title: "Bivariate Analysis in R"
 output:
   html_document:
       toc: true
@@ -8,3 +8,37 @@ output:
       toc_depth: 3
       number_sections: false
 ---
+
+# Quantifying More than One Variable
+
+So far we've only focused on exploring a single variable by considering its frequency, histogram, and descriptive statistics. Doing this allows us to know a great deal about how some set of measured values, i.e., a sample, are distributed across a set of possible values and how those values are dispersed around some notion of the 'middle' of the data. That's a lot of work, but what about moving beyond thinking only about a single variable?
+
+Often, we want to consider the relationship between a pair of variables and the effect that one variable may have on the values of another -- this is known as bivariate analysis, and we'll explore it this week with our trusty North Carolina employment data.
+
+For this Module, we'll use the NC Shapefile from previous R Modules (`NC_REGION.shp`), which contains four important "employment" variables (`MNEM2000`, `MNEM1990`, `TOTJOB2000`, `TOTJOB1990`), and two variables for population (`POP2000` and `POP1990`).
+
+```{r, message = FALSE}
+library(sf)
+library(tidyverse)
+
+NC <- read_sf("data/NC_REGION.shp")
+
+
+# Let's create a plot of just the "geometry" of the shapefile, in order to make
+# sure it loaded correctly.
+plot(st_geometry(NC))
+```
+
+Let's map the distribution of our `MNEM1990` variable. We want a histogram, a density plot, and our mean and median lines all together.
+
+```{r density}
+
+```
+
+
+
+## Questions
+
+As in previous R Modules, write up this document as an R Markdown report, and export the results to a `.pdf`. Include both your results, your R code, and the answers to the questions.
+
+1. Create a histogram for the `POP2000` variable. Include the histogram itself, the density, the mean and median lines, and the axis labels and title. 
