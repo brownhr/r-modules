@@ -8,6 +8,13 @@ output:
       toc_depth: 3
       number_sections: false
 ---
+```{r setup, include = FALSE}
+library(ggplot2)
+theme_set(theme_bw())
+knitr::opts_chunk$set(
+  message = FALSE
+)
+```
 
 # Quantifying More than One Variable
 
@@ -17,16 +24,16 @@ Often, we want to consider the relationship between a pair of variables and the 
 
 For this Module, we'll use the NC Shapefile from previous R Modules (`NC_REGION.shp`), which contains four important "employment" variables (`MNEM2000`, `MNEM1990`, `TOTJOB2000`, `TOTJOB1990`), and two variables for population (`POP2000` and `POP1990`).
 
-```{r, message = FALSE}
+```{r}
 library(sf)
 library(tidyverse)
 
 NC <- read_sf("data/NC_REGION.shp")
+```
 
-theme_set(theme_bw())
+Let's create a plot of just the "geometry" of the shapefile, in order to make sure it loaded correctly.
 
-# Let's create a plot of just the "geometry" of the shapefile, in order to make
-# sure it loaded correctly.
+```{r plot}
 plot(st_geometry(NC))
 ```
 

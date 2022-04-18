@@ -79,7 +79,7 @@ NC_filter <- NC %>%
   select_if(is.numeric) %>%
   # Students should have a different set of variables, but can use some of the
   # following.
-  select(
+  dplyr::select(
     c(
       POP2000,
       MNEM2000,

@@ -359,13 +359,13 @@ div.tocify {
       <a href="RModule3.html">R Module 3</a>
     </li>
     <li>
-      <a href="RModule4.html">R Module 4</a>
-    </li>
-    <li>
       <a href="RModule5.html">R Module 5</a>
     </li>
     <li>
       <a href="RModule6.html">R Module 6</a>
+    </li>
+    <li>
+      <a href="RModule7.html">R Module 7</a>
     </li>
   </ul>
 </li>
@@ -524,26 +524,25 @@ the function</em></strong></p>
 <pre><code>##  [1] A A A A A A A A A A B B B B B B C C C C C C D D D D D D D D D D E E E E E E
 ## [39] E F F F F G G G G G G G H H H H
 ## Levels: A B C D E F G H</code></pre>
-<p>We can also see from this <strong>Use R to produce the following
-simple data summaries and visualizations commonly used for qualitative
-data:</strong></p>
+<p><strong>Use R to produce the following simple data summaries and
+visualizations commonly used for qualitative data:</strong></p>
 <ol style="list-style-type: decimal">
 <li><p>A histogram of the <code>Composition</code> variable from the
 <code>painters</code> dataset, using the <code>hist()</code>
 function.</p></li>
-<li><p>A <strong>horizontal</strong> bar chart of the
-<code>Expression</code> variable, using the <code>barplot()</code>
-function.</p>
+<li><p>A bar chart of the <code>Expression</code> variable, using the
+<code>barplot()</code> function.</p>
 <ul>
 <li><em>Tip: use `?barplot() to see which argument you need to change to
-get a horizontal bar plot</em></li>
+get a horizontal bar plot</em> Also, wrap the painters$Expression with
+the table() function, then use the barplot() function</li>
 </ul></li>
 <li><p>A pie chart of the <code>Schools</code> variable, using the
 <code>pie()</code> function.</p>
 <ul>
 <li><em>Hint: you need to wrap the <code>pie()</code> function around
 the <code>table()</code> function, because you need
-<strong>frequencies</strong> of each school, rather than just their
+<strong>counts</strong> of each school, rather than just their
 label</em></li>
 </ul></li>
 </ol>
@@ -605,7 +604,7 @@ Module 1”, add your name, and turn it in to Google Classroom. Bring any
 questions, insights, comments, or concerns to the next class!</p>
 </div>
 
-<p>&copy; 2022 brownhr & M. Sugg. v.0.0.8</p>
+<p>&copy; 2022 brownhr & M. Sugg. v.0.0.9</p>
 
 
 </div>

@@ -355,13 +355,13 @@ div.tocify {
       <a href="RModule3.html">R Module 3</a>
     </li>
     <li>
-      <a href="RModule4.html">R Module 4</a>
-    </li>
-    <li>
       <a href="RModule5.html">R Module 5</a>
     </li>
     <li>
       <a href="RModule6.html">R Module 6</a>
+    </li>
+    <li>
+      <a href="RModule7.html">R Module 7</a>
     </li>
   </ul>
 </li>
@@ -403,14 +403,11 @@ population (<code>POP2000</code> and <code>POP1990</code>).</p>
 <pre class="r"><code>library(sf)
 library(tidyverse)
 
-NC &lt;- read_sf(&quot;data/NC_REGION.shp&quot;)
-
-theme_set(theme_bw())
-
-# Let&#39;s create a plot of just the &quot;geometry&quot; of the shapefile, in order to make
-# sure it loaded correctly.
-plot(st_geometry(NC))</code></pre>
-<p><img src="RModule7_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+NC &lt;- read_sf(&quot;data/NC_REGION.shp&quot;)</code></pre>
+<p>Let’s create a plot of just the “geometry” of the shapefile, in order
+to make sure it loaded correctly.</p>
+<pre class="r"><code>plot(st_geometry(NC))</code></pre>
+<p><img src="RModule7_files/figure-html/plot-1.png" width="672" /></p>
 <div id="questions" class="section level2">
 <h2>Questions</h2>
 <p>As in previous R Modules, write up this document as an R Markdown
@@ -419,7 +416,9 @@ results, your R code, and the answers to the questions.</p>
 <ol style="list-style-type: decimal">
 <li>Create a histogram for the <code>POP2000</code> variable. Include
 the histogram itself, the density, the mean and median lines, and the
-axis labels and title.</li>
+axis labels and title. If you’re using base R, look into the
+<code>probability</code> argument for the <code>hist()</code>
+function.</li>
 </ol>
 <hr />
 </div>
@@ -559,9 +558,170 @@ class="math inline">\(&lt;\)</span> 1.</strong></p>
 </div>
 <div id="linear-regression" class="section level1">
 <h1>Linear Regression</h1>
+<p>We’ve assessed the covariance visually and computationally. There
+seems to be a strong, positive, and linear relationship between
+manufacturing and population. Now, we can run a regression – what R was
+really made to do – and explore this relationship futher.</p>
+<p>Running a linear regression in R is done with the linear model
+(<code>lm()</code>) function, and its primary argument is written in
+“formula syntax”, a special way of describing a formula. Formula syntax
+looks like <code>y ~ x</code>, which is read as “y as a function of x”.
+In the context of <code>lm()</code>, this means our dependent variable
+<code>y</code> is a function of our independent variable
+<code>x</code>.</p>
+<pre class="r"><code>model &lt;- lm(MNEM2000 ~ POP2000, data = NC)
+model</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MNEM2000 ~ POP2000, data = NC)
+## 
+## Coefficients:
+## (Intercept)      POP2000  
+##   1.891e+03    7.294e-02</code></pre>
+<p>What we get is the classic equation of a line: <span
+class="math inline">\(y = mx+b\)</span>, where <span
+class="math inline">\(b\)</span> is our <code>(Intercept)</code> and
+<span class="math inline">\(m\)</span> is our <code>POP2000</code>
+coefficient. We can plot this in R on top of a scatter plot:</p>
+<pre class="r"><code>model &lt;- lm(MNEM2000 ~ POP2000, data = NC)
+
+
+plot(MNEM2000 ~ POP2000, data = NC)
+abline(model)</code></pre>
+<p><img src="RModule7_files/figure-html/lm-base-1.png" width="672" /></p>
+<p>Or alternatively in <code>ggplot2</code>, with
+<code>stat_smooth()</code>:</p>
+<pre class="r"><code>library(ggplot2)
+
+ggplot(NC, aes(x = POP2000, y = MNEM2000)) +
+  geom_point() + 
+  # `se = FALSE` means we don&#39;t plot a confidence interval around our line.
+  stat_smooth(method = &quot;lm&quot;, se = FALSE)</code></pre>
+<p><img src="RModule7_files/figure-html/lm-ggplot2-1.png" width="672" /></p>
+<p>Now we have our regression line. However, we need to measure whether
+it’s actually a good fit. We can use the <span
+class="math inline">\(r^2\)</span> “goodness of fit measure” to
+determine this.</p>
+<pre class="r"><code>s &lt;- summary(model)
+
+s</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MNEM2000 ~ POP2000, data = NC)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -10836.5  -2051.7   -973.5    912.1  16942.0 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 1.891e+03  5.368e+02   3.522 0.000652 ***
+## POP2000     7.294e-02  4.171e-03  17.485  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4281 on 98 degrees of freedom
+## Multiple R-squared:  0.7573, Adjusted R-squared:  0.7548 
+## F-statistic: 305.7 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Here, it’s the <code>Multiple R-squared</code> value. If we assign
+the summary of our linear model to an object, e.g. <code>s</code>, we
+can return the r-squared (and by extension, other attributes) with
+<code>s$r.squared</code>, which gives us 0.7572621.</p>
+<p>Larger <span class="math inline">\(r^2\)</span> values for a
+bivariate regression line indicate that more of the variance in
+<code>y</code> is explained by the variance in <code>x</code>. In other
+words, this means that roughly 76% of manufacturing in each county is
+explained by the population of that county; this also means that <span
+class="math inline">\(\approx\)</span> 24% of variance is
+<strong>not</strong> explained by population. There’s clearly more to
+the story, such as how manufacturing is distributed geographically
+around the state in a certain way, but we’ve now established that
+population is an important part of our model.</p>
+</div>
+<div id="residuals" class="section level1">
+<h1>Residuals</h1>
+<p>Next, we should consider our other “goodness of fit” measure. We need
+to assess how the differences between the manufacturing values
+predicteed by the regression line differ from the actual observed
+values. These differences are called residuals, and we can call a list
+of the residuals in R:</p>
+<pre class="r"><code>model &lt;- lm(MNEM2000 ~ POP2000, data = NC)
+
+
+head(model$residuals)</code></pre>
+<pre><code>##          1          2          3          4          5          6 
+##  -640.8329 -1265.6555  3589.3870 -2683.4450 -1682.8900 -1520.8310</code></pre>
+<p>Examining the results tells us a lot about our regression; for most
+regressions, the ideal is to have the residuals symmetrically
+distributed around the mean of the residuals, which should be close to
+0. When the mean of the residuals is close to 0, and the residuals are
+normally distributed around this mean, it indicates that when our
+regression misses its prediction, we’re missing both “above” and “below”
+the actual value (which is good).</p>
+<p>Think of it like target shooting: a good regression line is going to
+hit the bullseye some of the time, but not all the time. When it misses
+the bullseye, we want it to miss both high and low, left and right of it
+evenly. If we consistently missed below the bullseye, for example, we’d
+have a clue about a systematic problem in our estimate (in the target
+shooting example, perhaps we’ve forgotten to account for the wind
+direction or the speed of our arrow).</p>
+<div id="questions-2" class="section level2">
+<h2>Questions</h2>
+<ol start="3" style="list-style-type: decimal">
+<li>Calculate and report the mean value of the set of residuals from
+your regression results (in other words, the mean difference between
+predicted and observed values of our dependent variable). Next, create
+an absolute value histogram of the residuals from your regression using
+the ‘fd’ breaks method. Add the mean value of the residuals to your plot
+as a vertical line. Include a legend, appropriate axis labels, and a
+title. As always, provide your R code to do this in your R Markdown
+report.</li>
+</ol>
+<p>We now have two “goodness of fit” measures to help us decide if our
+prediction line fits our data well. A higher <span
+class="math inline">\(r^2\)</span> value in combination with a lower
+standard error estimate gives us some confidence that our line of fit is
+suitable.</p>
+</div>
+</div>
+<div id="geographic-distribution" class="section level1">
+<h1>Geographic Distribution</h1>
+<p>Geographers work with residuals quite a bit, but why? Just as we want
+to know how are “misses” are distributed around the regression line, we
+also want to know how the misses are distributed across geographic
+space. If we see evidence of spatial dependence in our regressions, we
+have reason to think that our model might perform well in some
+geographic areas and poorly in others. To do this, we start with
+something called a “residual map”. We’ll do more with the residuals
+later, but for now, let’s add the residuals to our shapefile attribute
+table, then create a simple map that visualizes the distribution of the
+residuals around the state.</p>
+<p>We can append the residuals of our model to our original Shapefile
+quite easily:</p>
+<pre class="r"><code>NC$Residuals &lt;- model$residuals</code></pre>
+<p>If you want to save your shapefile, use the <code>write_sf()</code>
+function from <code>sf</code>:</p>
+<pre class="r"><code>write_sf(NC, &quot;NC.shp&quot;)</code></pre>
+<div id="questions-3" class="section level2">
+<h2>Questions:</h2>
+<ol start="4" style="list-style-type: decimal">
+<li>Create a choropleth map of the residuals of the regression with an
+appropriate legend and title. You may explore the spatial patterning fo
+residuals through altering your break methods and number of categories,
+but for your final map, use 4 classes and a quartiles classification
+theme. Why? This utilizes the median and 1st/3rd quartiles as
+breakpoints. In other words, our map will be connected to a measure of
+central tendency of the residuals, which can aid interpretation. Explain
+in writing if there is visual evidence for spatial dependence in the
+map. Provide the map and your R code.</li>
+</ol>
+<p>You can use any R package you wish to generate this map, but I
+recommend <code>tmap</code>, as it’s designed to work well with
+choropleth mapping.</p>
+</div>
 </div>
 
-<p>&copy; 2022 brownhr & M. Sugg. v.0.0.8</p>
+<p>&copy; 2022 brownhr & M. Sugg. v.0.0.9</p>
 
 
 </div>

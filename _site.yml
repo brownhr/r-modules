@@ -20,14 +20,16 @@ navbar:
       # - text: "Basic Statistics"
       - text: "R Module 3"
         href: RModule3.html
-      - text: "R Module 4"
-        href: RModule4.html
+      # - text: "R Module 4"
+      #   href: RModule4.html
       - text: "R Module 5"
         href: RModule5.html
       # - text: "-------"
       # - text: "Intermediate R"
       - text: "R Module 6"
         href: RModule6.html
+      - text: "R Module 7"
+        href: RModule7.html
 output:
   html_document:
     theme: flatly
