@@ -36,7 +36,7 @@ plot(st_geometry(NC))
 
 As in previous R Modules, write up this document as an R Markdown report, and export the results to a `.pdf`. Include both your results, your R code, and the answers to the questions.
 
-1. Create a histogram for the `POP2000` variable. Include the histogram itself, the density, the mean and median lines, and the axis labels and title. 
+1. Create a histogram for the `POP2000` variable. Include the histogram itself, the density, the mean and median lines, and the axis labels and title. If you're using base R, look into the `probability` argument for the `hist()` function.
 
 
 *** 
@@ -160,3 +160,91 @@ NC_filter %>%
 
 
 # Linear Regression
+
+We've assessed the covariance visually and computationally. There seems to be a strong, positive, and linear relationship between manufacturing and population. Now, we can run a regression -- what R was really made to do -- and explore this relationship futher. 
+
+Running a linear regression in R is done with the linear model (`lm()`) function, and its primary argument is written in "formula syntax", a special way of describing a formula. Formula syntax looks like `y ~ x`, which is read as "y as a function of x". In the context of `lm()`, this means our dependent variable `y` is a function of our independent variable `x`. 
+
+```{r}
+model <- lm(MNEM2000 ~ POP2000, data = NC)
+model
+```
+
+What we get is the classic equation of a line: $y = mx+b$, where $b$ is our `(Intercept)` and $m$ is our `POP2000` coefficient. We can plot this in R on top of a scatter plot:
+
+```{r lm-base}
+model <- lm(MNEM2000 ~ POP2000, data = NC)
+
+
+plot(MNEM2000 ~ POP2000, data = NC)
+abline(model)
+
+```
+
+Or alternatively in `ggplot2`, with `stat_smooth()`:
+
+```{r lm-ggplot2, message = FALSE}
+library(ggplot2)
+
+ggplot(NC, aes(x = POP2000, y = MNEM2000)) +
+  geom_point() + 
+  # `se = FALSE` means we don't plot a confidence interval around our line.
+  stat_smooth(method = "lm", se = FALSE)
+
+```
+
+Now we have our regression line. However, we need to measure whether it's actually a good fit. We can use the $r^2$ "goodness of fit measure" to determine this. 
+
+```{r}
+s <- summary(model)
+
+s
+```
+
+Here, it's the `Multiple R-squared` value. If we assign the summary of our linear model to an object, e.g. `s`, we can return the r-squared (and by extension, other attributes) with `s$r.squared`, which gives us `r s$r.squared`.
+
+Larger $r^2$ values for a bivariate regression line indicate that more of the variance in `y` is explained by the variance in `x`. In other words, this means that roughly 76% of manufacturing in each county is explained by the population of that county; this also means that $\approx$ 24% of variance is **not** explained by population. There's clearly more to the story, such as how manufacturing is distributed geographically around the state in a certain way, but we've now established that population is an important part of our model.
+
+# Residuals
+
+Next, we should consider our other "goodness of fit" measure. We need to assess how the differences between the manufacturing values predicteed by the regression line differ from the actual observed values. These differences are called residuals, and we can call a list of the residuals in R:
+
+```{r}
+model <- lm(MNEM2000 ~ POP2000, data = NC)
+
+
+head(model$residuals)
+```
+
+Examining the results tells us a lot about our regression; for most regressions, the ideal is to have the residuals symmetrically distributed around the mean of the residuals, which should be close to 0. When the mean of the residuals is close to 0, and the residuals are normally distributed around this mean, it indicates that when our regression misses its prediction, we're missing both "above" and "below" the actual value (which is good).
+
+Think of it like target shooting: a good regression line is going to hit the bullseye some of the time, but not all the time. When it misses the bullseye, we want it to miss both high and low, left and right of it evenly. If we consistently missed below the bullseye, for example, we'd have a clue about a systematic problem in our estimate (in the target shooting example, perhaps we've forgotten to account for the wind direction or the speed of our arrow).
+
+## Questions
+
+3. Calculate and report the mean value of the set of residuals from your regression results (in other words, the mean difference between predicted and observed values of our dependent variable). Next, create an absolute value histogram of the residuals from your regression using the 'fd' breaks method. Add the mean value of the residuals to your plot as a vertical line. Include a legend, appropriate axis labels, and a title. As always, provide your R code to do this in your R Markdown report.
+
+We now have two "goodness of fit" measures to help us decide if our prediction line fits our data well. A higher $r^2$ value in combination with a lower standard error estimate gives us some confidence that our line of fit is suitable.
+
+# Geographic Distribution
+
+Geographers work with residuals quite a bit, but why? Just as we want to know how are "misses" are distributed around the regression line, we also want to know how the misses are distributed across geographic space. If we see evidence of spatial dependence in our regressions, we have reason to think that our model might perform well in some geographic areas and poorly in others. To do this, we start with something called a "residual map". We'll do more with the residuals later, but for now, let's add the residuals to our shapefile attribute table, then create a simple map that visualizes the distribution of the residuals around the state.
+
+We can append the residuals of our model to our original Shapefile quite easily:
+
+```{r}
+NC$Residuals <- model$residuals
+```
+
+If you want to save your shapefile, use the `write_sf()` function from `sf`:
+
+```{r, eval = FALSE}
+write_sf(NC, "NC.shp")
+```
+
+
+## Questions:
+
+4. Create a choropleth map of the residuals of the regression with an appropriate legend and title. You may explore the spatial patterning fo residuals through altering your break methods and number of categories, but for your final map, use 4 classes and a quartiles classification theme. Why? This utilizes the median and 1st/3rd quartiles as breakpoints. In other words, our map will be connected to a measure of central tendency of the residuals, which can aid interpretation. Explain in writing if there is visual evidence for spatial dependence in the map. Provide the map and your R code. 
+
+You can use any R package you wish to generate this map, but I recommend `tmap`, as it's designed to work well with choropleth mapping.

@@ -96,8 +96,8 @@ NC_filter <- NC %>%
 
 library(corrr)
 
-cor <- NC_filter %>% 
-  correlate() %>% 
+cor <- NC_filter %>%
+  correlate() %>%
   shave()
 
 fashion(cor, decimals = 3)
@@ -106,7 +106,70 @@ fashion(cor, decimals = 3)
 ```{r q2, warning = FALSE}
 library(GGally)
 
-cor %>% 
+cor %>%
   ggcorr(nbreaks = 7, palette = "RdBu")
 ```
 
+## Question 3:
+
+Calculate and report the mean value of the set of residuals from your regression results (in other words, the mean difference between predicted and observed values of our dependent variable). Next, create an absolute value histogram of the residuals from your regression using the 'fd' breaks method. Add the mean value of the residuals to your plot as a vertical line. Include a legend, appropriate axis labels, and a title. As always, provide your R code to do this in your R Markdown report.
+
+
+```{r q3-1}
+model <- lm(MNEM2000 ~ POP2000, data = NC)
+
+m <- mean(model$residuals)
+print(paste("Mean residuals = ", m))
+```
+
+base R:
+
+```{r q3-base}
+hist(model$residuals, probability = TRUE, breaks = nclass.FD)
+abline(v = mean(model$residuals), col = "green")
+
+```
+
+
+
+
+ggplot2:
+
+```{r q3-ggplot2}
+residuals <- data.frame(model$residuals)
+fd_bins <- nclass.FD(residuals$model.residuals)
+ggplot(residuals, aes(x = model.residuals)) +
+  geom_histogram(bins = fd_bins,
+                 fill = "gray50",
+                 boundary = 0) +
+  geom_vline(aes(xintercept = mean(model.residuals), color = "Mean")) +
+  scale_color_manual(values = c("Mean" = "green")) +
+  labs(
+    x = "Residuals",
+    y = "Count",
+    color = "Stats",
+    title = "Histogram of MNEM2000 Residuals"
+  )
+```
+
+
+## Question 4:
+
+Create a choropleth map of the residuals of the regression with an appropriate legend and title. You may explore the spatial patterning fo residuals through altering your break methods and number of categories, but for your final map, use 4 classes and a quartiles classification theme. Why? This utilizes the median and 1st/3rd quartiles as breakpoints. In other words, our map will be connected to a measure of central tendency of the residuals, which can aid interpretation. Explain in writing if there is visual evidence for spatial dependence in the map. Provide the map and your R code.
+
+```{r q4}
+library(tmap)
+NC$Residuals <- model$residuals
+
+tm_shape(NC) + 
+  tm_polygons(
+    col = "Residuals",
+    style = "quantile",
+    n = 4,
+    palette = "RdYlBu"
+  )
+
+
+```
+
+*There seems to be a lot of high residuals in the central part of the state, and low residuals on the coastal plains and western tip regions. *
