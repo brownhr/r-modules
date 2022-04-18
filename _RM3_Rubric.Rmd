@@ -2,13 +2,6 @@
 title: "R Module 3 Rubric"
 ---
 
-```{r render, echo = F, eval = F, message=F}
-xfun::Rscript_call(rmarkdown::render,
-                   list(input = "RM3_Rubric.Rmd", output_format = "word_document"))
-
-
-```
-
 ```{r setup, echo = FALSE, message=F}
 knitr::opts_chunk$set(echo = F)
 
