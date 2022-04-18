@@ -405,14 +405,12 @@ library(tidyverse)
 
 NC &lt;- read_sf(&quot;data/NC_REGION.shp&quot;)
 
+theme_set(theme_bw())
 
 # Let&#39;s create a plot of just the &quot;geometry&quot; of the shapefile, in order to make
 # sure it loaded correctly.
 plot(st_geometry(NC))</code></pre>
 <p><img src="RModule7_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<p>Let’s map the distribution of our <code>MNEM1990</code> variable. We
-want a histogram, a density plot, and our mean and median lines all
-together.</p>
 <div id="questions" class="section level2">
 <h2>Questions</h2>
 <p>As in previous R Modules, write up this document as an R Markdown
@@ -423,7 +421,143 @@ results, your R code, and the answers to the questions.</p>
 the histogram itself, the density, the mean and median lines, and the
 axis labels and title.</li>
 </ol>
+<hr />
 </div>
+</div>
+<div id="covariance" class="section level1">
+<h1>Covariance</h1>
+<p>An important consideration in our analysis is <em>covariation</em>,
+that is, how the values of one variable change with the values of
+another. In our case, it is necessary to consider that the number of
+manufacturing jobs likely changes (<em>covaries</em>) with population;
+i.e., counties with a higher population likely have a larger number of
+manufacturing jobs. Note that we’re also assuming <em>causality</em> in
+our speculative statement, that manufacturing depends to some degree on
+population values (e.g., larger population centers have more need for
+manufacturing jobs, too).</p>
+<p>Before we formally test covariance, we should establish if these
+variables actually covary; let’s try a basic scatterplot:</p>
+<pre class="r"><code>library(ggplot2)
+
+ggplot(
+  data = NC,
+  mapping = aes(x = MNEM2000, y = POP2000)
+) +
+  geom_point() +
+  labs(
+    x = &quot;Manufacturing Jobs&quot;,
+    y = &quot;Population&quot;,
+    # The &quot;\n&quot; character is a &quot;newline&quot; escape character and can be used to
+    # break up long titles onto more than one line.
+    title = &quot;Covariance of Manufacturing Jobs vs.\nPopulation in 2000&quot;
+  )</code></pre>
+<p><img src="RModule7_files/figure-html/scatter-1-1.png" width="672" /></p>
+<p>Do we have visual evidence of a relationship? Maybe, but because the
+distribution of the observations clusters so many towards the origin, it
+makes it difficult to see the actual pattern. We can apply a
+transformation to each variable to see what’s going on:</p>
+<pre class="r"><code>ggplot(
+  data = NC,
+  mapping = aes(
+    x = sqrt(MNEM2000),
+    y = sqrt(POP2000)
+  )
+) +
+  geom_point()</code></pre>
+<p><img src="RModule7_files/figure-html/scatter-2-1.png" width="672" /></p>
+<p>Much better; the <code>sqrt()</code> function doesn’t change small
+values as much as it does large ones. The outliers were brought “closer
+in” but the overall pattern is the same, just easier to visually
+interpret. Note that our data trends from lower left to upper right in a
+generally linear manner. This is visual evidence to suggest linear
+covariance, but we need to formally test this relationship. For this,
+we’ll use <em>Pearson’s R</em></p>
+<div id="pearsons-r" class="section level2">
+<h2>Pearson’s R</h2>
+<p>Testing covariance and performing bivariate analysis in R are
+fortunately quite easy; most of the basic functions we need are in the
+<code>base</code> package, which comes pre-loaded when we start R
+Studio. However, we’ll use some functions from the <code>corrr</code>
+package, as they work better with “tidy” format data (see <a
+href="https://www.tidyverse.org">the Tidyverse</a>). We’ll use
+<code>dplyr</code> (included when we load <code>tidyverse</code>) to
+choose our two columns we wish to correlate.</p>
+<pre class="r"><code>library(corrr)
+
+cor &lt;- NC %&gt;%
+  # We&#39;ll drop the &#39;geometry&#39; on the fly, as it can potentially break the
+  # function. We&#39;re not actually getting rid of it from our original data, of
+  # course.
+  st_drop_geometry() %&gt;%
+  select(MNEM2000, POP2000) %&gt;%
+  correlate(use = &quot;pairwise.complete.obs&quot;,
+            method = &quot;pearson&quot;)
+
+# The fashion() function in corrr is used to format the results of correlation
+# for printing; all it does is make things look nicer in our output!
+
+fashion(cor, decimals = 4)</code></pre>
+<pre><code>##       term MNEM2000 POP2000
+## 1 MNEM2000            .8702
+## 2  POP2000    .8702</code></pre>
+<p>The Pearson’s R for these two variables seems like a strongly
+positive result – as the population increases, so does manufacturing
+employment. We might also like to explore correlations between numerous
+variables at the same time; it’s easy to do with the <code>corrr</code>
+package and <code>dplyr</code>. Because we’re only looking at numeric
+data, we can filter out both the <code>geometry</code> column, as well
+as any character columns:</p>
+<pre class="r"><code>NC_filter &lt;- NC %&gt;% 
+  
+  # Again, we need to drop the geometry
+  st_drop_geometry() %&gt;% 
+  
+  # Using select_if, we can choose only the columns that are numeric
+  select_if(is.numeric) %&gt;%
+  
+  # Finally, we can choose the columns we actually want to correlate. Note that
+  # this is a bit redundant with the `select_if()` above, but I wanted to show
+  # how to select columns programmatically with a logical test.
+  select(
+    c(
+      POP2000,
+      MNEM2000,
+      HOUSEHOLDS,
+      MEDIANRENT,
+      TOTJOB2000,
+      WHITE,
+      BLACK,
+      AMERI_ES,
+      ASIAN_PI,
+      OTHER,
+      HISPANIC
+    )
+  )</code></pre>
+<p>Now, we can correlate our data:</p>
+<pre class="r"><code># We can plot a correlogram with the GGally package. Install and load it, and use the `ggcorr()` function on our filtered data to get a plot
+library(GGally)
+
+NC_filter %&gt;% 
+  # We can set a diverging color palette if we set the nbreaks argument. Use
+  # RColorBrewer::brewer.pal.info to see some of the available color palettes in
+  # R.
+  ggcorr(nbreaks = 7, palette = &quot;RdBu&quot;)</code></pre>
+<p><img src="RModule7_files/figure-html/corr-1.png" width="672" /></p>
+</div>
+<div id="questions-1" class="section level2">
+<h2>Questions</h2>
+<p><strong>Using the <code>correlate()</code> and <code>fashion()</code>
+functions in <code>corrr</code>, create a Pearson’s <em>r</em>
+correlation matrix of your filtered data. When filtering and selecting
+columns, choose different/additional columns to compare (don’t just use
+the ones in the Lab!). Provide the matrix and the correlogram (and your
+R code used to make it!) in your R Markdown report. Identify the
+strongest and weakest correlation coefficients where r <span
+class="math inline">\(&lt;\)</span> 1.</strong></p>
+</div>
+</div>
+<div id="linear-regression" class="section level1">
+<h1>Linear Regression</h1>
 </div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.8</p>

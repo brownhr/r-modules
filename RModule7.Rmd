@@ -23,16 +23,11 @@ library(tidyverse)
 
 NC <- read_sf("data/NC_REGION.shp")
 
+theme_set(theme_bw())
 
 # Let's create a plot of just the "geometry" of the shapefile, in order to make
 # sure it loaded correctly.
 plot(st_geometry(NC))
-```
-
-Let's map the distribution of our `MNEM1990` variable. We want a histogram, a density plot, and our mean and median lines all together.
-
-```{r density}
-
 ```
 
 
@@ -42,3 +37,126 @@ Let's map the distribution of our `MNEM1990` variable. We want a histogram, a de
 As in previous R Modules, write up this document as an R Markdown report, and export the results to a `.pdf`. Include both your results, your R code, and the answers to the questions.
 
 1. Create a histogram for the `POP2000` variable. Include the histogram itself, the density, the mean and median lines, and the axis labels and title. 
+
+
+*** 
+
+# Covariance
+
+An important consideration in our analysis is *covariation*, that is, how the values of one variable change with the values of another. In our case, it is necessary to consider that the number of manufacturing jobs likely changes (*covaries*) with population; i.e., counties with a higher population likely have a larger number of manufacturing jobs. Note that we're also assuming *causality* in our speculative statement, that manufacturing depends to some degree on population values (e.g., larger population centers have more need for manufacturing jobs, too). 
+
+Before we formally test covariance, we should establish if these variables actually covary; let's try a basic scatterplot:
+
+```{r scatter-1}
+
+library(ggplot2)
+
+ggplot(
+  data = NC,
+  mapping = aes(x = MNEM2000, y = POP2000)
+) +
+  geom_point() +
+  labs(
+    x = "Manufacturing Jobs",
+    y = "Population",
+    # The "\n" character is a "newline" escape character and can be used to
+    # break up long titles onto more than one line.
+    title = "Covariance of Manufacturing Jobs vs.\nPopulation in 2000"
+  )
+
+```
+
+Do we have visual evidence of a relationship? Maybe, but because the distribution of the observations clusters so many towards the origin, it makes it difficult to see the actual pattern. We can apply a transformation to each variable to see what's going on:
+
+```{r scatter-2}
+
+ggplot(
+  data = NC,
+  mapping = aes(
+    x = sqrt(MNEM2000),
+    y = sqrt(POP2000)
+  )
+) +
+  geom_point()
+
+```
+
+
+Much better; the `sqrt()` function doesn't change small values as much as it does large ones. The outliers were brought "closer in" but the overall pattern is the same, just easier to visually interpret. Note that our data trends from lower left to upper right in a generally linear manner. This is visual evidence to suggest linear covariance, but we need to formally test this relationship. For this, we'll use *Pearson's R*
+
+***
+
+## Pearson's R
+
+Testing covariance and performing bivariate analysis in R are fortunately quite easy; most of the basic functions we need are in the `base` package, which comes pre-loaded when we start R Studio. However, we'll use some functions from the `corrr` package, as they work better with "tidy" format data (see [the Tidyverse](https://www.tidyverse.org)). We'll use `dplyr` (included when we load `tidyverse`) to choose our two columns we wish to correlate.
+
+```{r cor, message = FALSE}
+library(corrr)
+
+cor <- NC %>%
+  # We'll drop the 'geometry' on the fly, as it can potentially break the
+  # function. We're not actually getting rid of it from our original data, of
+  # course.
+  st_drop_geometry() %>%
+  select(MNEM2000, POP2000) %>%
+  correlate(use = "pairwise.complete.obs",
+            method = "pearson")
+
+# The fashion() function in corrr is used to format the results of correlation
+# for printing; all it does is make things look nicer in our output!
+
+fashion(cor, decimals = 4)
+```
+The Pearson's R for these two variables seems like a strongly positive result -- as the population increases, so does manufacturing employment. We might also like to explore correlations between numerous variables at the same time; it's easy to do with the `corrr` package and `dplyr`. Because we're only looking at numeric data, we can filter out both the `geometry` column, as well as any character columns:
+
+```{r filter}
+NC_filter <- NC %>% 
+  
+  # Again, we need to drop the geometry
+  st_drop_geometry() %>% 
+  
+  # Using select_if, we can choose only the columns that are numeric
+  select_if(is.numeric) %>%
+  
+  # Finally, we can choose the columns we actually want to correlate. Note that
+  # this is a bit redundant with the `select_if()` above, but I wanted to show
+  # how to select columns programmatically with a logical test.
+  select(
+    c(
+      POP2000,
+      MNEM2000,
+      HOUSEHOLDS,
+      MEDIANRENT,
+      TOTJOB2000,
+      WHITE,
+      BLACK,
+      AMERI_ES,
+      ASIAN_PI,
+      OTHER,
+      HISPANIC
+    )
+  )
+
+```
+
+Now, we can correlate our data:
+
+```{r corr, message = F, warning = F}
+
+# We can plot a correlogram with the GGally package. Install and load it, and use the `ggcorr()` function on our filtered data to get a plot
+library(GGally)
+
+NC_filter %>% 
+  # We can set a diverging color palette if we set the nbreaks argument. Use
+  # RColorBrewer::brewer.pal.info to see some of the available color palettes in
+  # R.
+  ggcorr(nbreaks = 7, palette = "RdBu")
+
+```
+
+## Questions
+
+**Using the `correlate()` and `fashion()` functions in `corrr`, create a Pearson's _r_ correlation matrix of your filtered data. When filtering and selecting columns, choose different/additional columns to compare (don't just use the ones in the Lab!). Provide the matrix and the correlogram (and your R code used to make it!) in your R Markdown report. Identify the strongest and weakest correlation coefficients where r $<$ 1.**
+
+
+# Linear Regression
