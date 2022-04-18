@@ -1,0 +1,109 @@
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  out.width = "50%"
+)
+```
+
+# R Module 6 Rubric
+
+## Question 1: Boxplot
+
+Notched boxplot of your regions
+
+Base R:
+```{r q1-1}
+library(sf)
+NC <- read_sf("data/NC_REGION.shp")
+
+boxplot(MNEM1990 ~ Region, data = NC, notch = TRUE)
+
+```
+
+ggplot2:
+
+```{r q1-2}
+library(ggplot2)
+
+ggplot(NC, aes(x = MNEM1990, y = Region)) + 
+  geom_boxplot(notch = TRUE)
+```
+
+
+
+## Question 2: ANOVA
+
+Report your F-Statistic and if you should reject or fail to reject the null hypothesis
+
+```{r}
+anova <- aov(MNEM1990 ~ Region, data = NC)
+
+print(anova)
+```
+
+```{r}
+summary(anova)
+```
+
+
+
+## Question 3: `oneway.test`, Equal Variance
+
+```{r}
+oneway.test(MNEM1990 ~ Region, data = NC, var.equal = TRUE)
+```
+
+## Question 4: Bartlett K-Squared
+
+
+```{r}
+bartlett.test(MNEM1990 ~ Region, data = NC)
+```
+
+## Question 5: `oneway.test`, Unequal Variance
+
+```{r}
+oneway.test(MNEM1990 ~ Region, data = NC, var.equal = FALSE)
+```
+
+## Question 6: Shapiro-Wilk Normality Test
+```{r}
+# Student's don't need to use dplyr or even transform the data, as long as the
+# distribution is normal.
+
+library(dplyr)
+NC <- NC %>% 
+  mutate(
+    sqrt_MNEM1990 = sqrt(MNEM1990)
+  )
+
+shapiro.test(NC$sqrt_MNEM1990)
+```
+
+Illustrate data using density plot for both un-transformed and transformed data
+
+
+```{r q6-1}
+unt <- ggplot(NC, aes(x = MNEM1990)) + 
+  geom_density()
+
+tra <- ggplot(NC, aes(x = sqrt_MNEM1990)) + 
+  geom_density()
+
+
+# This is just to get two plots side-by-side
+cowplot::plot_grid(unt, tra)
+```
+
+## Question 7: Tukey Test
+
+```{r}
+aov <- aov(sqrt_MNEM1990 ~ Region, data = NC)
+
+tukey <- TukeyHSD(aov)
+tukey
+```
+
+```{r tukey}
+plot(tukey)
+```

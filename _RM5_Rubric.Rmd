@@ -1,3 +1,10 @@
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  out.width = "50%"
+)
+```
+
 # R Module 5 Rubric
 
 ## Questions

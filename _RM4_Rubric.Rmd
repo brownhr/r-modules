@@ -1,1 +1,13 @@
- 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  out.width = "50%"
+)
+```
+
+
+# R Module 4 Rubric
+
+This R Module introduces R Markdown, and is designed to get students comfortable with using the format to produce reports and generate documents. Rather than taking screenshots and pasting into a .docx, students should be able to run code directly in their .Rmd, and have code and figures embedded in their document. 
+
+From this point on, students should be using R Markdown. I definitely don't want to dictate any sort of major change to the syllabus, so that decision is up to you. However, I think using R Markdown, while there is a learning curve, will lead to better code and an easier time trying to debug students' code and projects. 
