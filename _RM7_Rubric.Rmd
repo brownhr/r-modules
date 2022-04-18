@@ -1,0 +1,112 @@
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  out.width = "50%"
+)
+```
+
+```{r}
+# Load data
+library(sf)
+
+NC <- read_sf("data/NC_REGION.shp")
+```
+
+
+
+# R Module 7
+
+As in previous R Modules, write up this document as an R Markdown report, and export the results to a `.pdf`. Include both your results, your R code, and the answers to the questions.
+
+## Question 1:
+
+Create a histogram for the `POP2000` variable. Include the histogram itself, the density, the mean and median lines, and the axis labels and title.
+
+
+Base R:
+```{r q1-1}
+hist(NC$POP2000, probability = T)
+lines(density(NC$POP2000))
+abline(v = mean(NC$POP2000), col = "green")
+abline(v = median(NC$POP2000), col = "blue")
+```
+
+ggplot2:
+
+```{r q1-2}
+library(ggplot2)
+
+# This is pretty tricky to get to with ggplot2, so I don't expect many to get
+# this one. By far the most difficult part is getting the legend to display what
+# would be intuitive.
+
+
+ggplot(NC, aes(x = POP2000)) +
+  geom_histogram(aes(y = ..density..),
+    fill = NA,
+    color = "black",
+    boundary = 0,
+    bins = 20
+  ) +
+  geom_density(
+    linetype = "dashed",
+    aes(color = "Density")
+  ) +
+  geom_vline(aes(xintercept = mean(POP2000), color = "Mean")) +
+  geom_vline(aes(xintercept = median(POP2000), color = "Median")) +
+  scale_color_manual(values = c(
+    "Density" = "red",
+    "Mean" = "blue",
+    "Median" = "green"
+  )) +
+  labs(
+    x = "Population (2000)",
+    y = "Density",
+    title = "Distribution of Population in 2000"
+  )
+```
+
+## Question 2:
+
+Using the `correlate()` and `fashion()` functions in `corrr`, create a Pearson's _r_ correlation matrix of your filtered data. When filtering and selecting columns, choose different/additional columns to compare (don't just use the ones in the Lab!). Provide the matrix and the correlogram (and your R code used to make it!) in your R Markdown report. Identify the strongest and weakest correlation coefficients where r $<$ 1.
+
+
+```{r filter}
+library(dplyr)
+
+NC_filter <- NC %>%
+  st_drop_geometry() %>%
+  select_if(is.numeric) %>%
+  # Students should have a different set of variables, but can use some of the
+  # following.
+  select(
+    c(
+      POP2000,
+      MNEM2000,
+      HOUSEHOLDS,
+      MEDIANRENT,
+      WHITE,
+      BLACK,
+      AMERI_ES,
+      ASIAN_PI,
+      OTHER,
+      HISPANIC
+    )
+  )
+
+library(corrr)
+
+cor <- NC_filter %>% 
+  correlate() %>% 
+  shave()
+
+fashion(cor, decimals = 3)
+```
+
+```{r q2, warning = FALSE}
+library(GGally)
+
+cor %>% 
+  ggcorr(nbreaks = 7, palette = "RdBu")
+```
+

@@ -3,8 +3,11 @@ title: "R Module 3 Rubric"
 ---
 
 ```{r setup, echo = FALSE, message=F}
-knitr::opts_chunk$set(echo = F)
-
+knitr::opts_chunk$set(
+  echo = F,
+  message = FALSE,
+  out.width = "50%"
+)
 library(sf)
 library(tidyverse)
 
