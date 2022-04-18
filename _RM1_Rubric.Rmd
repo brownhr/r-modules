@@ -1,0 +1,37 @@
+```{r setup, include=F}
+knitr::opts_chunk$set(
+  out.width = "50%",
+  message = FALSE
+)
+```
+
+# R Module 1 Rubric
+
+This R module is pretty simple; there aren't that many difficult questions. Students should mostly just be able to load and run R Studio.
+
+```{r}
+# Load data
+library(MASS)
+
+head(painters)
+```
+
+Question 1:
+
+```{r q1}
+hist(painters$Composition)
+```
+
+
+Question 2:
+
+```{r q2}
+barplot(table(painters$Expression))
+```
+
+
+Question 3: 
+
+```{r q3}
+pie(table(painters$School))
+```
