@@ -17,7 +17,7 @@ map(
   rubric_list,
   function(input) {
     rmarkdown::render(
-      input = input, output_dir = "rubrics",
+      input = input, output_dir = "rubrics/docx",
       output_format = "word_document"
     )
   }
@@ -27,7 +27,7 @@ map(
   rubric_list,
   function(input) {
     rmarkdown::render(
-      input = input, output_dir = "rubrics",
+      input = input, output_dir = "rubrics/pdf",
       output_format = "pdf_document"
     )
   }
