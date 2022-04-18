@@ -35,4 +35,5 @@ output:
     includes:
       in_header: header.html
       after_body: footer.html
-output_dir: "."
+output_dir: "docs"
+exclude: ["_*.Rmd"]

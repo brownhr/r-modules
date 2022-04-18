@@ -9,7 +9,7 @@ library(tidyverse)
 # RM2_Rubric.Rmd, etc.
 
 
-rubric_list <- list.files(pattern = "RM\\d_Rubric\\.Rmd")
+rubric_list <- list.files(pattern = "^_.+_Rubric\\.Rmd")
 
 map(rubric_list,
     function (input){
