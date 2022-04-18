@@ -107,17 +107,17 @@ We can also view specific variables in the dataset with **the `$` operator**; fo
 painters$School
 ```
 
-We can also see from this **Use R to produce the following simple data summaries and visualizations commonly used for qualitative data:**
+**Use R to produce the following simple data summaries and visualizations commonly used for qualitative data:**
 
 1.  A histogram of the `Composition` variable from the `painters` dataset, using the `hist()` function.
 
-2.  A **horizontal** bar chart of the `Expression` variable, using the `barplot()` function.
+2.  A bar chart of the `Expression` variable, using the `barplot()` function.
 
-    -   *Tip: use \`?barplot() to see which argument you need to change to get a horizontal bar plot*
+    -   *Tip: use \`?barplot() to see which argument you need to change to get a horizontal bar plot* Also, wrap the painters$Expression with the table() function, then use the barplot() function
 
 3.  A pie chart of the `Schools` variable, using the `pie()` function.
 
-    -   *Hint: you need to wrap the `pie()` function around the `table()` function, because you need **frequencies** of each school, rather than just their label*
+    -   *Hint: you need to wrap the `pie()` function around the `table()` function, because you need **counts** of each school, rather than just their label*
 
 ***
 ***
