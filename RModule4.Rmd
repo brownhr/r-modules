@@ -107,6 +107,7 @@ tinytex::install_tinytex()
 
 ```
 
+Then, restart R Studio.
 
 
 Let's get started by creating a new R Project, as in previous R Modules. Once you have that set up, we want to create a new R Markdown document. Navigate to `File > New File > R Markdown`. Give it a title, "R Module 4 Writeup", enter your name and the date, and select `PDF` as the output format. 
