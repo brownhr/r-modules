@@ -91,7 +91,7 @@ Download the 64-bit version, and install the software. Note that this requires a
 
 After that, we'll need to install a few R packages:
 
-  - `rmarkdown`, `markdown`, and `mime`: These allow R Studio to work with Markdown and R Markdown
+  - `rmarkdown`, `knitr`, `markdown`, and `mime`: These allow R Studio to work with Markdown and R Markdown
   - `tinytex`: This package is a lightweight $\LaTeX$ distribution and is necessary to export as a .PDF
     - After installing this package, run `tinytex::install_tinytex()`. This step might take some time. 
   
@@ -99,7 +99,7 @@ After that, we'll need to install a few R packages:
 To get things running, you can just run the following code:
 
 ```{r packages, eval = FALSE}
-pkgs <- c("rmarkdown", "markdown", "mime", "tinytex")
+pkgs <- c("rmarkdown", "knitr", "markdown", "mime", "tinytex")
 
 install.packages(pkgs)
 
