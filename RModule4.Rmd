@@ -30,10 +30,88 @@ airport_survey <- read_csv("data/airport_survey.csv",
 
 For this R Module, we'll be taking on the role of ...
 
-## What is R Markdown?
+## What is Markdown?
+
+Markdown is a popular "markup language" designed to format plain-text data, such as comments on many websites and documentation for code. In text editors like Microsoft Word or Google Docs, called "What you see is what you get (*WYSIWYG*)" editors, there are buttons for making text italic, bold, underlined, etc., but it's often difficult to transfer that information from one editor to another; if you copy italic text from a Word document into a program like Notepad, you lose all your formatting. 
+
+Markdown, however is designed to be a "What you type is what you get (*WYTIWYG*)" language. If you want to *italic* text, you wrap your text with single \*asterisks\* or \_underscores\_. If you want **bold** text, you \*\*use\*\* \_\_two\_\_, and you can ***combine*** them with \*\*\*three\*\*\*.
+
+There are a ton of other formatting options available, such as lists, links, etc. This module isn't intended to teach Markdown, but rather a variant called R Markdown. For more information regarding Markdown, you can use sites like [Handbook's Markdown Guide](https://about.gitlab.com/handbook/markdown-guide/) or resources such as Stack Overflow.
+
+## R Markdown
+
+R Markdown is a variant of Markdown that is designed to work with R code. In addition to all of the standard Markdown formatting rules, R Markdown allows you to embed and run R code directly in your document, in sections called *code chunks*. This lets you not only run your code, but generate a document with text as well; perfect for writing up labs! Once you get the hang of R Markdown documents, you won't want to write up reports in Word anymore. Rather than endlessly take screenshots and paste into a document, you can embed your code in an R Markdown document, and it'll insert the plots and graphs that you generate *directly*, like this:
+
+<pre><code>```{r code-example}
+
+x <- seq(-1, 1, length = 20)
+
+y <- dnorm(x)
+
+plot(x, y)
+
+```</code></pre>
+
+Which gives you:
 
 
-### Getting Started
+```{r code-example, echo = FALSE, out.width = "50%"}
+x <- seq(-1, 1, length = 20)
+y <- dnorm(x)
+
+plot(x, y)
+
+```
+
+Or, if you want to print a table, you can use:
+
+<pre><code>```{r table}
+
+head(mtcars)
+
+```</code></pre>
+
+Which gives:
+
+```{r table, echo = FALSE}
+
+head(mtcars)
+
+```
+
+
+# Getting Started
+
+Before we do anything with R Markdown, we need to do a bit of setup to make sure that R Studio is good-to-go in a few ways. 
+
+First, if you haven't already, install *R Tools*. This software is used when installing packages, and makes things a lot easier. For Windows, you can navigate to:
+  https://cran.r-project.org/bin/windows/Rtools/rtools40.html
+
+Download the 64-bit version, and install the software. Note that this requires admin priviledges. This step isn't strictly necessary; R tools is used to build packages that are "in development", but it's useful to have if you can.
+
+After that, we'll need to install a few R packages:
+
+  - `rmarkdown`, `markdown`, and `mime`: These allow R Studio to work with Markdown and R Markdown
+  - `tinytex`: This package is a lightweight $\LaTeX$ distribution and is necessary to export as a .PDF
+    - After installing this package, run `tinytex::install_tinytex()`. This step might take some time. 
+  
+
+To get things running, you can just run the following code:
+
+```{r packages, eval = FALSE}
+pkgs <- c("rmarkdown", "markdown", "mime", "tinytex")
+
+install.packages(pkgs)
+
+tinytex::install_tinytex()
+
+```
+
+
+
+Let's get started by creating a new R Project, as in previous R Modules. Once you have that set up, we want to create a new R Markdown document. Navigate to `File > New File > R Markdown`. Give it a title, "R Module 4 Writeup", enter your name and the date, and select `PDF` as the output format. 
+
+
 
 ### Running Code
 

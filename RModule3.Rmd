@@ -82,7 +82,7 @@ Looks good so far! You'll make a few maps of your own later in the Module, so fe
 
 Read more about `sf` by going to <https://r-spatial.github.io/sf/>
 
-**Answer the following questions, and include them in your final document:**
+**Create a new R Project, "R Module 3", to include your code, scripts, etc. Answer the following questions, and include them in your final document:**
 
 1.  Within your `data/` folder, open the file `NC_Counties.prj` with a program like Notepad or Notepad++.
 
