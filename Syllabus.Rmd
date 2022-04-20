@@ -1,0 +1,49 @@
+---
+title: Syllabus
+---
+
+GHY 5800 -- Advanced Quantitative Methods in Geography
+
+
+## Course Description
+
+This course provides a critical introduction to quantitative methods commonly used in the analysis of applied geographic research problems.  The content of the course is geared towards the discussion and practice of common research techniques and theoretical aspects used to investigate issues in human geography, physical geography, GIScience, and community and regional planning.   Specific topics include reliability and validity, research ethics, survey design, case study methods, descriptive statistics, inferential statistics, spatial statistics, univariate statistical methods, multivariate statistical methods, regression analysis, and spatial autocorrelation. Adjustments to the methods covered may be made per the composition of the class on a semester by semester basis.
+
+This course will be structured like a   survey of research methods.   As we survey the methods, we will read practical “how-to” literature, but we will also collectively seek out examples of well-done research using these tools, and trace the ways that scholars have used these methods, including a discussion of how they built their argument around specific modes of analysis. Readings will be provided by the instructor and active participation in discussion by all students is expected during class meetings.  Mindful reading and participation are therefore critical to discussion and exploration of research in each student’s area of interest.  Students are expected to read all materials prior to class and prepare weekly comments or questions on each week’s reading.  
+
+
+## Learning Outcomes
+
+Specific course objectives include:
+
+1. Building a knowledge-base and toolkit of quantitative techniques that enable students to appropriately collect and analyze data
+2. Developing a professional research project demonstrating research methods skills
+3. Enabling students to confidently and carefully interpret the results of data analyses and clearly communicate those results
+4. Exploring how to design studies to collect appropriate data for addressing research questions
+5. Improving writing, communications, critical thinking, and analytical skills within the context of the course content
+
+## Required Readings
+
+There are no required textbooks for this course; assigned readings will be provided in PDF format and posted on the AsULearn Site for this course. Readings will consist of a combination of peer-reviewed publications and chapter exerpts from some of the following sources:
+
+- *McGrew, J.C. Jr., and Monroe, C.B. 2009. An Introduction to Statistical Problem Solving in Geography: 2nd  Ed. Long Grove, IL: Waveland Press*
+- *Field, A. Miles, J., and Field Zoe. 2012. Discovering Statistics Using R. 1st Ed. Sage Publication.*
+
+***
+
+## Code of Student Conduct
+
+The Code of Student Conduct is described at: http://studentconduct.appstate.edu/ Students are bound by the **Academic Integrity Code**: http://academicintegrity.appstate.edu/ **The Honor *Pledge** (https://academicintegrity.appstate.edu/the-academic-integrity-code) is a cornerstone of the Appalachian State University Academic Integrity Code. No Appalachian student shall unfairly further their own academic performance. 
+
+1. Students will not lie, cheat or steal to gain academic advantage
+2. Students will oppose every instance of academic dishonesty.
+
+Students attending Appalachian State University Pledge: "I pledge on my honor that I have not violated the Appalachian State University Academic Integrity Code"
+
+## Disabilities
+
+Appalachian State University is committed to nondiscrimination on the basis of disability and is responsible for adhering to disability compliance requirements. The Office of Disability Resources (ODR) is the designated office at Appalachian for the promotion of equity, access, and civil rights on the basis of a disability. Consistent with Section 504 of the Rehabilitation Act of 1973 (Section 504) and the Americans with Disabilities Act of 1990 (ADA) in addition to other federal, state, and local civil rights laws related to disability, ODR works diligently to provide an inclusive experience and equal opportunity at Appalachian to individuals with disabilities. Individuals should contact the Office of Disability Resources ((828) 262-3056 or odr.appstate.edu).
+
+
+## Food Insecurity
+
