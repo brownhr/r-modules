@@ -8,3 +8,22 @@ output:
       toc_depth: 3
       number_sections: false
 ---
+
+# Introduction to Spatial Autocorrelation
+
+One of the most important laws in Geography is that things that are closer to one-another are more likely to be related to each other; this is Tobler's first law of Geography:
+
+    > Everything is related to everything else, but near things are more related than distant things
+
+This law gives us a foundation for an extremely powerful statistical tool -- Spatial Autocorrelation. This measure assesses the amount of "related-ness" that can be explained by spatial proximity. Our null hypothesis, therefore, is that values occur randomly over space. To reject this null hypothesis means that spatial proximity has some effect on the observed values; think back to the results of R Module 7, and how our residuals seemed to "cluster" in certain parts of the state.
+
+Spatial autocorrelation can be measured in a number of ways; in this module, we'll lay the groundwork for the most widely-used statistic for spatial autocorrelation for a continuous variable: *Moran's I*. This metric is a "global measure" -- it is a single value that defines the entire dataset. 
+
+Before we can jump into calculating the Moran's I, we have a few additional decisions and tasks to perform. This week, we'll walk through the setup for calculating Moran's I, specifically:
+
+1. The choice of neighborhood criterion, and,
+2. The creation of the *spatial weights matrix*
+
+
+# Choosing a neighborhood criterion
+
