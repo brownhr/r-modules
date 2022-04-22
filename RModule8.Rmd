@@ -41,3 +41,8 @@ Distance-based approaches require you to specify some distance "threshold" that 
 ## Boundary-Based
 
 For boundary-based approaches, however, we define neighbors slightly differently. Instead of establishing a distance around a point and including all poitns within that distance, neighbors are defined by whether or not two areal units share boundaries. This can be done in several ways, thinking about it like a chess board. If neighbors should share 0-length boundaries (corners), we have a "Bishop's case" neighborhood; if we exclude 0-length boundaries but include boundaries with length > 1 (edges), we have a "Rook's case" neighborhood. Combining both cases, we have a "Queen's case" neighborhood. Just as before, we are challenged to define what counts as a 'shared' boundary.
+
+| Bishop 	| Rook 	| Queen 	|
+|--------	|------	|-------	|
+|![](img/bishop.png)|![](img/rook.png)|![](img/queen.png)|
+
