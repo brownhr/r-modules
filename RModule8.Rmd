@@ -109,4 +109,24 @@ tmap_arrange(t1, t2)
 
 ```
 
+Let's calculate the neighbor criterion with a boundary-based approach, using the `spdep::poly2nb()` function. We'll also calculate the centroids of our counties.
+
+```{r, message=FALSE}
+queen_nb <- poly2nb(NC_UTM, queen = TRUE)
+
+NC_centroids <- st_centroid(NC_UTM)
+```
+
+If we want to plot the lines, it's easiest to use the `nb2lines()` function, which generates an `sf` object of the connections, allowing us to generate plots with `tmap`, `ggplot2`, etc. 
+
+```{r nb-lines}
+nb_lines <- nb2lines(nb = queen_nb,
+                     coords = NC_centroids$geometry)
+
+qtm(shp = NC_UTM,
+    fill = "white") +
+  qtm(nb_lines) + 
+  qtm(NC_centroids, symbols.size = .25)
+
+```
 
