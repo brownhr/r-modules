@@ -427,6 +427,20 @@ either <span class="math inline">\(0\)</span> or <span
 class="math inline">\(1\)</span>, and might look something like
 this:</p>
 <p><img src="img/R%20Module%209/weights-matrix.png" width="40%" style="display: block; margin: auto;" /></p>
+<p>Notice that some counties may have more or fewer connections than
+others, meaning this wasn’t made with <span
+class="math inline">\(k\)</span>-nearest neighbor. For example, county
+<code>A</code> has 2 neighbors (we don’t count self-connections, so
+<code>A</code>’s neighbors are <code>B</code> and <code>E</code>).
+However, <code>E</code> has 3 neighbors, <code>A</code>, <code>C</code>,
+and <code>D</code>. Because these connections are roughly analagous to
+influence (counties with more connections likely have a greater
+influence on the surrounding areas), we should set the total influence
+upon a given unit to 1. In other words, we need to standardize the
+connections, typically done by row standardizing.</p>
+<p>To row standardize a matrix, we first sum each row, then divide each
+non-zero cell in that row by the sum total:</p>
+<p><img src="img/R%20Module%209/matrix-2.png" width="50%" style="display: block; margin: auto;" /></p>
 </div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.10</p>
