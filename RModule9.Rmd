@@ -13,4 +13,24 @@ output:
 
 # What is Spatial Autocorrelation?
 
-We discussed this briefly in [R Module 8](RModule8.html), but how do we actually calculate spatial autocorrelation?
+In the previous R Module, we introduced the idea of calculating a "spatial neighborhood" and the need for a formal definition of this neighborhood prior to spatial autocorrelation testing. Although these constructs are relatively easy to make in R with the `spdep` package, we have a lot of options; which method is best? Unfortunately, there isn't a single best method to use; it depends on the data you have, the scale you're looking at, and what you wish to accomplish.
+
+Therefore, the results of spatial autocorrelation testing depend heavily on the choices for your spatial neighborhood. The best recourse is to first theorize the spatial form of the process you're investigating and to test several spatial neighbor constructs to see if your results change significantly when your neighborhoods change.
+
+# Assigning Weights
+
+Before we test spatial autocorrelation on our data, there's another step for us to perform after we create our neighbor constructs -- our spatial weights matrix $W_{ij}$. Recall from the previous Module that $W_{ij}$ is an $n \times n$ matrix, where $n$ is the number of spatial units (points or areas). The cells of the matrix record the presence or absence of connections as a binary measure; $0$ indicates no connection between the two units, and $1$ indicates a connection.
+
+We use binary measures because it's often difficult to determine the "relative influence" of spatial units on one another -- North Carolina, for example, borders both Virginia and Georgia, but its border with Virginia is much longer. So, rather than guess the value, we start with a binary measure; either there exists a connection or there doesn't.
+
+Suppose we had a study region that consisted of five counties and we applied one of the neighborhood criteria from last R Module. Our $W_{ij}$ would be a $5 \times 5$ matrix, with cell values of either $0$ or $1$, and might look something like this:
+
+|   | A | B | C | D | E |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| A | - | 1 | 0 | 0 | 1 |
+| B | 1 | - | 1 | 1 | 0 |
+| C | 0 | 1 | - | 0 | 1 |
+| D | 0 | 1 | 0 | - | 1 |
+| E | 1 | 0 | 1 | 1 | - |
+
+
