@@ -8,3 +8,9 @@ output:
       toc_depth: 3
       number_sections: false
 ---
+
+***
+
+# What is Spatial Autocorrelation?
+
+We discussed this briefly in [R Module 8](RModule8.html), but how do we actually calculate spatial autocorrelation?
