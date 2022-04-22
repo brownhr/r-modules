@@ -23,7 +23,7 @@ to ignore the file when building the website
 ``` {r}
 rubric_list <- list.files(pattern = "^_.+_Rubric\\.Rmd")
 
-map(
+walk(
   rubric_list,
   function(input) {
     rmarkdown::render(
@@ -33,7 +33,7 @@ map(
   }
 )
 
-map(
+walk(
   rubric_list,
   function(input) {
     rmarkdown::render(
@@ -51,7 +51,7 @@ rubric_docx <- list.files(
   pattern = "^_.+\\.docx",
   full.names = TRUE)
 
-map(rubric_docx, function(x) {
+walk(rubric_docx, function(x) {
   base <- basename(x)
   num <- str_extract(x, "\\d+")
   name <- paste0("R Module ", num)
