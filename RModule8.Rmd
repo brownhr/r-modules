@@ -176,7 +176,7 @@ To get around this type of problem, where some counties have very few connection
 Because we're using a distance-based criteria, it's good that we've already projected our shapefile to a `crs` with linear units. Let's demonstrate a $k = 1$ setup using the `knn2nb()` (*k-nearest neighbor to neighbor-list*) function:
 
 
-```{r}
+```{r knn-1}
 # We'll use the county name as the rownames. Unlike in poly2nb, the row.names
 # argument actually seems to work :)
 
