@@ -34,7 +34,7 @@ knitr::include_graphics("img/R Module 9/weights-matrix.png")
 
 ## Standardizing Weights
 
-Notice that some counties may have more or fewer connections than others, meaning this wasn't made with $k$-nearest neighbor. For example, county `A` has 2 neighbors (we don't count self-connections, so `A`'s neighbors are `B` and `E`). However, `E` has 3 neighbors, `A`, `C`, and `D`. Because these connections are roughly analagous to influence (counties with more connections likely have a greater influence on the surrounding areas), we should set the total influence upon a given unit to 1. In other words, we need to standardize the connections, typically done by row standardizing.
+Notice that some counties may have more or fewer connections than others, meaning this wasn't made with $k$-nearest neighbor. For example, county `A` has 2 neighbors (we don't count self-connections, so `A`'s neighbors are `B` and `E`). However, `E` has 3 neighbors: `A`, `C`, and `D`. Because these connections are roughly analogous to influence (counties with more connections likely have a greater influence on the surrounding areas), we should set the total influence upon a given unit to 1. In other words, we need to standardize the connections, typically done by row standardizing.
 
 To row standardize a matrix, we first sum each row, then divide each non-zero cell in that row by the sum total:
 

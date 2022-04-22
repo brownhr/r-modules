@@ -434,8 +434,8 @@ others, meaning this wasn’t made with <span
 class="math inline">\(k\)</span>-nearest neighbor. For example, county
 <code>A</code> has 2 neighbors (we don’t count self-connections, so
 <code>A</code>’s neighbors are <code>B</code> and <code>E</code>).
-However, <code>E</code> has 3 neighbors, <code>A</code>, <code>C</code>,
-and <code>D</code>. Because these connections are roughly analagous to
+However, <code>E</code> has 3 neighbors: <code>A</code>, <code>C</code>,
+and <code>D</code>. Because these connections are roughly analogous to
 influence (counties with more connections likely have a greater
 influence on the surrounding areas), we should set the total influence
 upon a given unit to 1. In other words, we need to standardize the
@@ -463,7 +463,11 @@ class="math inline">\(W_{ij}\)</span>. After that, we’ll use the
 <pre class="r"><code>queen_nb_w &lt;- nb2listw(
   neighbours = queen_nb,
   # The default style, &quot;W&quot;, tells us that we&#39;re performing row standardization
-  style = &quot;W&quot;
+  style = &quot;W&quot;,
+  
+  # Don&#39;t worry about this option for now, but it&#39;ll be important to include
+  # later.
+  zero.policy = TRUE
 )
 
 summary(queen_nb_w)</code></pre>
@@ -486,6 +490,84 @@ summary(queen_nb_w)</code></pre>
 ## Weights constants summary:
 ##     n    nn  S0       S1       S2
 ## W 100 10000 100 44.65023 410.4746</code></pre>
+<p>Printing the new object itself doesnt show us our <span
+class="math inline">\(W_{ij}\)</span> directly (technically it isn’t
+stored as a matrix in R)</p>
+<hr />
+</div>
+<div id="global-morans-i" class="section level1">
+<h1>Global Moran’s I</h1>
+<p>Moran’s I is a test of whether a variable autocorrelates with itself
+across space. The calculation for Moran’s I is actually quite similar to
+the Pearson’s <span class="math inline">\(r\)</span> correlation; the
+main differences are that:</p>
+<ol style="list-style-type: decimal">
+<li>Moran’s I is a test of a single variable, and</li>
+<li>Moran’s I requires us to first define our spatial weights matrix
+<span class="math inline">\(W_{ij}\)</span></li>
+</ol>
+<p>We’ve done this already, so now we’re finally able to calculate
+Moran’s I.</p>
+<div id="what-does-i-represent" class="section level2">
+<h2>What does <em>I</em> represent?</h2>
+<p>The Moran’s I test returns a single value, ranging from <span
+class="math inline">\(-1\)</span> to <span
+class="math inline">\(1\)</span>, indicating “autocorrelation”. When
+<span class="math inline">\(I = -1\)</span>, the variable in question is
+perfectly “negatively spatially autocorrelated” – high values neighbor
+low values – think about them like similar poles on bar magnets and how
+they “want” to repel each other. When <span class="math inline">\(I =
+1\)</span>, the variable in question is perfectly “positively spatially
+autocorrelated” – high values “clump” together, as do low values.</p>
+<p>What happens when <span class="math inline">\(I = 0\)</span>? This
+indicates “spatial randomness” – sometimes high and low values occur,
+sometimes they are dispersed, but there’s no systematic pattern
+governing their distribution.</p>
+<p>Because Moran’s I is a single value, it’s easy to interpret; it shows
+the “global measure” of autocorrelation. However, actually calculating
+the Moran’s I is somewhat difficult.</p>
+</div>
+<div id="calculating-morans-i" class="section level2">
+<h2>Calculating Moran’s I</h2>
+<p>The real challenge in calculating Moran’s I is in creating the
+sampling distribution that we need to find our critical values and our
+<span class="math inline">\(p\)</span>-values used in hypothesis
+testing. The safest assumption is that the statistical distribution (not
+spatial distribution!) of our variable in question is not normal.
+However, we can approximate a normal sampling distribution through
+spatial randomization.</p>
+<p>The actual values assigned to each spatial unit are randomized
+repeatedly – the values are moved to a randomly-designated spatial unit
+– to create a distribution that we use for our hypothesis test. The
+expected value of <span class="math inline">\(I\)</span> for that
+“theoretical” distribution approaches <span
+class="math inline">\(0\)</span> as the number of spatial units
+increases, and the standard deviation of the sampling distribution can
+only be derived once <span class="math inline">\(W_{ij}\)</span> has
+been created.</p>
+<p>What this essentially means is that we’re comparing our measured
+values against a “hypothetical distribution” in which those values are
+distributed randomly across space.</p>
+<p>This is the null hypothesis associated with Moran’s I: spatial
+randomness. If the variable in question doesn’t spatially autocorrelate
+(i.e., it doesn’t differ significantly from a hypothetical random
+spatial distribution), we do not reject the null. However, if the
+variable does autocorrelate and our <span
+class="math inline">\(p\)</span>-values are greater than our <span
+class="math inline">\(\alpha\)</span> (usually 0.05), then we reject the
+null hypothesis and can confidently state that our variable spatially
+autocorrelates.</p>
+<p>More formally, our null hypothesis is that our calculated <span
+class="math inline">\(I\)</span> is equal to the expected <span
+class="math inline">\(I \approx 0\)</span>. The alternative hypothesis
+is that the calculated <span class="math inline">\(I \neq\)</span> the
+expected <span class="math inline">\(I\)</span>. Thus, we have a
+two-tailed test.</p>
+<hr />
+</div>
+</div>
+<div id="performing-the-morans-i-calculation" class="section level1">
+<h1>Performing the Moran’s I Calculation</h1>
 </div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.10</p>
