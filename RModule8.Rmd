@@ -42,7 +42,7 @@ Distance-based approaches require you to specify some distance "threshold" that 
 
 For boundary-based approaches, however, we define neighbors slightly differently. Instead of establishing a distance around a point and including all poitns within that distance, neighbors are defined by whether or not two areal units share boundaries. This can be done in several ways, thinking about it like a chess board. If neighbors should share 0-length boundaries (corners), we have a "Bishop's case" neighborhood; if we exclude 0-length boundaries but include boundaries with length > 1 (edges), we have a "Rook's case" neighborhood. Combining both cases, we have a "Queen's case" neighborhood. Just as before, we are challenged to define what counts as a 'shared' boundary.
 
-| Bishop 	| Rook 	| Queen 	|
+| Bishop's Case | Rook's Case | Queen's Case |
 |--------	|--------	|--------	|
 |![](img/R Module 8/bishop.png)|![](img/R Module 8/rook.png)|![](img/R Module 8/queen.png)|
 
@@ -117,15 +117,23 @@ queen_nb <- poly2nb(NC_UTM, queen = TRUE)
 NC_centroids <- st_centroid(NC_UTM)
 ```
 
+Let's go ahead and also assign `NC_centroids$geometry` to an object called `nc_coords`; we'll use it a lot later!
+
+```{r coords}
+nc_coords <- NC_centroids$geometry
+```
+
+
+
 If we want to plot the lines, it's easiest to use the `nb2lines()` function, which generates an `sf` object of the connections, allowing us to generate plots with `tmap`, `ggplot2`, etc. 
 
 ```{r nb-lines}
 nb_lines <- nb2lines(nb = queen_nb,
-                     coords = NC_centroids$geometry)
+                     coords = nc_coords)
 tm_shape(NC_UTM) +
   tm_borders() +
   tm_shape(nb_lines) + tm_lines() +
-  tm_shape(NC_centroids) + tm_dots(size = 0.2)
+  tm_shape(NC_centroids) + tm_dots(size = 0.125)
 ```
 
 ## Questions:
@@ -135,8 +143,7 @@ tm_shape(NC_UTM) +
 
 1. Use the `poly2nb()` function to create a Rook's case neighbor construct by changing `queen = TRUE` to `queen = FALSE`. Call this new object `rook_nb` in your code. Plot a map using `tmap` that shows the counties, the connections as lines, and the county centroids as points. Include a title (hint: use `main.title` if you want to have the title outside the map frame).
 
-
-## Summary
+***
 
 Notice how some counties have many neighbors and some have relatively few. These constructs are sensitive to boundary effects; counties on the edge of the study area will always have fewer connections, because they're not surrounded on all sides. We can get a helpful summary of the distributions of connections between counties for the different constructs we create.
 
@@ -144,9 +151,110 @@ Notice how some counties have many neighbors and some have relatively few. These
 summary(queen_nb)
 ```
 
-This summary provides a great deal of information. Of particular interest is the 'link number distribution' report: the top row of numbers is the number of links, and the bottom is the number of counties with that number of links. 
+This summary provides a great deal of information. Of particular interest is the 'link number distribution' report: the top row of numbers is the number of links, and the bottom is the number of counties with that number of links. So, we have 8 counties with two links, 23 counties with five, 17 with four, etc. Because we didn't tell `poly2nb` what our counties were called, we can't easily locate these counties on the map. 
 
-```{r nb-links, echo = FALSE}
-s <- invisible(summary(queen_nb))
+There's actually a bit of a bug with the `poly2nb`function: the argument `row.names` doesn't work if we give it an object from `sf` (i.e., the data we've been working on so far), so we have to have a bit of a workaround if we want to assign the names:
+
+
+```{r}
+queen_names <- NC_UTM %>% 
+  tibble::column_to_rownames("NAME") %>% 
+  st_as_sf() %>% 
+  poly2nb(pl = .,
+          queen = TRUE)
+
+summary(queen_names)
+```
+
+
+2. Compare the distribution of links between the Queen's case and Rook's case. What changed when we restricted the neighbor criterion by using a Rook's case? Using the code above, what are **names** of the 'least connected regions' generated with a Rook's case neighborhood? Provide the code used to get your results.
+
+# Nearest Neighbor
+
+To get around this type of problem, where some counties have very few connections, we use a different method called *k-nearest neighbor*. This method specifies the number of connections for each spatial unit; for instance, when $k=1$, each spatial unit will have exactly one neighbor. The choice for which unit becomes the neighbor is based on distance between points or centroids; the unit that is "closest" is classified as the neighbor.
+
+Because we're using a distance-based criteria, it's good that we've already projected our shapefile to a `crs` with linear units. Let's demonstrate a $k = 1$ setup using the `knn2nb()` (*k-nearest neighbor to neighbor-list*) function:
+
+
+```{r}
+# We'll use the county name as the rownames. Unlike in poly2nb, the row.names
+# argument actually seems to work :)
+
+NC_knn1 <- knn2nb(
+  knn = knearneigh(x = NC_centroids,
+                   k = 1),
+  row.names = NC_UTM$NAME
+)
+
+# Now, let's make a plot. Remember, the nb2lines function is used to convert a
+# neighbor list object into an "sf-compatible" object which we can map.
+
+knn_lines <- nb2lines(
+  nb = NC_knn1,
+  coords = nc_coords
+)
+
+qtm(NC_UTM, title = "k = 1") +
+  qtm(knn_lines) +
+  qtm(NC_centroids)
+
 
 ```
+
+This is quite different to our Rook's and Queen's cases. Again, you can use `summary()` to get the details of the connections between spatial units. Doing this shows that the variability in the distribution of connections is gone; all counties have exactly one connection to another county. 
+
+## Questions
+
+3. In addition to $k=1$, use `knn2nb()` to create neighbor constructs for $k=2$, $k=4$, and $k=6$. Plot the connections for each using `tmap`, including the label. Provide your R code and plots for the neighbor constructs. Use `tmap_arrange()` to place all 4 plots in a single "image". 
+- **Try and do this with some R programming; rather than just generating each construct one-at-a-time, try using things like for loops, `lapply`, `purrr::map` functions, etc.**
+
+# Distance-Based Approach
+
+
+For the final demonstration, let's use a distance-based approach. Rather than specifying a specific number of nearest neighbors, let's pick a distance threshold and apply it to every county. Any county within this distance will be considered a neighbor. What distance should we use for the threshold? Let's explore this using the sets of distances used for $k=1$ nearest neighbors.
+
+First, we need to calculate the shortest distance between every centroid:
+
+```{r}
+dist <- nbdists(nb = NC_knn1,
+                coords = nc_coords) %>% 
+  # We'll use the unlist() function to convert our list of distances to a vector, which is easier to compare.
+  unlist()
+
+summary(dist)
+
+```
+
+We can see that the maximum distance (in meters) between any of the two counties is 41,087. If we set this as our distance band, we can be sure that every county will have at least one neighbor.
+
+Now, we can use `dnearneigh()` to create a distance-based neighbor construct:
+
+```{r dnn}
+max_dist <- max(dist)
+
+NC_dnn <- dnearneigh(x = NC_centroids,
+  d1 = 0,
+  d2 = max_dist,
+  row.names = NC_UTM$NAME
+)
+
+NC_dnn_sf <- nb2lines(
+  NC_dnn, coords = nc_coords
+)
+
+qtm(NC_UTM) + qtm(NC_dnn_sf)
+```
+
+It looks like it's in between the Queen and Rook's case, and the $k = 1$ case. Again, you can call `summary()` on `NC_dnn` to see the distribution of the numbers of links.
+
+We can also explore what happens as we increase or decrease the distance threshold by modifying the `d2` argument, which controls the "upper limit" of the distance-based neighbor.
+
+## Questions:
+
+4.
+  a. In addition to our "100%" distance threshold (the code above), create plots for:
+    - 50% of the maximum distance,
+    - 125% of the maximum distance, 
+    - 150% of the maximum distance.
+  b. Use `tmap` to do this, and arrange all plots in a single image using `tmap_arrange()`. Be sure to label each plot.
+  c. What happened to the number of connections from the 75% to the 125% construct?
