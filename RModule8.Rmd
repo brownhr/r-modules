@@ -35,7 +35,7 @@ Neighborhoods can be defined in a number of ways, but the two basic choices are 
 
 Distance-based approaches require you to specify some distance "threshold" that will be used to define which points or centroids will be classified as "neighbors" for the autocorrelation tests. The larger the distance, the more neighbors we expect. The figure below illustrates that concept. If we set a distance band at a distance of 1 around the focal unit (the red point), we'll only have one other point in the neighborhood. If we increase the distance by 50% to 1.5, we'll have two points in the neighborhood. So we always have a challenge in front of us: what distance do we use?
 
-![](img/distance-based.png)
+![](img/R Module 8/distance-based.png)
 
 
 ## Boundary-Based
@@ -44,5 +44,15 @@ For boundary-based approaches, however, we define neighbors slightly differently
 
 | Bishop 	| Rook 	| Queen 	|
 |--------	|------	|-------	|
-|![](img/bishop.png)|![](img/rook.png)|![](img/queen.png)|
+|![](img/R Module 8/bishop.png)|![](img/R Module 8/rook.png)|![](img/R Module 8/queen.png)|
 
+
+***
+
+# Creating the Spatial Weights Matrix
+
+
+
+
+
+$w_{ij} = $ ![](img/R Module 8/example-swm.png)
