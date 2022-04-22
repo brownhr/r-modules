@@ -12,7 +12,7 @@ Built with R `r getRversion()`
 ## Citations & Packages
 
 ```{r write-bib, include = FALSE}
-
+library(magrittr)
 renv::dependencies()$Package %>% 
   unique() %>%
   knitr::write_bib(file = "bibliography.bib")
