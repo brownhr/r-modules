@@ -60,4 +60,6 @@ For example, if we have seven counties, `We`, `Ad`, `Ar`, `De`, `Bo`, `Je`, and 
 knitr::include_graphics("img/R Module 8/example-swm.png")
 ```
 
+# Working with the Data
 
+Let's explore both of these steps using R. We'll work again with our manufacturing employment data for North Carolina. This week, you'll need to install another package, `spdep`, which you'll use to generate the spatial weights matrix for the global Moran's I.

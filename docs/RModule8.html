@@ -398,12 +398,14 @@ on the observed values; think back to the results of R Module 7, and how
 our residuals seemed to “cluster” in certain parts of the state.</p>
 <p>Spatial autocorrelation can be measured in a number of ways; in this
 module, we’ll lay the groundwork for the most widely-used statistic for
-spatial autocorrelation for a continuous variable: <em>Moran’s I</em>.
-This metric is a “global measure” – it is a single value that defines
-the entire dataset.</p>
-<p>Before we can jump into calculating the Moran’s I, we have a few
-additional decisions and tasks to perform. This week, we’ll walk through
-the setup for calculating Moran’s I, specifically:</p>
+spatial autocorrelation for a continuous variable: <em>Moran’s <span
+class="math inline">\(I\)</span></em>. This metric is a “global measure”
+– it is a single value that defines the entire dataset.</p>
+<p>Before we can jump into calculating the Moran’s <span
+class="math inline">\(I\)</span>, we have a few additional decisions and
+tasks to perform. This week, we’ll walk through the setup for
+calculating Moran’s <span class="math inline">\(I\)</span>,
+specifically:</p>
 <ol style="list-style-type: decimal">
 <li>The choice of neighborhood criterion, and,</li>
 <li>The creation of the <em>spatial weights matrix</em></li>
@@ -411,11 +413,12 @@ the setup for calculating Moran’s I, specifically:</p>
 </div>
 <div id="choosing-a-neighborhood-criterion" class="section level1">
 <h1>Choosing a neighborhood criterion</h1>
-<p>Moran’s I measures the correlation of a variable with itself across
-space, based on some criteria about how far away from a given unit other
-values will be compared. In other words, we have to define a
-“neighborhood” around each spatial unit to form the basis for comparing
-the value of a spatial unit with the values in its neighborhood.</p>
+<p>Moran’s <span class="math inline">\(I\)</span> measures the
+correlation of a variable with itself across space, based on some
+criteria about how far away from a given unit other values will be
+compared. In other words, we have to define a “neighborhood” around each
+spatial unit to form the basis for comparing the value of a spatial unit
+with the values in its neighborhood.</p>
 <p>Neighborhoods can be defined in a number of ways, but the two basic
 choices are either a <em>distance-base</em> approach or a <em>common
 boundary-based</em> approach. Distance-based approaches can work for
@@ -473,9 +476,38 @@ boundary.</p>
 <hr />
 </div>
 </div>
-<div id="creating-the-spatial-weights-matrix" class="section level1">
-<h1>Creating the Spatial Weights Matrix</h1>
-<p><img src="img/R%20Module%208/example-swm.png" width="30%" /></p>
+<div id="spatial-weights-matrix" class="section level1">
+<h1>Spatial Weights Matrix</h1>
+<p>For either distance or boundary based approaches, we also have to
+decide how to measure the connection between neighboring units. The most
+common way is to use a binary measure. If a given spatial unit <span
+class="math inline">\(i\)</span> is connected to a given spatial unit
+<span class="math inline">\(j\)</span>, the connection between them
+<span class="math inline">\(w_{ij}\)</span> equals <span
+class="math inline">\(1\)</span>. If there is no connection, <span
+class="math inline">\(w_{ij} = 0\)</span>. If we were to record all the
+connections between all spatial units, we could record the results as a
+matrix, where each row and column of the matrix is a list of spatial
+units and each cell in the matrix is our binary measure of whether a
+connection exists between those spatial units.</p>
+<p>For example, if we have seven counties, <code>We</code>,
+<code>Ad</code>, <code>Ar</code>, <code>De</code>, <code>Bo</code>,
+<code>Je</code>, and <code>Do</code>, we can specify the connections
+between each pair of counties using Queen’s case boundaries, and measure
+those connections using a binary value. If we summarize this in matrix
+form, we have a formal expression of connectivity based on our choices.
+This is called the <strong>spatial weights matrix</strong>; you’ll find
+it referred to in spatial autocorrelation formulas as <span
+class="math inline">\(w_{ij}\)</span>, and looks like:</p>
+<p><img src="img/R%20Module%208/example-swm.png" width="30%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="working-with-the-data" class="section level1">
+<h1>Working with the Data</h1>
+<p>Let’s explore both of these steps using R. We’ll work again with our
+manufacturing employment data for North Carolina. This week, you’ll need
+to install another package, <code>spdep</code>, which you’ll use to
+generate the spatial weights matrix for the global Moran’s <span
+class="math inline">\(I\)</span></p>
 </div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.9</p>
