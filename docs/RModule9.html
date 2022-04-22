@@ -427,6 +427,8 @@ either <span class="math inline">\(0\)</span> or <span
 class="math inline">\(1\)</span>, and might look something like
 this:</p>
 <p><img src="img/R%20Module%209/weights-matrix.png" width="40%" style="display: block; margin: auto;" /></p>
+<div id="standardizing-weights" class="section level2">
+<h2>Standardizing Weights</h2>
 <p>Notice that some counties may have more or fewer connections than
 others, meaning this wasn’t made with <span
 class="math inline">\(k\)</span>-nearest neighbor. For example, county
@@ -441,6 +443,49 @@ connections, typically done by row standardizing.</p>
 <p>To row standardize a matrix, we first sum each row, then divide each
 non-zero cell in that row by the sum total:</p>
 <p><img src="img/R%20Module%209/matrix-2.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Row standardization splits the influence from neighboring units
+proportionally. Put another way, row standardizing weights the influence
+each county has on its neighbors proportionally and standardizes the
+total influence on each spatial unit. There are other kinds of weighting
+schemes but row standardization in commonly used, and is relatively easy
+to perform in R. Once we’re done with this step, we can finally
+calculate our global Moran’s I measure. To demonstrate, let’s return to
+our data from the previous R Module.</p>
+</div>
+</div>
+<div id="calculating-the-spatial-weights-matrix" class="section level1">
+<h1>Calculating the Spatial Weights Matrix</h1>
+<p>Load the required libraries and read in the shapefile to R.
+Re-project the data to NAD 83 / UTM Zone 17N (please reference R Module
+8), then use <code>poly2nb</code> to create a Queen’s case <span
+class="math inline">\(W_{ij}\)</span>. After that, we’ll use the
+<code>nb2listw()</code> function to row standardize our matrix.</p>
+<pre class="r"><code>queen_nb_w &lt;- nb2listw(
+  neighbours = queen_nb,
+  # The default style, &quot;W&quot;, tells us that we&#39;re performing row standardization
+  style = &quot;W&quot;
+)
+
+summary(queen_nb_w)</code></pre>
+<pre><code>## Characteristics of weights list object:
+## Neighbour list object:
+## Number of regions: 100 
+## Number of nonzero links: 490 
+## Percentage nonzero weights: 4.9 
+## Average number of links: 4.9 
+## Link number distribution:
+## 
+##  2  3  4  5  6  7  8  9 
+##  8 15 17 23 19 14  2  2 
+## 8 least connected regions:
+## Currituck Chowan Tyrrell Dare Polk Pamlico Clay New Hanover with 2 links
+## 2 most connected regions:
+## Iredell Moore with 9 links
+## 
+## Weights style: W 
+## Weights constants summary:
+##     n    nn  S0       S1       S2
+## W 100 10000 100 44.65023 410.4746</code></pre>
 </div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.10</p>

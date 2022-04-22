@@ -32,6 +32,8 @@ knitr::include_graphics("img/R Module 9/weights-matrix.png")
 ```
 
 
+## Standardizing Weights
+
 Notice that some counties may have more or fewer connections than others, meaning this wasn't made with $k$-nearest neighbor. For example, county `A` has 2 neighbors (we don't count self-connections, so `A`'s neighbors are `B` and `E`). However, `E` has 3 neighbors, `A`, `C`, and `D`. Because these connections are roughly analagous to influence (counties with more connections likely have a greater influence on the surrounding areas), we should set the total influence upon a given unit to 1. In other words, we need to standardize the connections, typically done by row standardizing.
 
 To row standardize a matrix, we first sum each row, then divide each non-zero cell in that row by the sum total:
@@ -41,3 +43,38 @@ To row standardize a matrix, we first sum each row, then divide each non-zero ce
 knitr::include_graphics("img/R Module 9/matrix-2.png")
 
 ```
+
+Row standardization splits the influence from neighboring units proportionally. Put another way, row standardizing weights the influence each county has on its neighbors proportionally and standardizes the total influence on each spatial unit. There are other kinds of weighting schemes but row standardization in commonly used, and is relatively easy to perform in R. Once we're done with this step, we can finally calculate our global Moran's I measure. To demonstrate, let's return to our data from the previous R Module.
+
+
+# Calculating the Spatial Weights Matrix
+
+Load the required libraries and read in the shapefile to R. Re-project the data to NAD 83 / UTM Zone 17N (please reference R Module 8), then use `poly2nb` to create a Queen's case $W_{ij}$. After that, we'll use the `nb2listw()` function to row standardize our matrix.
+
+```{r, include = FALSE}
+library(sf)
+library(spdep)
+library(tidyverse)
+
+
+NC <- read_sf("data/NC_REGION.shp")
+
+NC_UTM <- st_transform(x = NC,
+                       crs = st_crs("EPSG:26917"))
+queen_nb <- NC_UTM %>% 
+  tibble::column_to_rownames("NAME") %>% 
+  st_as_sf() %>% 
+  poly2nb(queen = TRUE)
+
+```
+
+```{r}
+queen_nb_w <- nb2listw(
+  neighbours = queen_nb,
+  # The default style, "W", tells us that we're performing row standardization
+  style = "W"
+)
+
+summary(queen_nb_w)
+```
+
