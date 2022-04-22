@@ -122,11 +122,15 @@ If we want to plot the lines, it's easiest to use the `nb2lines()` function, whi
 ```{r nb-lines}
 nb_lines <- nb2lines(nb = queen_nb,
                      coords = NC_centroids$geometry)
-
-qtm(shp = NC_UTM,
-    fill = "white") +
-  qtm(nb_lines) + 
-  qtm(NC_centroids, symbols.size = .25)
-
+tm_shape(NC_UTM) +
+  tm_borders() +
+  tm_shape(nb_lines) + tm_lines() +
+  tm_shape(NC_centroids) + tm_dots(size = 0.2)
 ```
 
+## Questions:
+
+**As in previous R Modules, type up your report as an R Markdown document, and export it as a .pdf. Include your figures, plots, and answers, and include your R code.**
+
+
+1. Use the `poly2nb()` function to create a Rook's case neighbor construct by changing `queen = TRUE` to `queen = FALSE`. Call this new object `rook_nb` in your code. Plot a map using `tmap` that shows the counties, the connections as lines, and the county centroids as points. Include a title (hint: use `main.title` if you want to have the title outside the map frame).

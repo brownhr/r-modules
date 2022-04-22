@@ -1,0 +1,20 @@
+## Question 1: 
+Use the `poly2nb()` function to create a Rook's case neighbor construct by changing `queen = TRUE` to `queen = FALSE`. Call this new object `rook_nb` in your code. Plot a map using `tmap` that shows the counties, the connections as lines, and the county centroids as points. Include a title (hint: use `main.title` if you want to have the title outside the map frame).
+
+```{r q1}
+
+rook_nb <- poly2nb(NC_UTM, queen = FALSE)
+
+NC_centroids <- st_centroid(NC_UTM)
+
+nb_lines <- nb2lines(nb = rook_nb,
+                     coords = NC_centroids$geometry)
+tm_shape(NC_UTM) +
+  tm_borders() +
+  tm_shape(nb_lines) + tm_lines() +
+  tm_shape(NC_centroids) + tm_dots(size = 0.2) +
+  tm_layout(
+    main.title = "Rook's Case Neighbors")
+
+```
+
