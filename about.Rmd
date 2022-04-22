@@ -11,23 +11,11 @@ Built with R `r getRversion()`
 
 ## Citations & Packages
 
-```{r write-bib, echo = F, warning=F, message=F}
+```{r write-bib, include = FALSE}
 
-knitr::write_bib(x = c(
-  # "rmdcss",
-  "rmarkdown",
-  "bookdown",
-  "ggplot2",
-  "sf",
-  "readr",
-  "tidyverse",
-  # "plotly",
-  # "leaflet",
-  # "crosstalk",
-  "pagedown",
-  "base"
-),
-file = "bibliography.bib")
+renv::dependencies()$Package %>% 
+  unique() %>%
+  knitr::write_bib(file = "bibliography.bib")
 
 ```
 
