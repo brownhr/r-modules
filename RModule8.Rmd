@@ -49,12 +49,15 @@ For boundary-based approaches, however, we define neighbors slightly differently
 
 ***
 
-# Creating the Spatial Weights Matrix
+# Spatial Weights Matrix
 
+For either distance or boundary based approaches, we also have to decide how to measure the connection between neighboring units. The most common way is to use a binary measure. If a given spatial unit $i$ is connected to a given spatial unit $j$, the connection between them $w_{ij}$ equals $1$. If there is no connection, $w_{ij} = 0$. If we were to record all the connections between all spatial units, we could record the results as a matrix, where each row and column of the matrix is a list of spatial units and each cell in the matrix is our binary measure of whether a connection exists between those spatial units. 
 
+For example, if we have seven counties, `We`, `Ad`, `Ar`, `De`, `Bo`, `Je`, and `Do`, we can specify the connections between each pair of counties using Queen's case boundaries, and measure those connections using a binary value. If we summarize this in matrix form, we have a formal expression of connectivity based on our choices. This is called the **spatial weights matrix**; you'll find it referred to in spatial autocorrelation formulas as $w_{ij}$, and looks like:
 
 
 ```{r, out.width="30%", echo = FALSE, fig.align='center'}
 knitr::include_graphics("img/R Module 8/example-swm.png")
 ```
+
 
