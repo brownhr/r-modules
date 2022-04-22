@@ -4,7 +4,7 @@ navbar:
   left:
     - text: "Home"
       icon: fa-home
-      href: https://brownhr.github.io
+      href: index.html
     - text: "About"
       icon: fa-info
       href: about.html
