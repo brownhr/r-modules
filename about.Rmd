@@ -14,16 +14,16 @@ Built with R `r getRversion()`
 ```{r write-bib, echo = F, warning=F, message=F}
 
 knitr::write_bib(x = c(
-  "rmdcss",
+  # "rmdcss",
   "rmarkdown",
   "bookdown",
   "ggplot2",
   "sf",
   "readr",
   "tidyverse",
-  "plotly",
-  "leaflet",
-  "crosstalk",
+  # "plotly",
+  # "leaflet",
+  # "crosstalk",
   "pagedown",
   "base"
 ),

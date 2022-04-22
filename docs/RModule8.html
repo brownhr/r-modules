@@ -398,14 +398,12 @@ on the observed values; think back to the results of R Module 7, and how
 our residuals seemed to “cluster” in certain parts of the state.</p>
 <p>Spatial autocorrelation can be measured in a number of ways; in this
 module, we’ll lay the groundwork for the most widely-used statistic for
-spatial autocorrelation for a continuous variable: <em>Moran’s <span
-class="math inline">\(I\)</span></em>. This metric is a “global measure”
-– it is a single value that defines the entire dataset.</p>
-<p>Before we can jump into calculating the Moran’s <span
-class="math inline">\(I\)</span>, we have a few additional decisions and
-tasks to perform. This week, we’ll walk through the setup for
-calculating Moran’s <span class="math inline">\(I\)</span>,
-specifically:</p>
+spatial autocorrelation for a continuous variable: <em>Moran’s I</em>.
+This metric is a “global measure” – it is a single value that defines
+the entire dataset.</p>
+<p>Before we can jump into calculating the Moran’s I, we have a few
+additional decisions and tasks to perform. This week, we’ll walk through
+the setup for calculating Moran’s I, specifically:</p>
 <ol style="list-style-type: decimal">
 <li>The choice of neighborhood criterion, and,</li>
 <li>The creation of the <em>spatial weights matrix</em></li>
@@ -413,12 +411,11 @@ specifically:</p>
 </div>
 <div id="choosing-a-neighborhood-criterion" class="section level1">
 <h1>Choosing a neighborhood criterion</h1>
-<p>Moran’s <span class="math inline">\(I\)</span> measures the
-correlation of a variable with itself across space, based on some
-criteria about how far away from a given unit other values will be
-compared. In other words, we have to define a “neighborhood” around each
-spatial unit to form the basis for comparing the value of a spatial unit
-with the values in its neighborhood.</p>
+<p>Moran’s I measures the correlation of a variable with itself across
+space, based on some criteria about how far away from a given unit other
+values will be compared. In other words, we have to define a
+“neighborhood” around each spatial unit to form the basis for comparing
+the value of a spatial unit with the values in its neighborhood.</p>
 <p>Neighborhoods can be defined in a number of ways, but the two basic
 choices are either a <em>distance-base</em> approach or a <em>common
 boundary-based</em> approach. Distance-based approaches can work for
@@ -506,8 +503,119 @@ class="math inline">\(w_{ij}\)</span>, and looks like:</p>
 <p>Let’s explore both of these steps using R. We’ll work again with our
 manufacturing employment data for North Carolina. This week, you’ll need
 to install another package, <code>spdep</code>, which you’ll use to
-generate the spatial weights matrix for the global Moran’s <span
-class="math inline">\(I\)</span></p>
+generate the spatial weights matrix for the global Moran’s I.</p>
+<pre class="r"><code>library(sf)
+library(spdep)
+
+
+NC &lt;- read_sf(&quot;data/NC_REGION.shp&quot;)</code></pre>
+<p>Whenever we perform any sort of spatial analysis in GIS, it’s
+important to work in a <em>projected coordinate system</em>. Remember
+how maps like the Mercator projection distort the Earth’s surface as it
+approaches the poles? It’s a similar concept; instead of using
+latitude/longitude coordinates, we need to work with a projected system
+which gives us linear units.</p>
+<p><code>sf</code> can reproject our data with the
+<code>st_transform()</code> function, an argument of which is
+<code>crs</code>, or <em>coordinate reference system</em>. We’ll use
+something called the “EPSG code”, which is a unique identifier for each
+coordinate reference system, such as Lambert Conformal Conic, UTM Zone
+17N, etc. We’ll use <code>EPSG:26917</code> for our data, which we can
+get some info about with <code>st_crs()</code>:</p>
+<pre class="r"><code>st_crs(&quot;EPSG:26917&quot;)</code></pre>
+<pre class="r"><code>class(st_crs(&quot;EPSG:26917&quot;))</code></pre>
+<pre><code>## [1] &quot;crs&quot;</code></pre>
+<p>Let’s transform our data:</p>
+<pre class="r"><code># The &#39;crs&#39; argument works best when we give it an object of class &#39;crs&#39;, such
+# as what&#39;s given by the st_crs() function
+NC_UTM &lt;- st_transform(NC, crs = st_crs(&quot;EPSG:26917&quot;))</code></pre>
+<p>If we plot our original vs. our transformed, hopefully we’ll see some
+differences! Notice the northern border now appears slightly
+“curved”:</p>
+<pre class="r"><code>library(tmap)
+
+# qtm() can be used to generate a &quot;quick thematic map&quot;, which is great for
+# visualizing our data. Check it out with ?tmap::qtm()
+
+t1 &lt;- qtm(NC)
+t2 &lt;- qtm(NC_UTM)
+
+tmap_arrange(t1, t2)</code></pre>
+<p><img src="RModule8_files/figure-html/tranform-plot-1.png" width="80%" /></p>
+<p>Let’s calculate the neighbor criterion with a boundary-based
+approach, using the <code>spdep::poly2nb()</code> function. We’ll also
+calculate the centroids of our counties.</p>
+<pre class="r"><code>queen_nb &lt;- poly2nb(NC_UTM, queen = TRUE)
+
+NC_centroids &lt;- st_centroid(NC_UTM)</code></pre>
+<pre><code>## Warning in st_centroid.sf(NC_UTM): st_centroid assumes attributes are constant
+## over geometries of x</code></pre>
+<p>If we want to plot the lines, it’s easiest to use the
+<code>nb2lines()</code> function, which generates an <code>sf</code>
+object of the connections, allowing us to generate plots with
+<code>tmap</code>, <code>ggplot2</code>, etc.</p>
+<pre class="r"><code>nb_lines &lt;- nb2lines(nb = queen_nb,
+                     coords = NC_centroids$geometry)
+tm_shape(NC_UTM) +
+  tm_borders() +
+  tm_shape(nb_lines) + tm_lines() +
+  tm_shape(NC_centroids) + tm_dots(size = 0.2)</code></pre>
+<p><img src="RModule8_files/figure-html/nb-lines-1.png" width="672" /></p>
+<div id="questions" class="section level2">
+<h2>Questions:</h2>
+<p><strong>As in previous R Modules, type up your report as an R
+Markdown document, and export it as a .pdf. Include your figures, plots,
+and answers, and include your R code.</strong></p>
+<ol style="list-style-type: decimal">
+<li>Use the <code>poly2nb()</code> function to create a Rook’s case
+neighbor construct by changing <code>queen = TRUE</code> to
+<code>queen = FALSE</code>. Call this new object <code>rook_nb</code> in
+your code. Plot a map using <code>tmap</code> that shows the counties,
+the connections as lines, and the county centroids as points. Include a
+title (hint: use <code>main.title</code> if you want to have the title
+outside the map frame).</li>
+</ol>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>Notice how some counties have many neighbors and some have relatively
+few. These constructs are sensitive to boundary effects; counties on the
+edge of the study area will always have fewer connections, because
+they’re not surrounded on all sides. We can get a helpful summary of the
+distributions of connections between counties for the different
+constructs we create.</p>
+<pre class="r"><code>summary(queen_nb)</code></pre>
+<pre><code>## Neighbour list object:
+## Number of regions: 100 
+## Number of nonzero links: 490 
+## Percentage nonzero weights: 4.9 
+## Average number of links: 4.9 
+## Link number distribution:
+## 
+##  2  3  4  5  6  7  8  9 
+##  8 15 17 23 19 14  2  2 
+## 8 least connected regions:
+## 4 21 45 56 77 80 90 99 with 2 links
+## 2 most connected regions:
+## 39 67 with 9 links</code></pre>
+<p>This summary provides a great deal of information. Of particular
+interest is the ‘link number distribution’ report: the top row of
+numbers is the number of links, and the bottom is the number of counties
+with that number of links.</p>
+<pre><code>## Neighbour list object:
+## Number of regions: 100 
+## Number of nonzero links: 490 
+## Percentage nonzero weights: 4.9 
+## Average number of links: 4.9 
+## Link number distribution:
+## 
+##  2  3  4  5  6  7  8  9 
+##  8 15 17 23 19 14  2  2 
+## 8 least connected regions:
+## 4 21 45 56 77 80 90 99 with 2 links
+## 2 most connected regions:
+## 39 67 with 9 links</code></pre>
+</div>
 </div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.9</p>
