@@ -108,3 +108,17 @@ Because Moran's I is a single value, it's easy to interpret; it shows the "globa
 
 ## Calculating Moran's I
 
+The real challenge in calculating Moran's I is in creating the sampling distribution that we need to find our critical values and our $p$-values used in hypothesis testing. The safest assumption is that the statistical distribution (not spatial distribution!) of our variable in question is not normal. However, we can approximate a normal sampling distribution through spatial randomization.
+
+The actual values assigned to each spatial unit are randomized repeatedly -- the values are moved to a randomly-designated spatial unit -- to create a distribution that we use for our hypothesis test. The expected value of $I$ for that "theoretical" distribution approaches $0$ as the number of spatial units increases, and the standard deviation of the sampling distribution can only be derived once $W_{ij}$ has been created.
+
+What this essentially means is that we're comparing our measured values against a "hypothetical distribution" in which those values are distributed randomly across space. 
+
+This is the null hypothesis associated with Moran's I: spatial randomness. If the variable in question doesn't spatially autocorrelate (i.e., it doesn't differ significantly from a hypothetical random spatial distribution), we do not reject the null. However, if the variable does autocorrelate and our $p$-values are greater than our $\alpha$ (usually 0.05), then we reject the null hypothesis and can confidently state that our variable spatially autocorrelates.
+
+More formally, our null hypothesis is that our calculated $I$ is equal to the expected $I \approx 0$. The alternative hypothesis is that the calculated $I \neq$ the expected $I$. Thus, we have a two-tailed test.
+
+***
+
+# Performing the Moran's I Calculation
+
