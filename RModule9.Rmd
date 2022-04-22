@@ -72,9 +72,39 @@ queen_nb <- NC_UTM %>%
 queen_nb_w <- nb2listw(
   neighbours = queen_nb,
   # The default style, "W", tells us that we're performing row standardization
-  style = "W"
+  style = "W",
+  
+  # Don't worry about this option for now, but it'll be important to include
+  # later.
+  zero.policy = TRUE
 )
 
 summary(queen_nb_w)
 ```
+
+Printing the new object itself doesnt show us our $W_{ij}$ directly (technically it isn't stored as a matrix in R)
+
+
+***
+
+
+# Global Moran's I
+
+Moran's I is a test of whether a variable autocorrelates with itself across space. The calculation for Moran's I is actually quite similar to the Pearson's $r$ correlation; the main differences are that:
+
+1. Moran's I is a test of a single variable, and 
+2. Moran's I requires us to first define our spatial weights matrix $W_{ij}$
+
+We've done this already, so now we're finally able to calculate Moran's I.
+
+## What does *I* represent?
+
+The Moran's I test returns a single value, ranging from $-1$ to $1$, indicating "autocorrelation". When $I = -1$, the variable in question is perfectly "negatively spatially autocorrelated" -- high values neighbor low values -- think about them like similar poles on bar magnets and how they "want" to repel each other. When $I = 1$, the variable in question is perfectly "positively spatially autocorrelated" -- high values "clump" together, as do low values.
+
+What happens when $I = 0$? This indicates "spatial randomness" -- sometimes high and low values occur, sometimes they are dispersed, but there's no systematic pattern governing their distribution.
+
+Because Moran's I is a single value, it's easy to interpret; it shows the "global measure" of autocorrelation. However, actually calculating the Moran's I is somewhat difficult.
+
+
+## Calculating Moran's I
 
