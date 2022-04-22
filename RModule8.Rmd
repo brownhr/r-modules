@@ -63,3 +63,50 @@ knitr::include_graphics("img/R Module 8/example-swm.png")
 # Working with the Data
 
 Let's explore both of these steps using R. We'll work again with our manufacturing employment data for North Carolina. This week, you'll need to install another package, `spdep`, which you'll use to generate the spatial weights matrix for the global Moran's I.
+
+```{r readsf, message = FALSE}
+library(sf)
+library(spdep)
+
+
+NC <- read_sf("data/NC_REGION.shp")
+```
+
+Whenever we perform any sort of spatial analysis in GIS, it's important to work in a *projected coordinate system*. Remember how maps like the Mercator projection distort the Earth's surface as it approaches the poles? It's a similar concept; instead of using latitude/longitude coordinates, we need to work with a projected system which gives us linear units.
+
+`sf` can reproject our data with the `st_transform()` function, an argument of which is `crs`, or *coordinate reference system*. We'll use something called the "EPSG code", which is a unique identifier for each coordinate reference system, such as Lambert Conformal Conic, UTM Zone 17N, etc. We'll use `EPSG:26917` for our data, which we can get some info about with `st_crs()`:
+
+```{r crs, eval = FALSE}
+st_crs("EPSG:26917")
+```
+
+```{r}
+class(st_crs("EPSG:26917"))
+```
+
+
+Let's transform our data:
+
+```{r st_transform}
+
+# The 'crs' argument works best when we give it an object of class 'crs', such
+# as what's given by the st_crs() function
+NC_UTM <- st_transform(NC, crs = st_crs("EPSG:26917"))
+```
+
+If we plot our original vs. our transformed, hopefully we'll see some differences! Notice the northern border now appears slightly "curved":
+
+```{r tranform-plot, message=FALSE, out.width="80%"}
+library(tmap)
+
+# qtm() can be used to generate a "quick thematic map", which is great for
+# visualizing our data. Check it out with ?tmap::qtm()
+
+t1 <- qtm(NC)
+t2 <- qtm(NC_UTM)
+
+tmap_arrange(t1, t2)
+
+```
+
+
