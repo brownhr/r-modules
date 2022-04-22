@@ -27,3 +27,17 @@ Before we can jump into calculating the Moran's I, we have a few additional deci
 
 # Choosing a neighborhood criterion
 
+Moran's I measures the correlation of a variable with itself across space, based on some criteria about how far away from a given unit other values will be compared. In other words, we have to define a "neighborhood" around each spatial unit to form the basis for comparing the value of a spatial unit with the values in its neighborhood.
+
+Neighborhoods can be defined in a number of ways, but the two basic choices are either a *distance-base* approach or a *common boundary-based* approach. Distance-based approaches can work for both point and areal (polygon) data, although we typically assign an area to a point by calculating its centroid. Common boundary-based approaches are specifically used for areal data, because points don't have "boundaries".
+
+## Distance-Based
+
+Distance-based approaches require you to specify some distance "threshold" that will be used to define which points or centroids will be classified as "neighbors" for the autocorrelation tests. The larger the distance, the more neighbors we expect. The figure below illustrates that concept. If we set a distance band at a distance of 1 around the focal unit (the red point), we'll only have one other point in the neighborhood. If we increase the distance by 50% to 1.5, we'll have two points in the neighborhood. So we always have a challenge in front of us: what distance do we use?
+
+![](img/distance-based.png)
+
+
+## Boundary-Based
+
+For boundary-based approaches, however, we define neighbors slightly differently. Instead of establishing a distance around a point and including all poitns within that distance, neighbors are defined by whether or not two areal units share boundaries. This can be done in several ways, thinking about it like a chess board. If neighbors should share 0-length boundaries (corners), we have a "Bishop's case" neighborhood; if we exclude 0-length boundaries but include boundaries with length > 1 (edges), we have a "Rook's case" neighborhood. Combining both cases, we have a "Queen's case" neighborhood. Just as before, we are challenged to define what counts as a 'shared' boundary.
