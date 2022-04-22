@@ -4,9 +4,7 @@ library(rmarkdown)
 library(purrr)
 library(googledrive)
 
-knitr::opts_chunk$set(
-  include = FALSE
-)
+
 
 ```
 
@@ -23,7 +21,7 @@ to ignore the file when building the website
 ``` {r}
 rubric_list <- list.files(pattern = "^_.+_Rubric\\.Rmd")
 
-walk(
+map(
   rubric_list,
   function(input) {
     rmarkdown::render(
@@ -33,7 +31,7 @@ walk(
   }
 )
 
-walk(
+map(
   rubric_list,
   function(input) {
     rmarkdown::render(

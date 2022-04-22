@@ -114,6 +114,8 @@ tmap_arrange(
   nrow = 2
 )
 ```
+
+
 ### Extra credit :)
 
 ```{r q3-ec}
