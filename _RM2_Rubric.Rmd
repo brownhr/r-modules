@@ -79,7 +79,7 @@ ggplot(mtcars, aes(x = mpg)) +
 ```
 
 
-d. Choose two variables from `mtcars` and create a scatterplot in `ggplot2` showing their relation:
+d. Choose two variables from `mtcars` and create a scatter plot in `ggplot2` showing their relation:
     - Include title, labels, etc.
     - *Hint: Use the geom_point() function*
     - Use Google, Stack Exchange, and the built-in Help for examples on how to use these plots!

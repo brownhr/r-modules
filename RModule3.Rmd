@@ -30,7 +30,7 @@ Let's go ahead and initialize a new R Project (`File > New Project...`) and call
 
 ## Importing and Exporting Data
 
-Working in future R Modules, classes, and projects, you'll need to be able to load, save, and share data. Fortunately, there are tools to load this data for almost any data type, from .csv's to shapefiles, raster images, and many more. We'll go over a couple of the most useful tools and packages used in data management to work with files in R.
+Working in future R Modules, classes, and projects, you'll need to be able to load, save, and share data. Fortunately, there are tools to load this data for almost any data type, from .CSVs to Shapefiles, raster images, and many more. We'll go over a couple of the most useful tools and packages used in data management to work with files in R.
 
 In this lab, you'll use a folder called `data`, which contains a file called `mtcars.csv`. When working within R, it's important to know how to access files and folders. When you create a project, the folder you set it up within is designated as your **working directory**, which is a way of easily accessing files for your project without writing the file's full path. For example, instead of accessing the file with `C:/Users/brownhr/Documents/R Module 3/data/example.file`, if you're in the working directory "R Module 3" (which can be checked with `getwd()`), you can simply type `data/example.file`.
 
@@ -48,9 +48,9 @@ The `readr` package provides some excellent functionality reading and writing da
 
 Simple Features for R, or `sf`, is an R package that allows for much easier geospatial analysis than older packages like `rgdal`. `sf` works with "simple features" -- vector objects in GIS like points, lines, polygons, etc. -- and stores their "geometry" -- their list of coordinates -- as a column in a data frame. This allows for geospatial data to be processed in exactly the same way as non-spatial data; you can run functions and analyses on the attribute table of a shapefile without needing to convert or export to any intermediate formats, for example.
 
-`sf` can work with shapefiles and other vector formats made by ArcGIS Pro, QGIS, etc., so if you have a shapefile, you can import it into R with `read_sf()`, perform your analysis, and export any sort of spatial result with `write_sf()`.
+`sf` can work with Shapefiles and other vector formats made by ArcGIS Pro, QGIS, etc., so if you have a shapefile, you can import it into R with `read_sf()`, perform your analysis, and export any sort of spatial result with `write_sf()`.
 
-Even better, there's compatability with `ggplot2`! Suppose we have two shapefiles that we wish to map: `NC_Counties` and `US_States`. Combining them is easy in `ggplot2`:
+Even better, there's compatibility with `ggplot2`! Suppose we have two Shapefiles that we wish to map: `NC_Counties` and `US_States`. Combining them is easy in `ggplot2`:
 
 ```{r sf-example, out.width="100%"}
 
@@ -116,7 +116,7 @@ data <- US_States %>%
 tm_shape(data) +
   tm_polygons(
     # We're setting the color (col) mapping to the column "Population". Notice
-    # that you have to enquote the variable name here, which is different than in
+    # that you have to quote the variable name here, which is different than in
     # ggplot2.
     col = "Population",
     
@@ -178,8 +178,6 @@ ggplot(unif, aes(x = Input, y = Output)) +
   geom_line(
     color = "steelblue"
   ) + 
-  # coord_cartesian(xlim = c(-1, 2),
-  #                 ylim = c(-0.5, 1)) +
   labs(
     title = "Uniform Distribution"
   )

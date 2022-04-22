@@ -65,7 +65,7 @@ Navigate to these websites to download the right version for your device (versio
 knitr::include_graphics("img/rstudio_interface.png")
 ```
 
-Above is a screenshot of RStudio's interface; notice that the main window is divided into different "panes", each with a different purpose. The main panes we'll use in this class are the *Console* (left), *Environment* (upper right), *Files / Plot Viewer* (bottom right), and *Scripts* (not shown). These panes are useful for different tasks:
+Above is a screenshot of R Studio's interface; notice that the main window is divided into different "panes", each with a different purpose. The main panes we'll use in this class are the *Console* (left), *Environment* (upper right), *Files / Plot Viewer* (bottom right), and *Scripts* (not shown). These panes are useful for different tasks:
 
 -   The Console is used to write code and view its output. This is (for now) where we'll run all of our code, and where we can see the results of our operations.
 -   The Environment tab shows different datasets and variables that we assign -- we'll get into this more in future R Modules.

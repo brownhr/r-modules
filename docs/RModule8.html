@@ -325,7 +325,7 @@ div.tocify {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="https://brownhr.github.io">
+  <a href="index.html">
     <span class="fa fa-home"></span>
      
     Home
@@ -394,7 +394,7 @@ is Tobler’s first law of Geography:</p>
 <pre><code>&gt; Everything is related to everything else, but near things are more related than distant things</code></pre>
 <p>This law gives us a foundation for an extremely powerful statistical
 tool – Spatial Autocorrelation. This measure assesses the amount of
-“related-ness” that can be explained by spatial proximity. Our null
+“relatedness” that can be explained by spatial proximity. Our null
 hypothesis, therefore, is that values occur randomly over space. To
 reject this null hypothesis means that spatial proximity has some effect
 on the observed values; think back to the results of R Module 7, and how
@@ -443,7 +443,7 @@ us: what distance do we use?</p>
 <h2>Boundary-Based</h2>
 <p>For boundary-based approaches, however, we define neighbors slightly
 differently. Instead of establishing a distance around a point and
-including all poitns within that distance, neighbors are defined by
+including all points within that distance, neighbors are defined by
 whether or not two areal units share boundaries. This can be done in
 several ways, thinking about it like a chess board. If neighbors should
 share 0-length boundaries (corners), we have a “Bishop’s case”
@@ -659,7 +659,7 @@ already projected our shapefile to a <code>crs</code> with linear units.
 Let’s demonstrate a <span class="math inline">\(k = 1\)</span> setup
 using the <code>knn2nb()</code> (<em>k-nearest neighbor to
 neighbor-list</em>) function:</p>
-<pre class="r"><code># We&#39;ll use the county name as the rownames. Unlike in poly2nb, the row.names
+<pre class="r"><code># We&#39;ll use the county name as the row names. Unlike in poly2nb, the row.names
 # argument actually seems to work :)
 
 NC_knn1 &lt;- knn2nb(

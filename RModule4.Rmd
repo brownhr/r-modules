@@ -87,7 +87,7 @@ Before we do anything with R Markdown, we need to do a bit of setup to make sure
 First, if you haven't already, install *R Tools*. This software is used when installing packages, and makes things a lot easier. For Windows, you can navigate to:
   https://cran.r-project.org/bin/windows/Rtools/rtools40.html
 
-Download the 64-bit version, and install the software. Note that this requires admin priviledges. This step isn't strictly necessary; R tools is used to build packages that are "in development", but it's useful to have if you can.
+Download the 64-bit version, and install the software. Note that this requires admin privileges. This step isn't strictly necessary; R tools is used to build packages that are "in development", but it's useful to have if you can.
 
 After that, we'll need to install a few R packages:
 
@@ -110,7 +110,7 @@ tinytex::install_tinytex()
 Then, restart R Studio.
 
 
-Let's get started by creating a new R Project, as in previous R Modules. Once you have that set up, we want to create a new R Markdown document. Navigate to `File > New File > R Markdown`. Give it a title, "R Module 4 Writeup", enter your name, and select `PDF` as the output format. 
+Let's get started by creating a new R Project, as in previous R Modules. Once you have that set up, we want to create a new R Markdown document. Navigate to `File > New File > R Markdown`. Give it a title, "R Module 4 Write-up", enter your name, and select `PDF` as the output format. 
 
 
 

@@ -250,7 +250,7 @@ We can interpret this as meaning there is a 95% probability of a single observed
 
 ## Questions
 
-2. Use `qnorm()` to calclulate the values of `x` for each of the following circumstances. Provide both the calculated values of `x` and your R code.
+2. Use `qnorm()` to calculate the values of `x` for each of the following circumstances. Provide both the calculated values of `x` and your R code.
   a. 20% of the area of the curve is to the left of an unknown value of x
   b. 67% of the area of the curve is to the right of an unknown value of x
 

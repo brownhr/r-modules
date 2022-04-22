@@ -325,7 +325,7 @@ div.tocify {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="https://brownhr.github.io">
+  <a href="index.html">
     <span class="fa fa-home"></span>
      
     Home
@@ -428,17 +428,17 @@ function.</li>
 </div>
 <div id="covariance" class="section level1">
 <h1>Covariance</h1>
-<p>An important consideration in our analysis is <em>covariation</em>,
+<p>An important consideration in our analysis is <em>co-variation</em>,
 that is, how the values of one variable change with the values of
 another. In our case, it is necessary to consider that the number of
-manufacturing jobs likely changes (<em>covaries</em>) with population;
+manufacturing jobs likely changes (<em>co-varies</em>) with population;
 i.e., counties with a higher population likely have a larger number of
 manufacturing jobs. Note that we’re also assuming <em>causality</em> in
 our speculative statement, that manufacturing depends to some degree on
 population values (e.g., larger population centers have more need for
 manufacturing jobs, too).</p>
 <p>Before we formally test covariance, we should establish if these
-variables actually covary; let’s try a basic scatterplot:</p>
+variables actually co-vary; let’s try a basic scatter plot:</p>
 <pre class="r"><code>library(ggplot2)
 
 ggplot(
@@ -564,7 +564,7 @@ class="math inline">\(&lt;\)</span> 1.</strong></p>
 <p>We’ve assessed the covariance visually and computationally. There
 seems to be a strong, positive, and linear relationship between
 manufacturing and population. Now, we can run a regression – what R was
-really made to do – and explore this relationship futher.</p>
+really made to do – and explore this relationship further.</p>
 <p>Running a linear regression in R is done with the linear model
 (<code>lm()</code>) function, and its primary argument is written in
 “formula syntax”, a special way of describing a formula. Formula syntax
@@ -644,10 +644,10 @@ population is an important part of our model.</p>
 <div id="residuals" class="section level1">
 <h1>Residuals</h1>
 <p>Next, we should consider our other “goodness of fit” measure. We need
-to assess how the differences between the manufacturing values
-predicteed by the regression line differ from the actual observed
-values. These differences are called residuals, and we can call a list
-of the residuals in R:</p>
+to assess how the differences between the manufacturing values predicted
+by the regression line differ from the actual observed values. These
+differences are called residuals, and we can call a list of the
+residuals in R:</p>
 <pre class="r"><code>model &lt;- lm(MNEM2000 ~ POP2000, data = NC)
 
 
@@ -662,11 +662,11 @@ normally distributed around this mean, it indicates that when our
 regression misses its prediction, we’re missing both “above” and “below”
 the actual value (which is good).</p>
 <p>Think of it like target shooting: a good regression line is going to
-hit the bullseye some of the time, but not all the time. When it misses
-the bullseye, we want it to miss both high and low, left and right of it
-evenly. If we consistently missed below the bullseye, for example, we’d
-have a clue about a systematic problem in our estimate (in the target
-shooting example, perhaps we’ve forgotten to account for the wind
+hit the bulls-eye some of the time, but not all the time. When it misses
+the bulls-eye, we want it to miss both high and low, left and right of
+it evenly. If we consistently missed below the bulls-eye, for example,
+we’d have a clue about a systematic problem in our estimate (in the
+target shooting example, perhaps we’ve forgotten to account for the wind
 direction or the speed of our arrow).</p>
 <div id="questions-2" class="section level2">
 <h2>Questions</h2>

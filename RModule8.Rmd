@@ -15,7 +15,7 @@ One of the most important laws in Geography is that things that are closer to on
 
     > Everything is related to everything else, but near things are more related than distant things
 
-This law gives us a foundation for an extremely powerful statistical tool -- Spatial Autocorrelation. This measure assesses the amount of "related-ness" that can be explained by spatial proximity. Our null hypothesis, therefore, is that values occur randomly over space. To reject this null hypothesis means that spatial proximity has some effect on the observed values; think back to the results of R Module 7, and how our residuals seemed to "cluster" in certain parts of the state.
+This law gives us a foundation for an extremely powerful statistical tool -- Spatial Autocorrelation. This measure assesses the amount of "relatedness" that can be explained by spatial proximity. Our null hypothesis, therefore, is that values occur randomly over space. To reject this null hypothesis means that spatial proximity has some effect on the observed values; think back to the results of R Module 7, and how our residuals seemed to "cluster" in certain parts of the state.
 
 Spatial autocorrelation can be measured in a number of ways; in this module, we'll lay the groundwork for the most widely-used statistic for spatial autocorrelation for a continuous variable: *Moran's I*. This metric is a "global measure" -- it is a single value that defines the entire dataset. 
 
@@ -40,7 +40,7 @@ Distance-based approaches require you to specify some distance "threshold" that 
 
 ## Boundary-Based
 
-For boundary-based approaches, however, we define neighbors slightly differently. Instead of establishing a distance around a point and including all poitns within that distance, neighbors are defined by whether or not two areal units share boundaries. This can be done in several ways, thinking about it like a chess board. If neighbors should share 0-length boundaries (corners), we have a "Bishop's case" neighborhood; if we exclude 0-length boundaries but include boundaries with length > 1 (edges), we have a "Rook's case" neighborhood. Combining both cases, we have a "Queen's case" neighborhood. Just as before, we are challenged to define what counts as a 'shared' boundary.
+For boundary-based approaches, however, we define neighbors slightly differently. Instead of establishing a distance around a point and including all points within that distance, neighbors are defined by whether or not two areal units share boundaries. This can be done in several ways, thinking about it like a chess board. If neighbors should share 0-length boundaries (corners), we have a "Bishop's case" neighborhood; if we exclude 0-length boundaries but include boundaries with length > 1 (edges), we have a "Rook's case" neighborhood. Combining both cases, we have a "Queen's case" neighborhood. Just as before, we are challenged to define what counts as a 'shared' boundary.
 
 | Bishop's Case | Rook's Case | Queen's Case |
 |--------	|--------	|--------	|
@@ -177,7 +177,7 @@ Because we're using a distance-based criteria, it's good that we've already proj
 
 
 ```{r knn-1}
-# We'll use the county name as the rownames. Unlike in poly2nb, the row.names
+# We'll use the county name as the row names. Unlike in poly2nb, the row.names
 # argument actually seems to work :)
 
 NC_knn1 <- knn2nb(
