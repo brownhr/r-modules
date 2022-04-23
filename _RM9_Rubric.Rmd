@@ -58,11 +58,102 @@ moran_results <-
   })
 
 moran_table <- moran_results %>%
-  transpose() %>% 
-  as_tibble() %>% 
-  unnest_wider(estimate) %>% 
+  transpose() %>%
+  as_tibble() %>%
+  unnest_wider(estimate) %>%
   mutate(Variable = vars, .before = `Moran I statistic`)
 
 knitr::kable(moran_table)
+```
+## Question 2:
 
+**Calculate Moran's I for the `MNEM2000` variable using four different versions of $W_{ij}$:**
+
+  - Queen's Case
+  - Rook's Case
+  - $k = 4$ nearest neighbors
+  - Maximum Distance (100% threshold)
+
+**Make sure your weights matrices are row standardized. Provide a table that summarized the calculated I, $p$-values, and average number of connections per county. Discuss any systematic changes you observe in I, $p$-values, and average links.**
+
+
+```{r q2, warning = FALSE}
+NC_centroids <- st_centroid(NC_UTM)
+
+q_w <- NC_UTM %>%
+  poly2nb(queen = TRUE) %>%
+  nb2listw(
+    style = "W",
+    zero.policy = TRUE
+  )
+r_w <- NC_UTM %>%
+  poly2nb(queen = FALSE) %>%
+  nb2listw(
+    style = "W",
+    zero.policy = TRUE
+  )
+
+k_w <- knn2nb(knearneigh(NC_centroids,
+  k = 4
+)) %>%
+  nb2listw(
+    style = "W",
+    zero.policy = TRUE
+  )
+
+max_dist <- knn2nb(
+  knearneigh(
+    x = NC_centroids,
+    k = 1
+  )
+) %>%
+  nbdists(coords = NC_centroids$geometry) %>%
+  unlist() %>%
+  max()
+
+
+
+d_w <- dnearneigh(
+  NC_centroids,
+  d1 = 0,
+  d2 = max_dist
+) %>%
+  nb2listw(zero.policy = TRUE)
+
+list_w <- list(
+  "Queen's Case" = q_w,
+  "Rook's Case" = r_w,
+  "k = 4" = k_w,
+  "Max Distance" = d_w
+)
+
+moran_w <- list_w %>%
+  map(function(w) {
+    moran.test(
+      x = NC_UTM$MNEM2000,
+      listw = w,
+      zero.policy = TRUE,
+      alternative = "two.sided"
+    )[c("estimate", "p.value")]
+  })
+
+neighbors <- list_w %>%
+  map(function(w) {
+    w[["neighbours"]] %>%
+      unclass() %>%
+      map(length) %>%
+      unlist() %>%
+      mean()
+  }) %>%
+  enframe() %>%
+  rename(Links = value)
+
+moran_table_w <- moran_w %>%
+  transpose() %>%
+  as_tibble() %>%
+  unnest_wider(estimate) %>%
+  mutate(Method = names(list_w), .before = `Moran I statistic`) %>%
+  bind_cols(neighbors["Links"])
+
+knitr::kable(moran_table_w)
 ```

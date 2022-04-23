@@ -172,7 +172,7 @@ This means than using a sampling distribution created by randomization and a row
 
 **Provide your R code for the Moran's I tests (not the results themselves -- that's what the table is for).**
 
-## Rook Case
+# Spatial Weights Matrix
 
 To better ensure our results are accurate, it's important to test other neighborhood criteria. Because our spatial weights matrix is used to calculate Moran's I, our result could simply be due to the choice of neighborhood criterion. What if we used a different neighborhood construct? Let's try with a Rook's case, row-standardized as normal:
 
@@ -197,4 +197,15 @@ moran.test(
 
 ```
 
-Did anything change? It looks like our $I$ changed slightly, but our $p$-value is still significant at $\alpha = 0.05$
+Did anything change? It looks like our $I$ changed slightly, but our $p$-value is still significant at $\alpha = 0.05$, but suggests that our Moran's I can be sensitive to changes in our spatial weights matrix. 
+
+## Questions
+
+**2. Calculate Moran's I for the `MNEM2000` variable using four different versions of $W_{ij}$:**
+
+  - Queen's Case
+  - Rook's Case
+  - $k = 4$ nearest neighbors
+  - Maximum Distance (100% threshold)
+
+**Make sure your weights matrices are row standardized. Provide a table that summarized the calculated I, $p$-values, and average number of connections per county. Discuss any systematic changes you observe in I, $p$-values, and average links.**
