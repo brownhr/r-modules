@@ -195,3 +195,13 @@ Did anything change? It looks like our $I$ changed slightly, but our $p$-value i
   - Maximum Distance (100% threshold)
 
 **Make sure your weights matrices are row standardized. Provide a table that summarized the calculated I, $p$-values, and average number of connections per county. Discuss any systematic changes you observe in I, $p$-values, and average links.**
+
+
+# Spatial Correlogram
+
+If we want to explore how spatial autocorrelation changes over distance, we can create a spatial correlogram. This is a graph with a measure of spatial autocorrelation on the y axis and the different distance-based or boundary-based "bands" on the x axis. Consider the example of a Queen's case spatial weights matrix: we could also define "2^nd^-order neighbors"; these would be the neighbors to the original neighbors. For example:
+
+```{r neighbors, echo = F, out.width="50%"}
+knitr::include_graphics("img/R Module 9/neighbors.png")
+```
+
