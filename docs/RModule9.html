@@ -551,13 +551,13 @@ distributed randomly across space.</p>
 <p>For example, the top map shows a variable that is randomly
 distributed across space, and the bottom map shows one that likely is
 spatially autocorrelated:</p>
-<p><img src="RModule9_files/figure-html/moran-example-1.png" width="672" /></p>
+<p><img src="img/R%20Module%209/moran.png" width="50%" style="display: block; margin: auto;" /></p>
 <p>This is the null hypothesis associated with Moran’s I: spatial
 randomness. If the variable in question doesn’t spatially autocorrelate
 (i.e., it doesn’t differ significantly from a hypothetical random
 spatial distribution), we do not reject the null. However, if the
 variable does autocorrelate and our <span
-class="math inline">\(p\)</span>-values are greater than our <span
+class="math inline">\(p\)</span>-values are less than our <span
 class="math inline">\(\alpha\)</span> (usually 0.05), then we reject the
 null hypothesis and can confidently state that our variable spatially
 autocorrelates.</p>
@@ -620,10 +620,76 @@ single summary table:</strong></p>
 <p><strong>Provide your R code for the Moran’s I tests (not the results
 themselves – that’s what the table is for).</strong></p>
 </div>
-<div id="rook-case" class="section level2">
-<h2>Rook Case</h2>
-<p>So,</p>
 </div>
+<div id="spatial-weights-matrix" class="section level1">
+<h1>Spatial Weights Matrix</h1>
+<p>To better ensure our results are accurate, it’s important to test
+other neighborhood criteria. Because our spatial weights matrix is used
+to calculate Moran’s I, our result could simply be due to the choice of
+neighborhood criterion. What if we used a different neighborhood
+construct? Let’s try with a Rook’s case, row-standardized as normal:</p>
+<pre class="r"><code>rook_nb_w &lt;- NC_UTM %&gt;%
+  tibble::column_to_rownames(&quot;NAME&quot;) %&gt;%
+  st_as_sf() %&gt;%
+  poly2nb(queen = F) %&gt;%
+  nb2listw(
+    style = &quot;W&quot;,
+    zero.policy = TRUE
+  )
+
+moran.test(
+  x = NC_UTM$MNEM2000,
+  listw = rook_nb_w,
+  zero.policy = T,
+  alternative = &#39;two.sided&#39;
+)</code></pre>
+<pre><code>## 
+##  Moran I test under randomisation
+## 
+## data:  NC_UTM$MNEM2000  
+## weights: rook_nb_w    
+## 
+## Moran I statistic standard deviate = 6.3762, p-value = 1.815e-10
+## alternative hypothesis: two.sided
+## sample estimates:
+## Moran I statistic       Expectation          Variance 
+##       0.404484123      -0.010101010       0.004227639</code></pre>
+<p>Did anything change? It looks like our <span
+class="math inline">\(I\)</span> changed slightly, but our <span
+class="math inline">\(p\)</span>-value is still significant at <span
+class="math inline">\(\alpha = 0.05\)</span>, but suggests that our
+Moran’s I can be sensitive to changes in our spatial weights matrix.</p>
+<div id="questions-1" class="section level2">
+<h2>Questions</h2>
+<p><strong>2. Calculate Moran’s I for the <code>MNEM2000</code> variable
+using four different versions of <span
+class="math inline">\(W_{ij}\)</span>:</strong></p>
+<ul>
+<li>Queen’s Case</li>
+<li>Rook’s Case</li>
+<li><span class="math inline">\(k = 4\)</span> nearest neighbors</li>
+<li>Maximum Distance (100% threshold)</li>
+</ul>
+<p><strong>Make sure your weights matrices are row standardized. Provide
+a table that summarized the calculated I, <span
+class="math inline">\(p\)</span>-values, and average number of
+connections per county. Discuss any systematic changes you observe in I,
+<span class="math inline">\(p\)</span>-values, and average
+links.</strong></p>
+<hr />
+<hr />
+</div>
+</div>
+<div id="spatial-correlogram" class="section level1">
+<h1>Spatial Correlogram</h1>
+<p>If we want to explore how spatial autocorrelation changes over
+distance, we can create a spatial correlogram. This is a graph with a
+measure of spatial autocorrelation on the y axis and the different
+distance-based or boundary-based “bands” on the x axis. Consider the
+example of a Queen’s case spatial weights matrix: we could also define
+“2<sup>nd</sup>-order neighbors”; these would be the neighbors to the
+original neighbors. For example:</p>
+<p><img src="img/R%20Module%209/neighbors.png" width="40%" style="display: block; margin: auto;" /></p>
 </div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.10</p>
