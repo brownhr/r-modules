@@ -124,7 +124,7 @@ rand <- sample(NC_UTM$MNEM2000, 100)
 
 NC_rand <- NC_UTM
 NC_rand$rand <- rand
-NC_rand$rand2 <- rpois(100, 10)
+NC_rand$rand2 <- rnorm(100, 10)
 list(
   tm_shape(NC_rand) + tm_polygons(col = "rand2", style = "quantile", n = 5) + tm_layout(legend.show = F),
   tm_shape(NC_UTM) + tm_polygons(col = "MNEM2000", style = "quantile", n = 5) + tm_layout(legend.show = F)
