@@ -464,7 +464,7 @@ class="math inline">\(W_{ij}\)</span>. After that, we’ll use the
   neighbours = queen_nb,
   # The default style, &quot;W&quot;, tells us that we&#39;re performing row standardization
   style = &quot;W&quot;,
-  
+
   # Don&#39;t worry about this option for now, but it&#39;ll be important to include
   # later.
   zero.policy = TRUE
@@ -548,6 +548,10 @@ been created.</p>
 <p>What this essentially means is that we’re comparing our measured
 values against a “hypothetical distribution” in which those values are
 distributed randomly across space.</p>
+<p>For example, the top map shows a variable that is randomly
+distributed across space, and the bottom map shows one that likely is
+spatially autocorrelated:</p>
+<p><img src="RModule9_files/figure-html/moran-example-1.png" width="672" /></p>
 <p>This is the null hypothesis associated with Moran’s I: spatial
 randomness. If the variable in question doesn’t spatially autocorrelate
 (i.e., it doesn’t differ significantly from a hypothetical random
@@ -568,6 +572,58 @@ two-tailed test.</p>
 </div>
 <div id="performing-the-morans-i-calculation" class="section level1">
 <h1>Performing the Moran’s I Calculation</h1>
+<p>Let’s try this on the variable for manufacturing jobs in the year
+2000, <code>MNEM2000</code>:</p>
+<pre class="r"><code>moran.test(
+  x = NC_UTM$MNEM2000,
+  listw = queen_nb_w,
+  zero.policy = TRUE,
+  alternative = &quot;two.sided&quot;
+)</code></pre>
+<pre><code>## 
+##  Moran I test under randomisation
+## 
+## data:  NC_UTM$MNEM2000  
+## weights: queen_nb_w    
+## 
+## Moran I statistic standard deviate = 6.2869, p-value = 3.239e-10
+## alternative hypothesis: two.sided
+## sample estimates:
+## Moran I statistic       Expectation          Variance 
+##       0.388470385      -0.010101010       0.004019201</code></pre>
+<p>The calculated Moran’s I is listed (as <code>statistic</code>) along
+with the expected value of the “hypothetical” sampling distribution (as
+<code>Expectation</code>), as well as the <span
+class="math inline">\(p\)</span>-value. The expected value is around
+-0.01, and the calculated <span class="math inline">\(I\)</span> of
+0.3884 is <strong>not</strong> close to the expected value (which should
+be close to 0). Unsurprisingly, our <span
+class="math inline">\(p\)</span>-value is also fairly low, at <span
+class="math inline">\(3.239\times 10^{-10}\)</span>.</p>
+<p>This means than using a sampling distribution created by
+randomization and a row-standardized Queen’s case spatial weights
+matrix, we would have much less than a 1% chance of making a Type-I
+error if we reject our null hypothesis (of no spatial autocorrelation).
+We can confidently say, therefore, that <code>MNEM2000</code> is a
+spatially autocorrelated variable.</p>
+<div id="questions" class="section level2">
+<h2>Questions</h2>
+<p><strong>1. Calculate Moran’s I for the following variables in the
+dataset. List the Moran’s I values and p-values for each variable in a
+single summary table:</strong></p>
+<ul>
+<li><code>MNEM2000</code></li>
+<li><code>MNEM1990</code></li>
+<li><code>TOTJOB2000</code></li>
+<li><code>TOTJOB1990</code></li>
+</ul>
+<p><strong>Provide your R code for the Moran’s I tests (not the results
+themselves – that’s what the table is for).</strong></p>
+</div>
+<div id="rook-case" class="section level2">
+<h2>Rook Case</h2>
+<p>So,</p>
+</div>
 </div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.10</p>

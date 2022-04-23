@@ -1,0 +1,64 @@
+```{r}
+library(sf)
+library(spdep)
+library(tidyverse)
+
+
+NC <- read_sf("data/NC_REGION.shp")
+
+NC_UTM <- st_transform(
+  x = NC,
+  crs = st_crs("EPSG:26917")
+)
+queen_nb <- NC_UTM %>%
+  tibble::column_to_rownames("NAME") %>%
+  st_as_sf() %>%
+  poly2nb(queen = TRUE)
+
+
+queen_nb_w <- nb2listw(
+  neighbours = queen_nb,
+  style = "W",
+  zero.policy = TRUE
+)
+```
+
+
+
+**1. Calculate Moran's I for the following variables in the dataset. List the Moran's I values and p-values for each variable in a single summary table:**
+
+  - `MNEM2000`
+  - `MNEM1990`
+  - `TOTJOB2000`
+  - `TOTJOB1990`
+
+**Provide your R code for the Moran's I tests (not the results themselves -- that's what the table is for).**
+
+```{r q1}
+
+vars <- c("MNEM2000", "MNEM1990", "TOTJOB2000", "TOTJOB1990")
+
+
+moran_results <-
+  NC_UTM %>%
+  st_drop_geometry() %>%
+  select(any_of(x = vars)) %>%
+  map(function(x) {
+    moran.test(
+      x = x,
+      listw = queen_nb_w,
+      zero.policy = TRUE,
+      alternative = "two.sided"
+    )[c("statistic", "p.value")]
+  })
+
+
+
+
+moran_table <- moran_results %>%
+  map_dfr(as_tibble) %>%
+  mutate(name = vars)
+
+moran_table
+
+```

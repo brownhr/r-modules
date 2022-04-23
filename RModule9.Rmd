@@ -9,6 +9,14 @@ output:
       number_sections: false
 ---
 
+```{r include=FALSE}
+library(sf)
+library(spdep)
+library(tidyverse)
+library(tmap)
+```
+
+
 ***
 
 # What is Spatial Autocorrelation?
@@ -28,7 +36,6 @@ Suppose we had a study region that consisted of five counties and we applied one
 ```{r weights-matrix, echo = F, out.width="40%", fig.align='center'}
 
 knitr::include_graphics("img/R Module 9/weights-matrix.png")
-
 ```
 
 
@@ -41,7 +48,6 @@ To row standardize a matrix, we first sum each row, then divide each non-zero ce
 ```{r weights-matrix-2, echo = F, out.width="50%", fig.align='center'}
 
 knitr::include_graphics("img/R Module 9/matrix-2.png")
-
 ```
 
 Row standardization splits the influence from neighboring units proportionally. Put another way, row standardizing weights the influence each county has on its neighbors proportionally and standardizes the total influence on each spatial unit. There are other kinds of weighting schemes but row standardization in commonly used, and is relatively easy to perform in R. Once we're done with this step, we can finally calculate our global Moran's I measure. To demonstrate, let's return to our data from the previous R Module.
@@ -52,20 +58,16 @@ Row standardization splits the influence from neighboring units proportionally. 
 Load the required libraries and read in the shapefile to R. Re-project the data to NAD 83 / UTM Zone 17N (please reference R Module 8), then use `poly2nb` to create a Queen's case $W_{ij}$. After that, we'll use the `nb2listw()` function to row standardize our matrix.
 
 ```{r, include = FALSE}
-library(sf)
-library(spdep)
-library(tidyverse)
-
-
 NC <- read_sf("data/NC_REGION.shp")
 
-NC_UTM <- st_transform(x = NC,
-                       crs = st_crs("EPSG:26917"))
-queen_nb <- NC_UTM %>% 
-  tibble::column_to_rownames("NAME") %>% 
-  st_as_sf() %>% 
+NC_UTM <- st_transform(
+  x = NC,
+  crs = st_crs("EPSG:26917")
+)
+queen_nb <- NC_UTM %>%
+  tibble::column_to_rownames("NAME") %>%
+  st_as_sf() %>%
   poly2nb(queen = TRUE)
-
 ```
 
 ```{r}
@@ -73,7 +75,7 @@ queen_nb_w <- nb2listw(
   neighbours = queen_nb,
   # The default style, "W", tells us that we're performing row standardization
   style = "W",
-  
+
   # Don't worry about this option for now, but it'll be important to include
   # later.
   zero.policy = TRUE
@@ -126,10 +128,8 @@ NC_rand$rand2 <- rpois(100, 10)
 list(
   tm_shape(NC_rand) + tm_polygons(col = "rand2", style = "quantile", n = 5) + tm_layout(legend.show = F),
   tm_shape(NC_UTM) + tm_polygons(col = "MNEM2000", style = "quantile", n = 5) + tm_layout(legend.show = F)
-) %>% 
+) %>%
   tmap_arrange()
-
-
 ```
 
 
@@ -146,3 +146,32 @@ More formally, our null hypothesis is that our calculated $I$ is equal to the ex
 
 # Performing the Moran's I Calculation
 
+Let's try this on the variable for manufacturing jobs in the year 2000, `MNEM2000`:
+
+```{r}
+moran.test(
+  x = NC_UTM$MNEM2000,
+  listw = queen_nb_w,
+  zero.policy = TRUE,
+  alternative = "two.sided"
+)
+```
+
+The calculated Moran's I is listed (as `statistic`) along with the expected value of the "hypothetical" sampling distribution (as `Expectation`), as well as the $p$-value. The expected value is around -0.01, and the calculated $I$ of 0.3884 is **not** close to the expected value (which should be close to 0). Unsurprisingly, our $p$-value is also fairly low, at $3.239\times 10^{-10}$.
+
+This means than using a sampling distribution created by randomization and a row-standardized Queen's case spatial weights matrix, we would have much less than a 1% chance of making a Type-I error if we reject our null hypothesis (of no spatial autocorrelation). We can confidently say, therefore, that `MNEM2000` is a spatially autocorrelated variable. 
+
+## Questions
+
+**1. Calculate Moran's I for the following variables in the dataset. List the Moran's I values and p-values for each variable in a single summary table:**
+
+  - `MNEM2000`
+  - `MNEM1990`
+  - `TOTJOB2000`
+  - `TOTJOB1990`
+
+**Provide your R code for the Moran's I tests (not the results themselves -- that's what the table is for).**
+
+## Rook Case
+
+So, 
