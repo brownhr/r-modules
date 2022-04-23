@@ -114,7 +114,31 @@ The actual values assigned to each spatial unit are randomized repeatedly -- the
 
 What this essentially means is that we're comparing our measured values against a "hypothetical distribution" in which those values are distributed randomly across space. 
 
+For example, the top map shows a variable that is randomly distributed across space, and the bottom map shows one that likely is spatially autocorrelated:
+
+
+```{r moran-example, echo = FALSE}
+rand <- sample(NC_UTM$MNEM2000, 100)
+
+NC_rand <- NC_UTM
+NC_rand$rand <- rand
+NC_rand$rand2 <- rpois(100, 10)
+list(
+  tm_shape(NC_rand) + tm_polygons(col = "rand2", style = "quantile", n = 5) + tm_layout(legend.show = F),
+  tm_shape(NC_UTM) + tm_polygons(col = "MNEM2000", style = "quantile", n = 5) + tm_layout(legend.show = F)
+) %>% 
+  tmap_arrange()
+
+
+```
+
+
 This is the null hypothesis associated with Moran's I: spatial randomness. If the variable in question doesn't spatially autocorrelate (i.e., it doesn't differ significantly from a hypothetical random spatial distribution), we do not reject the null. However, if the variable does autocorrelate and our $p$-values are greater than our $\alpha$ (usually 0.05), then we reject the null hypothesis and can confidently state that our variable spatially autocorrelates.
+
+
+
+
+
 
 More formally, our null hypothesis is that our calculated $I$ is equal to the expected $I \approx 0$. The alternative hypothesis is that the calculated $I \neq$ the expected $I$. Thus, we have a two-tailed test.
 
