@@ -36,7 +36,12 @@ queen_nb_w <- nb2listw(
 
 ```{r q1}
 
-vars <- c("MNEM2000", "MNEM1990", "TOTJOB2000", "TOTJOB1990")
+# It's totally OK if students do this part manually; I just was curious to find
+# a way to specify a set of variables to input automatically and then get a
+# table as an output.
+
+
+vars <- c("MNEM2000", "MNEM1990", "TOTJOB2000", "TOTJOB1990", "POP2000", "POP1990")
 
 
 moran_results <-
@@ -49,16 +54,15 @@ moran_results <-
       listw = queen_nb_w,
       zero.policy = TRUE,
       alternative = "two.sided"
-    )[c("statistic", "p.value")]
+    )[c("estimate", "p.value")]
   })
 
-
-
-
 moran_table <- moran_results %>%
-  map_dfr(as_tibble) %>%
-  mutate(name = vars)
+  transpose() %>% 
+  as_tibble() %>% 
+  unnest_wider(estimate) %>% 
+  mutate(Variable = vars, .before = `Moran I statistic`)
 
-moran_table
+knitr::kable(moran_table)
 
 ```

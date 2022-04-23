@@ -174,4 +174,27 @@ This means than using a sampling distribution created by randomization and a row
 
 ## Rook Case
 
-So, 
+To better ensure our results are accurate, it's important to test other neighborhood criteria. Because our spatial weights matrix is used to calculate Moran's I, our result could simply be due to the choice of neighborhood criterion. What if we used a different neighborhood construct? Let's try with a Rook's case, row-standardized as normal:
+
+
+```{r}
+rook_nb_w <- NC_UTM %>%
+  tibble::column_to_rownames("NAME") %>%
+  st_as_sf() %>%
+  poly2nb(queen = F) %>%
+  nb2listw(
+    style = "W",
+    zero.policy = TRUE
+  )
+
+moran.test(
+  x = NC_UTM$MNEM2000,
+  listw = rook_nb_w,
+  zero.policy = T,
+  alternative = 'two.sided'
+)
+
+
+```
+
+Did anything change? It looks like our $I$ changed slightly, but our $p$-value is still significant at $\alpha = 0.05$
