@@ -385,7 +385,32 @@ div.tocify {
 </div>
 
 
-
+<hr />
+<div id="spatial-regression-in-r" class="section level1">
+<h1>Spatial Regression in R</h1>
+<p>Regression residuals are the primary way to assess if a regression
+violates any assumptions of the general linear model. Although all the
+assumptions are important, the violation of the assumption of
+independence is common with spatially organized data. This has led to
+the development of a family of alternate regression models that can
+accommodate spatial dependence. We’ll work with two of theme models
+continuing from the previous two R Modules. These are known as the
+<em>spatial lag model</em> and <em>spatial error model</em>. Both models
+account for spatial dependence by including new parameters that must be
+estimated; each model, however, handles this in a different way…</p>
+<div id="spatial-lag-model" class="section level2">
+<h2>Spatial Lag Model</h2>
+<p>The spatial lag model, shown below, introduces a new explanatory
+variable and an associated coefficient that must be estimated:</p>
+<p><span class="math display">\[ y = \rho W_y + \beta X +
+\varepsilon\]</span></p>
+</div>
+<div id="spatial-error-model" class="section level2">
+<h2>Spatial Error Model</h2>
+<p><span class="math display">\[y = \beta X + \varepsilon; \;\varepsilon
+= \lambda W \varepsilon + \xi\]</span></p>
+</div>
+</div>
 
 <p>&copy; 2022 brownhr & M. Sugg. v.0.0.10</p>
 
