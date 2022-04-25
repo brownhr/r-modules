@@ -1,11 +1,16 @@
 ---
 title: Syllabus
+output: html_document
 ---
+
+***
 
 GHY 5800 -- Advanced Quantitative Methods in Geography
 
+***
 
-## Course Description
+
+# Course Description
 
 This course provides a critical introduction to quantitative methods commonly used in the analysis of applied geographic research problems.  The content of the course is geared towards the discussion and practice of common research techniques and theoretical aspects used to investigate issues in human geography, physical geography, GIScience, and community and regional planning.   Specific topics include reliability and validity, research ethics, survey design, case study methods, descriptive statistics, inferential statistics, spatial statistics, univariate statistical methods, multivariate statistical methods, regression analysis, and spatial autocorrelation. Adjustments to the methods covered may be made per the composition of the class on a semester by semester basis.
 
@@ -47,3 +52,56 @@ Appalachian State University is committed to nondiscrimination on the basis of d
 
 ## Food Insecurity
 
+The Department of Geography and Planning has a free Food Pantry in 323 Rankin Science West. Any student who has difficulty affording groceries or accessing sufficient food to eat every day, or who lacks a safe and stable place to live, and believes this may affect their performance in the course, is urged to contact the Dean of Students, 324 Plemmons Student Union, for a list of resources and support. The ASU Food Pantry and Free Store is also a free resource with pantry and personal care items, located in the Office of Sustainability on the bottom floor of East Hall. Furthermore, please seek assistance from the professor if you are comfortable doing so.
+
+## Course Materials
+
+**NO Public Sharing of Course Materials - All course materials, including video, may be subject to intellectual property protections under applicable law and regulation and are for the sole use of students enrolled in this class. Students do not have permission to copy or record materials except for personal use in the context of this class and students do not have permission to share any class materials, including videos, in any manner on any platform without the prior express permission of the faculty member teaching this course.**
+
+## Safe Learning Environment and Reporting Obligations
+
+Appalachian State University is committed to maintaining a safe learning environment for all students, regardless of sex, sexual orientation, gender, gender expression, and gender identity. To meet this commitment, and to comply with state and federal laws, Appalachian faculty are required to formally report instances of interpersonal violence, such as sexual harassment, relationship violence, stalking, and retaliation, to the Office of Title IX Compliance. Those impacted by interpersonal violence will be provided support, resources, and applicable information. Please visit https://titleix.appstate.edu/ or call (828) 262-2144 for more information.
+
+## Statement on Black Lives Matter, Diversity, and Inclusion
+
+The faculty and staff of the Department of Geography and Planning at Appalachian State University strongly affirm that Black Lives Matter. We stand in solidarity with those seeking to change systemic racism, inequality, and discrimination. We are appalled and saddened by the recent killings of George Floyd, Ahmaud Arbery, Breonna Taylor, Nina Pop, Tony McDade, and many others. We support the statements released by the American Association of Geographers and American Planning Association that identify that these deaths are the product of racism, violence, and inequities and likewise support the demands for diversity, equity, and inclusion from the American Geophysical Union. Emphasizing human rights, enhancing diversity, promoting inclusion, and advocating for historically marginalized social groups are central to the disciplines of Geography and Planning. We affirm a commitment to resist and confront the devaluation of people of color by recognizing our role in creating and maintaining these systems.
+
+***
+
+# Course Requirements and Grading
+
+- 20% Assignments / Lab Exercises
+- 30% Final Project
+- 15% Seminar Leadership
+- 10% Participation
+- 12.5% Final Exam
+- 12.5% Midterm
+
+
+## Weekly Assignments and Lab Exercise
+
+Weekly assignments will account for 20% of the final grade in this course. These will consist of readings, discussion assignments, and/or in-class assignments as well as lab exercises. The lab exercises are an integral part of the quantitative methods portion of this course. The labs are designed to support our discussions in the lecture by providing application-based examples of the numerous quantitative analysis tools that we will be discussing. Weekly readings are also required. Students must prepare a discussion assignment related to the reading and bring a copy to class.
+
+
+## Seminar Leadership
+
+We will alternate the leadership of the seminar throughout the semester. Seminar leaders will guide us through the readings and provoke discussion on the topic at hand. This should include doing a little research to find out the disciplinary backgrounds of the authors and other relevant information. Seminar leaders should arrange to meet with me and discuss their presentations before the seminar –- ideally by the week before class. Part of this work will be to select a “model method,” for the class to explore. That is, the team leading the discussion should select an example of an exemplary use of the method in question for the rest of the class to read and think about. This should be posted to the course website a minimum of five days before the seminar. Each participant should lead once over the course of the semester. I will bring a schedule to the first class. 
+
+
+## Participation
+
+Participation is required for every class period. Participation will be graded as an assessment of student performance after each class. Dr. Sugg will assign a score to each student during each discussion period from 1 to 5 (1 is failing to participate in any way and 5 is participating in the fullest).  If any students were lacking in participation roles, Dr. Sugg will talk to them to offer suggestions for improvement during the course.  Discussion is a necessity for a graduate seminar, failure to participate in weekly discussions will result in a low participation grade.  As the course progresses, more discussions will be online and feedback to your peers is required via online discussion forums and peer review feedback. 
+
+
+## Final Research Project
+
+Each student will complete a final project that will account for 30% of the final grade. Students should integrate feedback from the research design workshop. The research project must combine the use of quantitative methods to answer a question (or questions) concerning a Geography or Planning related topic of the student's choosing. I suggest that you use this component to bring ideas from class into conversation with your own research focus. If you have an alternative suggestion, please feel free to talk to me about it! I am very flexible on this assignment provided it draws on work from the class but also takes it beyond the cases and readings that we have covered.
+
+Each student will be required to have their topic approved by Dr. Sugg by the end of the third week of the semester. The final project will have two components: 1) a professional-style research paper (~10 pages) that includes Abstract, Introduction, Methodology, Results, Discussion, and Conclusion, and 2) An oral presentation of the research which will occur during the allotted final exam period.  In addition, your grade will also include your evaluation of other students.  This research paper will demonstrate the knowledge and effective application of quantitative research methods to a research topic selected by the student. 
+
+
+## Final Exam
+
+Hard Copy of Paper due on Thursday, December 2nd (2:00 to 4:30 pm)
+
+***
