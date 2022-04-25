@@ -82,7 +82,7 @@ queen_nb_w <- nb2listw(
 
   # Don't worry about this option for now, but it'll be important to include
   # later.
-  zero.policy = TRUE
+  zero.policy = TRUE,
 )
 
 summary(queen_nb_w)
@@ -277,7 +277,7 @@ To calculate Local Moran's I, we'll use the `localmoran()` function from `spdep`
 local_moran_queen <- localmoran(
   x = NC_UTM$MNEM2000,
   listw = queen_nb_w,
-  zero.policy = TRUE,
+  # zero.policy = TRUE,
   alternative = "two.sided"
 )
 
@@ -307,18 +307,18 @@ This plot shows us quite a bit of information. First, we should note that the me
 4. The lower right is the "high-low" counties.
 
 
-It's important to note that the way each county is assigned is dependent on our significance level; right now it's still $\alpha = 0.05$. Counties on the above scatter plot with the 'diamond' symbol are those where the $p$-value is less than our significance level. If we 
+It's important to note that the way each county is assigned is dependent on our significance level; right now it's still $\alpha = 0.05$. Counties on the above scatter plot with the 'diamond' symbol are those where the $p$-value is less than our significance level. If we change our significance level to say, 50%, we can see more of the distribution (but of course, our results are not nearly as significant)
 
 ```{r}
-quadr <- attr(local_moran_queen, "quadr")[, 1]
+quadr <- attr(local_moran_queen, "quadr")[, 2]
 
 NC_localmoran <- NC_UTM
 
-NC_localmoran$Quandrant <- quadr
+NC_localmoran$Quadrant <- quadr
 
 NC_localmoran$p.value <- local_moran_queen[, 5]
 
-sig_level <- 0.05
+sig_level <- 0.5
 
 NC_localmoran <- NC_localmoran %>%
   mutate(
@@ -337,21 +337,37 @@ Let's plot this with a color palette to highlight where there are significant le
 
 lm_pal <-
   c(
-    "High-High" = "red3",
-    "High-Low" = "red",
+    "High-High" = "red",
+    "High-Low" = "#FF000080",
     "Insignificant" = "gray90",
-    "Low-High" = "skyblue",
-    "Low-Low" = "royalblue"
+    "Low-High" = "#0000FF80",
+    "Low-Low" = "blue"
   )
 
 
 tm_shape(NC_localmoran) +
   tm_polygons(
     col = "Quadrant_Sig",
-    palette = lm_pal
+    palette = lm_pal,
+    border.col = "black"
   ) +
   tm_layout(
-    main.title = "LISA Cluster at Alpha = 0.05",
-    frame = F
+    main.title = paste0("LISA Cluster at Alpha = ", sig_level)
+    
   )
 ```
+
+
+This map shows the four different types of clusters. Many counties fall into either the `High-High` or `Low-Low` categories. However, these results are based on a very high value of alpha; what happens if we restrict alpha to a more conventional level?
+
+## Questions
+
+**4. Adopt the code above to provide LISA maps for the `MNEM1990` variable at an alpha of 0.1, 0.05, and 0.01 using the Queen's case W. Provide a brief explanation of your findings about any local spatial autocorrelation at these more restrictive values of alpha.**
+
+
+***
+
+Congratulations on completing this R Module; there was certainly a LOT to cover here!
+
+
+
