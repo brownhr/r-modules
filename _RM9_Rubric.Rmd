@@ -81,25 +81,13 @@ knitr::kable(moran_table)
 NC_centroids <- st_centroid(NC_UTM)
 
 q_w <- NC_UTM %>%
-  poly2nb(queen = TRUE) %>%
-  nb2listw(
-    style = "W",
-    zero.policy = TRUE
-  )
+  poly2nb(queen = TRUE)
 r_w <- NC_UTM %>%
-  poly2nb(queen = FALSE) %>%
-  nb2listw(
-    style = "W",
-    zero.policy = TRUE
-  )
+  poly2nb(queen = FALSE)
 
 k_w <- knn2nb(knearneigh(NC_centroids,
   k = 4
-)) %>%
-  nb2listw(
-    style = "W",
-    zero.policy = TRUE
-  )
+))
 
 max_dist <- knn2nb(
   knearneigh(
@@ -117,8 +105,7 @@ d_w <- dnearneigh(
   NC_centroids,
   d1 = 0,
   d2 = max_dist
-) %>%
-  nb2listw(zero.policy = TRUE)
+)
 
 list_w <- list(
   "Queen's Case" = q_w,
@@ -127,7 +114,10 @@ list_w <- list(
   "Max Distance" = d_w
 )
 
-moran_w <- list_w %>%
+list_w_weighed <-
+  map(list_w, ~ nb2listw(.x, style = "W", zero.policy = TRUE))
+
+moran_w <- list_w_weighed %>%
   map(function(w) {
     moran.test(
       x = NC_UTM$MNEM2000,
@@ -137,7 +127,7 @@ moran_w <- list_w %>%
     )[c("estimate", "p.value")]
   })
 
-neighbors <- list_w %>%
+neighbors <- list_w_weighed %>%
   map(function(w) {
     w[["neighbours"]] %>%
       unclass() %>%
@@ -152,8 +142,28 @@ moran_table_w <- moran_w %>%
   transpose() %>%
   as_tibble() %>%
   unnest_wider(estimate) %>%
-  mutate(Method = names(list_w), .before = `Moran I statistic`) %>%
+  mutate(Method = names(list_w_weighed), .before = `Moran I statistic`) %>%
   bind_cols(neighbors["Links"])
 
 knitr::kable(moran_table_w)
 ```
+
+```{r q3, out.width="100%"}
+corr_list <- list_w %>%
+  map(~ sp.correlogram(
+    neighbours = .x,
+    var = NC_UTM$MNEM2000,
+    order = 7,
+    method = "I",
+    zero.policy = TRUE
+  ))
+
+
+par(mfrow = c(2, 2))
+corr_plots <- corr_list %>%
+  imap(~ {
+    plot(.x, main = .y)
+  })
+```
+*The general relationship is that the $I$ statistic decreases with the number of lags. However, in certain graphs, e.g. $k=4$, there are small "bumps" where the value increases. This likely indicates that the "centers" of clusters are approximately 3~4 units (counties) away from one another.*
+

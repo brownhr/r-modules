@@ -208,3 +208,32 @@ If we want to explore how spatial autocorrelation changes over distance, we can 
 knitr::include_graphics("img/R Module 9/neighbors.png")
 ```
 
+The correlogram calculates Moran's I at these different orders, called "lags", to assess how spatial autocorrelation varies across distance. When you create the correlogram, you need to specify how many lags you want, and which autocorrelation test to perform (we'll use Moran's I).
+
+Let's do this for our `MNEM2000` variable using a Queen's case $W_{ij}$ and 4 lags. In this function, we specify the **non-weighted** neighbor object (`queen_nb`, not `queen_nb_w`), the number of lags (4), and that we're using Moran's I for our test:
+
+```{r correlogram-1}
+corr_gram <- sp.correlogram(
+  neighbours = queen_nb,
+  var = NC_UTM$MNEM2000,
+  order = 4,
+  method = "I",
+  style = "W",
+  zero.policy = TRUE
+)
+  
+
+plot(corr_gram)
+```
+
+What this is telling us is that the manufacturing count for a given county is similar to its neighboring counties and less similar the further away these counties are. If we were to plot more lags, we might see Moran's I rise again. If so, this would indicate that there was a significant distance between manufacturing centers within the state, something suggested by our previous results.
+
+## Questions
+
+3. **Create and provide the spatial correlogram plots for the `MNEM2000` variable, using the Queen's case, Rook's case, $k = 4$ nearest neighbors, and Maximum Distance spatial weights matrices. Make sure to label the plots! What is the general relationship between manufacturing and distance that can be derived from these plots?**
+
+***
+***
+
+
+# Local Moran's I
