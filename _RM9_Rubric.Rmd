@@ -99,8 +99,6 @@ max_dist <- knn2nb(
   unlist() %>%
   max()
 
-
-
 d_w <- dnearneigh(
   NC_centroids,
   d1 = 0,

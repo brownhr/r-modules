@@ -14,6 +14,10 @@ library(sf)
 library(spdep)
 library(tidyverse)
 library(tmap)
+
+knitr::opts_chunk$set(
+  fig.align = "center"
+)
 ```
 
 
@@ -105,6 +109,21 @@ The Moran's I test returns a single value, ranging from $-1$ to $1$, indicating 
 
 What happens when $I = 0$? This indicates "spatial randomness" -- sometimes high and low values occur, sometimes they are dispersed, but there's no systematic pattern governing their distribution.
 
+Mathematically, the calculation for $I$ is as follows:
+
+$$I = \frac{1}{s^2}\frac{ \sum_i\sum_j(y_i-\bar{y})(y_j-\bar{y}) }{ \sum_i\sum_j W_{ij} }, $$
+
+With $$s^2 = \frac{(\sum y_i -\bar{y})^2}{n}$$
+
+Let's break this down:
+
+- $s^2$ is the sampling variances, defined by the sum of the difference between each value and the mean, then squared, and then divided by the number of spatial units $n$. 
+- Our denominator is the total sum of all the cells in our spatial weights matrix $W_{ij}$.
+- The numerator is the sum of the differences in between $y_i$ and $y_j$ (the values in our rows and columns) with our overall mean, $\bar{y}$.
+
+Hopefully, you won't ever have to calculate this by hand, but it's important to see what the test is actually performing. 
+
+
 Because Moran's I is a single value, it's easy to interpret; it shows the "global measure" of autocorrelation. However, actually calculating the Moran's I is somewhat difficult.
 
 
@@ -177,10 +196,8 @@ moran.test(
   x = NC_UTM$MNEM2000,
   listw = rook_nb_w,
   zero.policy = T,
-  alternative = 'two.sided'
+  alternative = "two.sided"
 )
-
-
 ```
 
 Did anything change? It looks like our $I$ changed slightly, but our $p$-value is still significant at $\alpha = 0.05$, but suggests that our Moran's I can be sensitive to changes in our spatial weights matrix. 
@@ -221,7 +238,7 @@ corr_gram <- sp.correlogram(
   style = "W",
   zero.policy = TRUE
 )
-  
+
 
 plot(corr_gram)
 ```
@@ -237,3 +254,104 @@ What this is telling us is that the manufacturing count for a given county is si
 
 
 # Local Moran's I
+
+The *global* Moran's I provides a single statistic that describes the "overall" spatial autocorrelation of a variable, but doesn't actually tell us *where* we find clustering among our spatial units. Another consideration is that there is a specific set or region of spatial units that are contributing to a significant global Moran's I value; for example, perhaps `MNEM2000` is only autocorrelated in the Piedmont region, or in the peripheries, etc.
+
+To address these questions, we need a **Local Indicator of Spatial Autocorrelation** (LISA). The "local Moran's I" is exactly such a statistic, and it returns a value for each area or point using our $W_{ij}$ to define the neighborhood around each area or point.
+
+As shown below, the formula to calculate the local Moran's I is different the the formula we saw earlier:
+
+$I_i = z_i \sum_j W_{ij} z_j$, where $z_i$ and $z_j$ represent the deviations from the mean. 
+
+Rather than summarize spatial autocorrelation into a single value, local Moran's I assigns a measure of spatial autocorrelation to each spatial unit. It does this by calculating the average value of the variable, for example `MNEM2000`, among neighboring units, which is called the lag variable. Then, the value of each lag is compared to the value in the focal unit; if the value in the lag is similar to the value of the focal unit, we have positive local spatial autocorrelation.
+
+This process is repeated for every spatial unit in the data, resulting in new localized measures.  Because we will have a measure for every unit, we can explore the resulting patterns using scatter plots and maps. We won't have a single $p$-value either; instead, we'll have a $p$-value for each 'neighborhood'.
+
+***
+
+## Calculating Local Moran's I
+
+To calculate Local Moran's I, we'll use the `localmoran()` function from `spdep`. Just as with the global Moran's I, we have to specify both the variable to test and the $W_{ij}$ to use. Let's use `MNEM2000` again, and the Queen's case matrix.
+
+```{r}
+local_moran_queen <- localmoran(
+  x = NC_UTM$MNEM2000,
+  listw = queen_nb_w,
+  zero.policy = TRUE,
+  alternative = "two.sided"
+)
+
+head(local_moran_queen)
+```
+
+What does this tell us? Call `?localmoran` to get an explanation as to each column.
+
+Just like regression residuals, we can explore these local measures with a scatter plot and a map. Let's start with a scatterplot of the actual manufacturing counts for each county against the lag counts for each county:
+
+```{r loc-moran-scatter}
+
+moran.plot(
+  x = NC_UTM$MNEM2000,
+  listw = queen_nb_w,
+  labels = NC_UTM$NAME,
+  xlab = "Manufacturing Counts",
+  ylab = "Lag Manufacturing Counts"
+)
+```
+
+This plot shows us quite a bit of information. First, we should note that the mean values of both our manufacturing counts and the lag manufacturing counts (average counts from each county's neighbors) are shown by the dashed lines. This allows us to break up the plot into four quadrants:
+
+1. The upper left quadrant shows us counties with counts below the mean, surrounded by counties above the mean. 
+2. The upper right shows high-count counties surrounded by high-count counties.
+3. The lower left is the "low-low" counties.
+4. The lower right is the "high-low" counties.
+
+
+It's important to note that the way each county is assigned is dependent on our significance level; right now it's still $\alpha = 0.05$. Counties on the above scatter plot with the 'diamond' symbol are those where the $p$-value is less than our significance level. If we 
+
+```{r}
+quadr <- attr(local_moran_queen, "quadr")[, 1]
+
+NC_localmoran <- NC_UTM
+
+NC_localmoran$Quandrant <- quadr
+
+NC_localmoran$p.value <- local_moran_queen[, 5]
+
+sig_level <- 0.05
+
+NC_localmoran <- NC_localmoran %>%
+  mutate(
+    Quadrant_Sig = if_else(
+      p.value <= sig_level,
+      true = as.character(Quadrant),
+      false = "Insignificant"
+    ) %>%
+      as.factor()
+  )
+```
+
+Let's plot this with a color palette to highlight where there are significant levels of local spatial autocorrelation:
+
+```{r local-moran-map}
+
+lm_pal <-
+  c(
+    "High-High" = "red3",
+    "High-Low" = "red",
+    "Insignificant" = "gray90",
+    "Low-High" = "skyblue",
+    "Low-Low" = "royalblue"
+  )
+
+
+tm_shape(NC_localmoran) +
+  tm_polygons(
+    col = "Quadrant_Sig",
+    palette = lm_pal
+  ) +
+  tm_layout(
+    main.title = "LISA Cluster at Alpha = 0.05",
+    frame = F
+  )
+```
