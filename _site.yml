@@ -5,6 +5,9 @@ navbar:
     - text: "Home"
       icon: fa-home
       href: index.html
+    - text: "Syllabus"
+      icon: fa-file-text
+      href: Syllabus.html
     - text: "About"
       icon: fa-info
       href: about.html
