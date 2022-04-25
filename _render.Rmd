@@ -4,7 +4,7 @@ library(rmarkdown)
 library(purrr)
 library(googledrive)
 
-
+knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
@@ -20,8 +20,10 @@ to ignore the file when building the website
 
 ``` {r}
 rubric_list <- list.files(pattern = "^_.+_Rubric\\.Rmd")
+library(furrr)
+future::plan(multisession)
 
-map(
+furrr::future_map(
   rubric_list,
   function(input) {
     rmarkdown::render(
@@ -31,8 +33,7 @@ map(
   }
 )
 
-map(
-  rubric_list,
+map(  rubric_list,
   function(input) {
     rmarkdown::render(
       input = input, output_dir = "rubrics/pdf",

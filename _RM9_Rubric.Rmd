@@ -48,7 +48,7 @@ vars <- c("MNEM2000", "MNEM1990", "TOTJOB2000", "TOTJOB1990", "POP2000", "POP199
 moran_results <-
   NC_UTM %>%
   st_drop_geometry() %>%
-  select(any_of(x = vars)) %>%
+  dplyr::select(any_of(x = vars)) %>%
   map(function(x) {
     moran.test(
       x = x,
