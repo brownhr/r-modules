@@ -29,7 +29,7 @@ In the previous R Module, we introduced the idea of calculating a "spatial neigh
 
 Therefore, the results of spatial autocorrelation testing depend heavily on the choices for your spatial neighborhood. The best recourse is to first theorize the spatial form of the process you're investigating and to test several spatial neighbor constructs to see if your results change significantly when your neighborhoods change.
 
-# Assigning Weights
+## Assigning Weights
 
 Before we test spatial autocorrelation on our data, there's another step for us to perform after we create our neighbor constructs -- our spatial weights matrix $W_{ij}$. Recall from the previous Module that $W_{ij}$ is an $n \times n$ matrix, where $n$ is the number of spatial units (points or areas). The cells of the matrix record the presence or absence of connections as a binary measure; $0$ indicates no connection between the two units, and $1$ indicates a connection.
 
@@ -43,7 +43,7 @@ knitr::include_graphics("img/R Module 9/weights-matrix.png")
 ```
 
 
-## Standardizing Weights
+### Standardizing Weights
 
 Notice that some counties may have more or fewer connections than others, meaning this wasn't made with $k$-nearest neighbor. For example, county `A` has 2 neighbors (we don't count self-connections, so `A`'s neighbors are `B` and `E`). However, `E` has 3 neighbors: `A`, `C`, and `D`. Because these connections are roughly analogous to influence (counties with more connections likely have a greater influence on the surrounding areas), we should set the total influence upon a given unit to 1. In other words, we need to standardize the connections, typically done by row standardizing.
 
@@ -127,6 +127,8 @@ Hopefully, you won't ever have to calculate this by hand, but it's important to 
 Because Moran's I is a single value, it's easy to interpret; it shows the "global measure" of autocorrelation. However, actually calculating the Moran's I is somewhat difficult.
 
 
+***
+
 ## Calculating Moran's I
 
 The real challenge in calculating Moran's I is in creating the sampling distribution that we need to find our critical values and our $p$-values used in hypothesis testing. The safest assumption is that the statistical distribution (not spatial distribution!) of our variable in question is not normal. However, we can approximate a normal sampling distribution through spatial randomization.
@@ -176,6 +178,9 @@ This means than using a sampling distribution created by randomization and a row
   - `TOTJOB1990`
 
 **Provide your R code for the Moran's I tests (not the results themselves -- that's what the table is for).**
+
+
+***
 
 # Spatial Weights Matrix
 
@@ -247,7 +252,7 @@ What this is telling us is that the manufacturing count for a given county is si
 
 ## Questions
 
-3. **Create and provide the spatial correlogram plots for the `MNEM2000` variable, using the Queen's case, Rook's case, $k = 4$ nearest neighbors, and Maximum Distance spatial weights matrices. Make sure to label the plots! What is the general relationship between manufacturing and distance that can be derived from these plots?**
+**3. Create and provide the spatial correlogram plots for the `MNEM2000` variable, using the Queen's case, Rook's case, $k = 4$ nearest neighbors, and Maximum Distance spatial weights matrices. Make sure to label the plots! What is the general relationship between manufacturing and distance that can be derived from these plots?**
 
 ***
 ***

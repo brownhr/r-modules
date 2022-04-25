@@ -366,6 +366,9 @@ div.tocify {
     <li>
       <a href="RModule8.html">R Module 8</a>
     </li>
+    <li>
+      <a href="RModule9.html">R Module 9</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -400,9 +403,8 @@ heavily on the choices for your spatial neighborhood. The best recourse
 is to first theorize the spatial form of the process you’re
 investigating and to test several spatial neighbor constructs to see if
 your results change significantly when your neighborhoods change.</p>
-</div>
-<div id="assigning-weights" class="section level1">
-<h1>Assigning Weights</h1>
+<div id="assigning-weights" class="section level2">
+<h2>Assigning Weights</h2>
 <p>Before we test spatial autocorrelation on our data, there’s another
 step for us to perform after we create our neighbor constructs – our
 spatial weights matrix <span class="math inline">\(W_{ij}\)</span>.
@@ -427,8 +429,8 @@ either <span class="math inline">\(0\)</span> or <span
 class="math inline">\(1\)</span>, and might look something like
 this:</p>
 <p><img src="img/R%20Module%209/weights-matrix.png" width="40%" style="display: block; margin: auto;" /></p>
-<div id="standardizing-weights" class="section level2">
-<h2>Standardizing Weights</h2>
+<div id="standardizing-weights" class="section level3">
+<h3>Standardizing Weights</h3>
 <p>Notice that some counties may have more or fewer connections than
 others, meaning this wasn’t made with <span
 class="math inline">\(k\)</span>-nearest neighbor. For example, county
@@ -453,6 +455,7 @@ calculate our global Moran’s I measure. To demonstrate, let’s return to
 our data from the previous R Module.</p>
 </div>
 </div>
+</div>
 <div id="calculating-the-spatial-weights-matrix" class="section level1">
 <h1>Calculating the Spatial Weights Matrix</h1>
 <p>Load the required libraries and read in the shapefile to R.
@@ -467,7 +470,7 @@ class="math inline">\(W_{ij}\)</span>. After that, we’ll use the
 
   # Don&#39;t worry about this option for now, but it&#39;ll be important to include
   # later.
-  zero.policy = TRUE
+  zero.policy = TRUE,
 )
 
 summary(queen_nb_w)</code></pre>
@@ -523,9 +526,33 @@ autocorrelated” – high values “clump” together, as do low values.</p>
 indicates “spatial randomness” – sometimes high and low values occur,
 sometimes they are dispersed, but there’s no systematic pattern
 governing their distribution.</p>
+<p>Mathematically, the calculation for <span
+class="math inline">\(I\)</span> is as follows:</p>
+<p><span class="math display">\[I = \frac{1}{s^2}\frac{
+\sum_i\sum_j(y_i-\bar{y})(y_j-\bar{y}) }{ \sum_i\sum_j W_{ij} },
+\]</span></p>
+<p>With <span class="math display">\[s^2 = \frac{(\sum y_i
+-\bar{y})^2}{n}\]</span></p>
+<p>Let’s break this down:</p>
+<ul>
+<li><span class="math inline">\(s^2\)</span> is the sampling variances,
+defined by the sum of the difference between each value and the mean,
+then squared, and then divided by the number of spatial units <span
+class="math inline">\(n\)</span>.</li>
+<li>Our denominator is the total sum of all the cells in our spatial
+weights matrix <span class="math inline">\(W_{ij}\)</span>.</li>
+<li>The numerator is the sum of the differences in between <span
+class="math inline">\(y_i\)</span> and <span
+class="math inline">\(y_j\)</span> (the values in our rows and columns)
+with our overall mean, <span
+class="math inline">\(\bar{y}\)</span>.</li>
+</ul>
+<p>Hopefully, you won’t ever have to calculate this by hand, but it’s
+important to see what the test is actually performing.</p>
 <p>Because Moran’s I is a single value, it’s easy to interpret; it shows
 the “global measure” of autocorrelation. However, actually calculating
 the Moran’s I is somewhat difficult.</p>
+<hr />
 </div>
 <div id="calculating-morans-i" class="section level2">
 <h2>Calculating Moran’s I</h2>
@@ -619,6 +646,7 @@ single summary table:</strong></p>
 </ul>
 <p><strong>Provide your R code for the Moran’s I tests (not the results
 themselves – that’s what the table is for).</strong></p>
+<hr />
 </div>
 </div>
 <div id="spatial-weights-matrix" class="section level1">
@@ -641,7 +669,7 @@ moran.test(
   x = NC_UTM$MNEM2000,
   listw = rook_nb_w,
   zero.policy = T,
-  alternative = &#39;two.sided&#39;
+  alternative = &quot;two.sided&quot;
 )</code></pre>
 <pre><code>## 
 ##  Moran I test under randomisation
@@ -690,9 +718,201 @@ example of a Queen’s case spatial weights matrix: we could also define
 “2<sup>nd</sup>-order neighbors”; these would be the neighbors to the
 original neighbors. For example:</p>
 <p><img src="img/R%20Module%209/neighbors.png" width="40%" style="display: block; margin: auto;" /></p>
+<p>The correlogram calculates Moran’s I at these different orders,
+called “lags”, to assess how spatial autocorrelation varies across
+distance. When you create the correlogram, you need to specify how many
+lags you want, and which autocorrelation test to perform (we’ll use
+Moran’s I).</p>
+<p>Let’s do this for our <code>MNEM2000</code> variable using a Queen’s
+case <span class="math inline">\(W_{ij}\)</span> and 4 lags. In this
+function, we specify the <strong>non-weighted</strong> neighbor object
+(<code>queen_nb</code>, not <code>queen_nb_w</code>), the number of lags
+(4), and that we’re using Moran’s I for our test:</p>
+<pre class="r"><code>corr_gram &lt;- sp.correlogram(
+  neighbours = queen_nb,
+  var = NC_UTM$MNEM2000,
+  order = 4,
+  method = &quot;I&quot;,
+  style = &quot;W&quot;,
+  zero.policy = TRUE
+)
+
+
+plot(corr_gram)</code></pre>
+<p><img src="RModule9_files/figure-html/correlogram-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>What this is telling us is that the manufacturing count for a given
+county is similar to its neighboring counties and less similar the
+further away these counties are. If we were to plot more lags, we might
+see Moran’s I rise again. If so, this would indicate that there was a
+significant distance between manufacturing centers within the state,
+something suggested by our previous results.</p>
+<div id="questions-2" class="section level2">
+<h2>Questions</h2>
+<p><strong>3. Create and provide the spatial correlogram plots for the
+<code>MNEM2000</code> variable, using the Queen’s case, Rook’s case,
+<span class="math inline">\(k = 4\)</span> nearest neighbors, and
+Maximum Distance spatial weights matrices. Make sure to label the plots!
+What is the general relationship between manufacturing and distance that
+can be derived from these plots?</strong></p>
+<hr />
+<hr />
+</div>
+</div>
+<div id="local-morans-i" class="section level1">
+<h1>Local Moran’s I</h1>
+<p>The <em>global</em> Moran’s I provides a single statistic that
+describes the “overall” spatial autocorrelation of a variable, but
+doesn’t actually tell us <em>where</em> we find clustering among our
+spatial units. Another consideration is that there is a specific set or
+region of spatial units that are contributing to a significant global
+Moran’s I value; for example, perhaps <code>MNEM2000</code> is only
+autocorrelated in the Piedmont region, or in the peripheries, etc.</p>
+<p>To address these questions, we need a <strong>Local Indicator of
+Spatial Autocorrelation</strong> (LISA). The “local Moran’s I” is
+exactly such a statistic, and it returns a value for each area or point
+using our <span class="math inline">\(W_{ij}\)</span> to define the
+neighborhood around each area or point.</p>
+<p>As shown below, the formula to calculate the local Moran’s I is
+different the the formula we saw earlier:</p>
+<p><span class="math inline">\(I_i = z_i \sum_j W_{ij} z_j\)</span>,
+where <span class="math inline">\(z_i\)</span> and <span
+class="math inline">\(z_j\)</span> represent the deviations from the
+mean.</p>
+<p>Rather than summarize spatial autocorrelation into a single value,
+local Moran’s I assigns a measure of spatial autocorrelation to each
+spatial unit. It does this by calculating the average value of the
+variable, for example <code>MNEM2000</code>, among neighboring units,
+which is called the lag variable. Then, the value of each lag is
+compared to the value in the focal unit; if the value in the lag is
+similar to the value of the focal unit, we have positive local spatial
+autocorrelation.</p>
+<p>This process is repeated for every spatial unit in the data,
+resulting in new localized measures. Because we will have a measure for
+every unit, we can explore the resulting patterns using scatter plots
+and maps. We won’t have a single <span
+class="math inline">\(p\)</span>-value either; instead, we’ll have a
+<span class="math inline">\(p\)</span>-value for each
+‘neighborhood’.</p>
+<hr />
+<div id="calculating-local-morans-i" class="section level2">
+<h2>Calculating Local Moran’s I</h2>
+<p>To calculate Local Moran’s I, we’ll use the <code>localmoran()</code>
+function from <code>spdep</code>. Just as with the global Moran’s I, we
+have to specify both the variable to test and the <span
+class="math inline">\(W_{ij}\)</span> to use. Let’s use
+<code>MNEM2000</code> again, and the Queen’s case matrix.</p>
+<pre class="r"><code>local_moran_queen &lt;- localmoran(
+  x = NC_UTM$MNEM2000,
+  listw = queen_nb_w,
+  # zero.policy = TRUE,
+  alternative = &quot;two.sided&quot;
+)
+
+head(local_moran_queen)</code></pre>
+<pre><code>##                      Ii         E.Ii     Var.Ii       Z.Ii Pr(z != E(Ii))
+## Ashe        0.224968418 -0.002784784 0.09067850 0.75633175      0.4494503
+## Alleghany   0.006921914 -0.005258719 0.17081028 0.02947222      0.9764880
+## Surry       0.073576987 -0.001178770 0.02258649 0.49741664      0.6188953
+## Currituck   0.660771648 -0.006634965 0.32618436 1.16858131      0.2425724
+## Northampton 0.386756847 -0.004588473 0.11068999 1.17626713      0.2394881
+## Hertford    0.448120266 -0.004260557 0.13852749 1.21544748      0.2241955</code></pre>
+<p>What does this tell us? Call <code>?localmoran</code> to get an
+explanation as to each column.</p>
+<p>Just like regression residuals, we can explore these local measures
+with a scatter plot and a map. Let’s start with a scatterplot of the
+actual manufacturing counts for each county against the lag counts for
+each county:</p>
+<pre class="r"><code>moran.plot(
+  x = NC_UTM$MNEM2000,
+  listw = queen_nb_w,
+  labels = NC_UTM$NAME,
+  xlab = &quot;Manufacturing Counts&quot;,
+  ylab = &quot;Lag Manufacturing Counts&quot;
+)</code></pre>
+<p><img src="RModule9_files/figure-html/loc-moran-scatter-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This plot shows us quite a bit of information. First, we should note
+that the mean values of both our manufacturing counts and the lag
+manufacturing counts (average counts from each county’s neighbors) are
+shown by the dashed lines. This allows us to break up the plot into four
+quadrants:</p>
+<ol style="list-style-type: decimal">
+<li>The upper left quadrant shows us counties with counts below the
+mean, surrounded by counties above the mean.</li>
+<li>The upper right shows high-count counties surrounded by high-count
+counties.</li>
+<li>The lower left is the “low-low” counties.</li>
+<li>The lower right is the “high-low” counties.</li>
+</ol>
+<p>It’s important to note that the way each county is assigned is
+dependent on our significance level; right now it’s still <span
+class="math inline">\(\alpha = 0.05\)</span>. Counties on the above
+scatter plot with the ‘diamond’ symbol are those where the <span
+class="math inline">\(p\)</span>-value is less than our significance
+level. If we change our significance level to say, 50%, we can see more
+of the distribution (but of course, our results are not nearly as
+significant)</p>
+<pre class="r"><code>quadr &lt;- attr(local_moran_queen, &quot;quadr&quot;)[, 2]
+
+NC_localmoran &lt;- NC_UTM
+
+NC_localmoran$Quadrant &lt;- quadr
+
+NC_localmoran$p.value &lt;- local_moran_queen[, 5]
+
+sig_level &lt;- 0.5
+
+NC_localmoran &lt;- NC_localmoran %&gt;%
+  mutate(
+    Quadrant_Sig = if_else(
+      p.value &lt;= sig_level,
+      true = as.character(Quadrant),
+      false = &quot;Insignificant&quot;
+    ) %&gt;%
+      as.factor()
+  )</code></pre>
+<p>Let’s plot this with a color palette to highlight where there are
+significant levels of local spatial autocorrelation:</p>
+<pre class="r"><code>lm_pal &lt;-
+  c(
+    &quot;High-High&quot; = &quot;red&quot;,
+    &quot;High-Low&quot; = &quot;#FF000080&quot;,
+    &quot;Insignificant&quot; = &quot;gray90&quot;,
+    &quot;Low-High&quot; = &quot;#0000FF80&quot;,
+    &quot;Low-Low&quot; = &quot;blue&quot;
+  )
+
+
+tm_shape(NC_localmoran) +
+  tm_polygons(
+    col = &quot;Quadrant_Sig&quot;,
+    palette = lm_pal,
+    border.col = &quot;black&quot;
+  ) +
+  tm_layout(
+    main.title = paste0(&quot;LISA Cluster at Alpha = &quot;, sig_level)
+    
+  )</code></pre>
+<p><img src="RModule9_files/figure-html/local-moran-map-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This map shows the four different types of clusters. Many counties
+fall into either the <code>High-High</code> or <code>Low-Low</code>
+categories. However, these results are based on a very high value of
+alpha; what happens if we restrict alpha to a more conventional
+level?</p>
+</div>
+<div id="questions-3" class="section level2">
+<h2>Questions</h2>
+<p><strong>4. Adopt the code above to provide LISA maps for the
+<code>MNEM1990</code> variable at an alpha of 0.1, 0.05, and 0.01 using
+the Queen’s case W. Provide a brief explanation of your findings about
+any local spatial autocorrelation at these more restrictive values of
+alpha.</strong></p>
+<hr />
+<p>Congratulations on completing this R Module; there was certainly a
+LOT to cover here!</p>
+</div>
 </div>
 
-<p>&copy; 2022 brownhr & M. Sugg. v.0.0.10</p>
+<p>&copy; 2022 brownhr & M. Sugg. v.0.0.11</p>
 
 
 </div>
