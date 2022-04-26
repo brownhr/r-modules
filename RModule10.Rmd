@@ -66,12 +66,20 @@ http://www.personal.psu.edu/users/a/c/acr181/2004_Election.zip
 
 Unzip this folder and load the results into R with `sf`. In addition, we'll need to transform (reproject) our data into a *crs* which uses linear units; we'll use the US National Atlas Equal Area, `EPSG:2163`. Refer to R Modules 8 and 9 on how to transform your data with `sf`.
 
+By the way, if you want to look up more coordinate reference systems, check out https://epsg.io
+
 ```{r, include = FALSE}
 library(sf)
 library(tidyverse)
 library(spatialreg)
+library(tmap)
 
-election <- read_sf("export/2004_Election_Counties.shp")
-
+election <- read_sf("export/2004_Election_Counties.shp") %>% 
+  st_transform(crs = st_crs("EPSG:2163"))
 ```
 
+```{r us-data, echo = FALSE}
+qtm(election, fill = NULL)
+```
+
+Quick note, this data only covers the continental U.S.; can you think of a reason why?
