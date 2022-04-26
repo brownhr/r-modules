@@ -37,7 +37,7 @@
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-<link rel="shortcut icon" href="logo.svg" />
+<link rel="shortcut icon" href="aoa_r.svg" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -585,15 +585,13 @@ tm_shape(NC_UTM) +
 <p><strong>As in previous R Modules, type up your report as an R
 Markdown document, and export it as a .pdf. Include your figures, plots,
 and answers, and include your R code.</strong></p>
-<ol style="list-style-type: decimal">
-<li>Use the <code>poly2nb()</code> function to create a Rook’s case
-neighbor construct by changing <code>queen = TRUE</code> to
+<p><strong>1. Use the <code>poly2nb()</code> function to create a Rook’s
+case neighbor construct by changing <code>queen = TRUE</code> to
 <code>queen = FALSE</code>. Call this new object <code>rook_nb</code> in
 your code. Plot a map using <code>tmap</code> that shows the counties,
 the connections as lines, and the county centroids as points. Include a
 title (hint: use <code>main.title</code> if you want to have the title
-outside the map frame).</li>
-</ol>
+outside the map frame).</strong></p>
 <hr />
 <p>Notice how some counties have many neighbors and some have relatively
 few. These constructs are sensitive to boundary effects; counties on the
@@ -647,14 +645,11 @@ summary(queen_names)</code></pre>
 ## Currituck Chowan Tyrrell Dare Polk Pamlico Clay New Hanover with 2 links
 ## 2 most connected regions:
 ## Iredell Moore with 9 links</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>Compare the distribution of links between the Queen’s case and
-Rook’s case. What changed when we restricted the neighbor criterion by
-using a Rook’s case? Using the code above, what are
-<strong>names</strong> of the ‘least connected regions’ generated with a
-Rook’s case neighborhood? Provide the code used to get your
-results.</li>
-</ol>
+<p><strong>2. Compare the distribution of links between the Queen’s case
+and Rook’s case. What changed when we restricted the neighbor criterion
+by using a Rook’s case? Using the code above, what are <em>names</em> of
+the ‘least connected regions’ generated with a Rook’s case neighborhood?
+Provide the code used to get your results.</strong></p>
 </div>
 </div>
 <div id="nearest-neighbor" class="section level1">
@@ -700,22 +695,17 @@ distribution of connections is gone; all counties have exactly one
 connection to another county.</p>
 <div id="questions-1" class="section level2">
 <h2>Questions</h2>
-<ol start="3" style="list-style-type: decimal">
-<li>In addition to <span class="math inline">\(k=1\)</span>, use
-<code>knn2nb()</code> to create neighbor constructs for <span
+<p><strong>3. In addition to <span class="math inline">\(k=1\)</span>,
+use <code>knn2nb()</code> to create neighbor constructs for <span
 class="math inline">\(k=2\)</span>, <span
 class="math inline">\(k=4\)</span>, and <span
 class="math inline">\(k=6\)</span>. Plot the connections for each using
 <code>tmap</code>, including the label. Provide your R code and plots
 for the neighbor constructs. Use <code>tmap_arrange()</code> to place
-all 4 plots in a single “image”.</li>
-</ol>
-<ul>
-<li><strong>Try and do this with some R programming; rather than just
-generating each construct one-at-a-time, try using things like for
-loops, <code>lapply</code>, <code>purrr::map</code> functions,
-etc.</strong></li>
-</ul>
+all 4 plots in a single “image”.</strong> - <em>Try and do this with
+some R programming; rather than just generating each construct
+one-at-a-time, try using things like for loops, <code>lapply</code>,
+<code>purrr::map</code> functions, etc.</em></p>
 </div>
 </div>
 <div id="distance-based-approach" class="section level1">
@@ -764,24 +754,13 @@ distance threshold by modifying the <code>d2</code> argument, which
 controls the “upper limit” of the distance-based neighbor.</p>
 <div id="questions-2" class="section level2">
 <h2>Questions:</h2>
-<ol start="4" style="list-style-type: decimal">
-<li><ol style="list-style-type: lower-alpha">
-<li>In addition to our “100%” distance threshold (the code above),
-create plots for:</li>
-</ol>
-<ul>
-<li>50% of the maximum distance,</li>
-<li>125% of the maximum distance,</li>
-<li>150% of the maximum distance.</li>
-</ul>
-<ol start="2" style="list-style-type: lower-alpha">
-<li>Use <code>tmap</code> to do this, and arrange all plots in a single
-image using <code>tmap_arrange()</code>. Be sure to label each
-plot.</li>
-<li>What happened to the number of connections from the 75% to the 125%
-construct?</li>
-</ol></li>
-</ol>
+<p><strong>4.</strong> a. In addition to our “100%” distance threshold
+(the code above), create plots for: - 50% of the maximum distance, -
+125% of the maximum distance, - 150% of the maximum distance. b. Use
+<code>tmap</code> to do this, and arrange all plots in a single image
+using <code>tmap_arrange()</code>. Be sure to label each plot. c. What
+happened to the number of connections from the 75% to the 125%
+construct?</p>
 </div>
 </div>
 
