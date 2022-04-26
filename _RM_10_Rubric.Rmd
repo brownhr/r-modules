@@ -1,0 +1,48 @@
+## Setup
+
+```{r, warning=FALSE}
+library(sf)
+library(tidyverse)
+library(spdep)
+library(tmap)
+library(spatialreg)
+
+election <- read_sf("export/2004_Election_Counties.shp") %>% 
+  st_transform(crs = st_crs("EPSG:2163"))
+
+centroids <- st_centroid(election)$geometry
+
+election_neighbors <- election %>% 
+  poly2nb()
+
+election_weighted <- election_neighbors %>% 
+  nb2listw(
+    style = "W",
+    zero.policy = TRUE
+  )
+
+```
+
+
+## Question 1:
+
+Use `lm()` to estimate `Bush_pct ~ pcincome` using ordinary least squares (OLS). Plot the **residuals** on a map (look back to R Module 7) and **test the residuals for spatial autocorrelation**. Provide both an example of your map and the results from your spatial autocorrelation test in your R Markdown report. 
+
+```{r q1-1}
+lm <- lm(Bush_pct ~ pcincome, data = election,)
+summary(lm)
+```
+
+```{r q1-2}
+election$residuals <- lm$residuals
+
+tm_shape(election) + 
+  tm_polygons(col = "residuals",
+              border.col = NULL,
+              palette = "RdYlGn",
+              style = "cont",
+              midpoint = 0)
+
+
+```
+

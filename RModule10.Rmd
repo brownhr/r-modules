@@ -78,9 +78,31 @@ election <- read_sf("export/2004_Election_Counties.shp") %>%
   st_transform(crs = st_crs("EPSG:2163"))
 ```
 
-```{r us-data, echo = FALSE}
-qtm(election, fill = NULL)
+For our data, we want to model the dependent variable as a function of our independent variable(s). Our DV is the percent of voters who voted for Bush, and our IV is per capita income. 
+
+```{r bush}
+library(tmap)
+
+tm_shape(election) + 
+  tm_polygons(
+    col = "Bush_pct",
+    border.col = NULL,
+    style = "quantile",
+    n = 7
+  )
+
 ```
+
+```{r, income}
+tm_shape(election) + 
+  tm_polygons(
+    col = "pcincome",
+    border.col = NULL,
+    style = "quantile",
+    n = 7
+  )
+```
+
 
 Quick note, this data only covers the continental U.S.; can you think of a reason why?
 
@@ -116,8 +138,52 @@ us_neighbors %>%
   qtm()
 ```
 
-```{r neighbors, echo = FALSE}
+```{r neighbors, echo = FALSE, out.width="60%"}
 knitr::include_graphics("img/R Module 10/neighbors.png")
 ```
 
+We can run a global Moran's I or Geary's C test on both variables that we'll use in the regression models. First, let's test for spatial autocorrelation among the dependent variable, `Bush_pct`:
 
+```{r, eval = FALSE}
+moran.test(x = election$Bush_pct,
+           listw = us_neighbors_w,
+           zero.policy = TRUE)
+
+geary.test(x = election$Bush_pct,
+           listw = us_neighbors_w,
+           zero.policy = TRUE)
+```
+
+Then, perform the tests on the independent variable, `pcincome`:
+
+```{r, eval = FALSE}
+moran.test(x = election$pcincome,
+           listw = us_neighbors_w,
+           zero.policy = TRUE)
+
+geary.test(x = election$pcincome,
+           listw = us_neighbors_w,
+           zero.policy = TRUE)
+```
+
+What do the results show? Both variables are strongly and positively spatially autocorrelated, when using the Queen's case $W_{ij}$. This is a clue that we should see spatially autocorrelation among the residuals from a basic linear regression. If so, we'll need to use a spatial regression model (hint, we will!) to estimate the "true nature" of the relationship. 
+
+## Questions
+
+1. **Use `lm()` to estimate `Bush_pct ~ pcincome` using ordinary least squares (OLS). Plot the *residuals* on a map (look back to R Module 7) and *test the residuals for spatial autocorrelation*. Provide both an example of your map and the results from your spatial autocorrelation test in your R Markdown report.** 
+  - Hint: Your results should look somewhat similar to the results below:
+  
+```{r resids, include = F}
+lm <- lm(Bush_pct ~ pcincome, data = election,)
+
+election$residuals <- lm$residuals
+
+tm_shape(election) + 
+  tm_polygons(col = "residuals",
+              border.col = NULL,
+              palette = "RdYlGn",
+              style = "cont",
+              midpoint = 0)
+```
+  
+  
