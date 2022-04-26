@@ -49,10 +49,46 @@ moran_residuals <-
   moran.test(
     x = election$residuals,
     listw = election_weighted,
-    zero.policy = TRUE
+    zero.policy = TRUE,
+    alternative = "two.sided"
   )
 
 moran_residuals
 ```
 
+
+## Question 2:
+
+Modeling `Kerry_pct ~ pcincome`, perform the following steps:
+  - Evaluate the relationship between the variables using `lm()`
+  - Plot the resulting residuals, and test for autocorrelation with `moran.test()`. Provide your map!
+  - Estimate the same relationship, using the spatial lag model (`spatialreg::lagsarlm()`)
+  - Perform a Moran's I test on the residuals from the lag model and report your results. Plot the residuals from the spatial lag model, and include in your report.
+  - Is there evidence of remaining spatial autocorrelation in the residuals?
+
+
+```{r q2-1}
+
+kerry_lm <- lm(Kerry_pct ~ pcincome, data = election)
+
+election$kerry_lm_res <- kerry_lm$residuals
+
+tm_shape(election) + 
+  tm_polygons(col = "kerry_lm_res",
+              border.col = NULL,
+              palette = "RdBu",
+              style = "cont",
+              midpoint = 0,
+              title = "Residuals")
+
+```
+```{r q2-2}
+kerry_moran <- moran.test(
+  election$kerry_lm_res,
+  listw = election_weighted,
+  zero.policy = TRUE,
+  alternative = "two.sided"
+)
+kerry_moran
+```
 

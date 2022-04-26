@@ -448,7 +448,7 @@ contains the “random error” (<span class="math inline">\(\xi\)</span>),
 and one that contains the spatially-autocorrelated error components
 (<span class="math inline">\(\lambda W_\varepsilon\)</span>):</p>
 <p><span class="math display">\[y = \beta X + \varepsilon; \;\varepsilon
-= \lambda W_\varepsilon + \xi\]</span></p>
+= \lambda W \varepsilon + \xi\]</span></p>
 <p>As with the spatial lag model, the spatial error model has a
 coefficient, lambda (<span class="math inline">\(\lambda\)</span>),
 which must be estimated. The remaining errors, xi (<span
@@ -478,8 +478,8 @@ way to say that any inferences we make based on such models, without
 accounting for spatial autocorrelation, could be very inaccurate.</p>
 <hr />
 </div>
-<div id="performing-spatial-regression" class="section level1">
-<h1>Performing Spatial Regression</h1>
+<div id="bringing-in-the-data" class="section level1">
+<h1>Bringing in the Data</h1>
 <p>This week, we’ll perform our spatial models on a new set of data: a
 Shapefile containing the results from the 2004 presidential election,
 and is available to download from the Google Drive, or from here:</p>
@@ -528,9 +528,9 @@ familiarize yourself with the data and the variables.</p>
 us_neighbors &lt;- election %&gt;% 
   poly2nb(queen = TRUE)
 
-us_centroids &lt;- st_centroid(election)
+us_centroids &lt;- st_centroid(election)$geometry
 
-us_w &lt;- us_neighbors %&gt;% 
+us_neighbors_w &lt;- us_neighbors %&gt;% 
   nb2listw(
     style = &quot;W&quot;,
     zero.policy = TRUE
@@ -539,7 +539,7 @@ us_w &lt;- us_neighbors %&gt;%
 <!-- Not actually plotting it in-document; it just takes a long time :) -->
 <pre class="r"><code>us_neighbors %&gt;%
   nb2lines(
-    coords = us_centroids$geometry) %&gt;% 
+    coords = us_centroids) %&gt;% 
   qtm()</code></pre>
 <p><img src="img/R%20Module%2010/neighbors.png" width="60%" style="display: block; margin: auto;" /></p>
 <p>We can run a global Moran’s I or Geary’s C test on both variables
@@ -570,19 +570,127 @@ we will!) to estimate the “true nature” of the relationship.</p>
 </div>
 <div id="questions" class="section level2">
 <h2>Questions</h2>
-<ol style="list-style-type: decimal">
-<li><strong>Use <code>lm()</code> to estimate
+<p><strong>1. Use <code>lm()</code> to estimate
 <code>Bush_pct ~ pcincome</code> using ordinary least squares (OLS).
 Plot the <em>residuals</em> on a map (look back to R Module 7) and
 <em>test the residuals for spatial autocorrelation</em>. Provide both an
 example of your map and the results from your spatial autocorrelation
-test in your R Markdown report.</strong></li>
+test in your R Markdown report.</strong> - Hint: Your results should
+look somewhat similar to the results below:</p>
+<p><img src="RModule10_files/figure-html/resids-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="performing-spatial-lag" class="section level1">
+<h1>Performing Spatial Lag</h1>
+<p>From our map, it definitely looks like there’s spatial
+autocorrelation among our residuals. After testing the residuals using
+Moran’s I or Geary’s C, we’ve successfully confirmed that our residuals
+are spatially autocorrelated; what does this mean, exactly? For
+starters, it strongly affects the apparent relationship between
+<code>Bush_pct</code> and <code>pcincome</code>. Our linear model
+suggests that there is a significant relationship between the two
+variables, but after seeing how strongly the residuals are spatially
+autocorrelated, it’s difficult to say if this relationship is actually
+this strong, or if it’s due to spatial proximity.</p>
+<p>Let’s perform our first spatial regression using the spatial lag
+model. Our function <code>lagsarlm</code> from the
+<code>spatialreg</code> package works very similarly to the traditional
+<code>lm</code> function, with a few additional arguments to input our
+spatial weights matrix. Let’s give it a shot:</p>
+<pre class="r"><code>library(spatialreg)
+
+# This function takes a good bit of time to run; maybe ~5 mins depending on the
+# machine you&#39;re running this on.
+
+lag &lt;- lagsarlm(Bush_pct ~ pcincome,
+                data = election, 
+                listw = us_neighbors_w,
+                zero.policy = TRUE,
+                quiet = FALSE)
+
+# The `broom` package has many functions for &quot;tidy-ing&quot; data, and includes a
+# Method for tidying the results from the lagsarlm function.
+
+broom::tidy(lag)</code></pre>
+<pre><code>## 
+## Call:
+## lagsarlm(formula = Bush_pct ~ pcincome, data = election, listw = us_neighbors_w, 
+##     quiet = FALSE, zero.policy = TRUE)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -62.9897  -4.6131   1.0712   5.5165  34.2249 
+## 
+## Type: lag 
+## Regions with no neighbours included:
+##  36 691 711 883 
+## Coefficients: (asymptotic standard errors) 
+##               Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) 1.4073e+01 1.0572e+00 13.3118   &lt;2e-16
+## pcincome    5.4600e-05 3.3758e-05  1.6174   0.1058
+## 
+## Rho: 0.75104, LR test value: 1808.2, p-value: &lt; 2.22e-16
+## Asymptotic standard error: 0.014316
+##     z-value: 52.463, p-value: &lt; 2.22e-16
+## Wald statistic: 2752.4, p-value: &lt; 2.22e-16
+## 
+## Log likelihood: -11425.87 for lag model
+## ML residual variance (sigma squared): 79.207, (sigma: 8.8999)
+## Number of observations: 3111 
+## Number of parameters estimated: 4 
+## AIC: 22860, (AIC for lm: 24666)
+## LM test for residual autocorrelation
+## test value: 68.585, p-value: &lt; 2.22e-16</code></pre>
+<p>The values we’re interested are our <span
+class="math inline">\(\rho\)</span> statistic, <code>Rho</code>, and our
+<span class="math inline">\(p\)</span>-value. Looking at this result, we
+can confidently say that the value of <code>Bush_pct</code> is likely to
+have higher values, if neighboring counties have higher values, and
+lower values if the neighboring counties have lower values. Notice,
+also, that our independent variable <code>pcincome</code> now has a
+<span class="math inline">\(p\)</span>-value of 0.1058; <strong>it’s no
+longer significant when accounting for spatial
+autoccorelation!</strong></p>
+<div id="checking-our-residuals" class="section level2">
+<h2>Checking our Residuals</h2>
+<p>After performing our spatial lag model, it’s important to check our
+results to verify if we’ve truly accounted for spatial autocorrelation.
+All we need to do, then, is run a Moran’s I test on the
+<em>residuals</em> of the spatial lag model, and if the value of <span
+class="math inline">\(I\)</span> is close to 0, then there’s no spatial
+autocorrelation among our residuals, which means our spatial lag model
+performed adequately.</p>
+<pre class="r"><code>election$lag_residuals &lt;- lag$residuals
+
+lag_moran &lt;- moran.test(
+  election$lag_residuals,
+  listw = us_neighbors_w,
+  zero.policy = TRUE,
+  alternative = &#39;two.sided&#39;
+)</code></pre>
+<p><img src="RModule10_files/figure-html/lag-resids-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This looks pretty good; ideally, our value of <span
+class="math inline">\(I\)</span> would be exactly 0, but this tells us
+that any remaining spatial autocorrelation is very weak. Plotting the
+residuals from our lag model (in exactly the same way we did from the
+residuals from <code>lm()</code>), we can see that there’s no strong
+spatial pattern that emerges, unlike our residuals from
+<code>lm()</code>.</p>
+</div>
+<div id="questions-1" class="section level2">
+<h2>Questions</h2>
+<ol start="2" style="list-style-type: decimal">
+<li>Modeling <code>Kerry_pct ~ pcincome</code>, perform the following
+steps:</li>
 </ol>
 <ul>
-<li>Hint: Your results should look somewhat similar to the results
-below:</li>
+<li>Evaluate the relationship between the variables using
+<code>lm()</code></li>
+<li>Plot the resulting residuals, and test for autocorrelation with
+<code>moran.test()</code>. Provide your map!</li>
+<li>Estimate the same relationship, using the spatial lag model
+(<code>spatialreg::lagsarlm()</code>)</li>
 </ul>
-<p><img src="RModule10_files/figure-html/resids-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 

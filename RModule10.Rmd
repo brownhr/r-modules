@@ -47,7 +47,7 @@ As with Moran's I, $\rho$ can be either positive, indicating positive spatial de
 
 The other model we have is known as the *spatial error model*. Unlike the lag model, the error model addresses spatial dependence by separating the error term $\varepsilon$ into two components: one that contains the "random error" ($\xi$), and one that contains the spatially-autocorrelated error components ($\lambda W_\varepsilon$):
 
-$$y = \beta X + \varepsilon; \;\varepsilon = \lambda W_\varepsilon + \xi$$
+$$y = \beta X + \varepsilon; \;\varepsilon = \lambda W \varepsilon + \xi$$
 
 As with the spatial lag model, the spatial error model has a coefficient, lambda ($\lambda$), which must be estimated. The remaining errors, xi ($\xi$), should be randomly distributed as per the conventional general linear model. The interpretations of $\lambda$ are similar to that of $\rho$ in the lag model, as is the hypothesis test informed by the coefficient's value and $p$-value (i.e., our null hypothesis is that $\lambda = 0$)
 
@@ -61,7 +61,7 @@ The problem of spatially autocorrelated residuals means that we **really** can't
 
 ***
 
-# Testing our Residuals
+# Bringing in the Data
 
 This week, we'll perform our spatial models on a new set of data: a Shapefile containing the results from the 2004 presidential election, and is available to download from the Google Drive, or from here:
 
@@ -106,8 +106,6 @@ tm_shape(election) +
 ```
 
 
-Quick note, this data only covers the continental U.S.; can you think of a reason why?
-
 Take a look at the dataset with tools like `View()` to familiarize yourself with the data and the variables.
 
 ## Spatial Weights
@@ -120,9 +118,9 @@ library(spdep)
 us_neighbors <- election %>% 
   poly2nb(queen = TRUE)
 
-us_centroids <- st_centroid(election)
+us_centroids <- st_centroid(election)$geometry
 
-us_w <- us_neighbors %>% 
+us_neighbors_w <- us_neighbors %>% 
   nb2listw(
     style = "W",
     zero.policy = TRUE
@@ -136,13 +134,17 @@ We can plot the connections to see if they look good:
 ```{r w, eval = FALSE}
 us_neighbors %>%
   nb2lines(
-    coords = us_centroids$geometry) %>% 
+    coords = us_centroids) %>% 
   qtm()
 ```
 
 ```{r neighbors, echo = FALSE, out.width="60%"}
 knitr::include_graphics("img/R Module 10/neighbors.png")
 ```
+
+***
+
+## Testing Autocorrelation
 
 We can run a global Moran's I or Geary's C test on both variables that we'll use in the regression models. First, let's test for spatial autocorrelation among the dependent variable, `Bush_pct`:
 
@@ -172,7 +174,7 @@ What do the results show? Both variables are strongly and positively spatially a
 
 ## Questions
 
-1. **Use `lm()` to estimate `Bush_pct ~ pcincome` using ordinary least squares (OLS). Plot the *residuals* on a map (look back to R Module 7) and *test the residuals for spatial autocorrelation*. Provide both an example of your map and the results from your spatial autocorrelation test in your R Markdown report.** 
+**1. Use `lm()` to estimate `Bush_pct ~ pcincome` using ordinary least squares (OLS). Plot the *residuals* on a map (look back to R Module 7) and *test the residuals for spatial autocorrelation*. Provide both an example of your map and the results from your spatial autocorrelation test in your R Markdown report.** 
   - Hint: Your results should look somewhat similar to the results below:
   
 ```{r resids, echo = FALSE}
@@ -199,8 +201,8 @@ Let's perform our first spatial regression using the spatial lag model. Our func
 ```{r lag, eval = FALSE}
 library(spatialreg)
 
-# This function takes a good bit of time to run! Set quiet = FALSE to see what
-# the function is doing
+# This function takes a good bit of time to run; maybe ~5 mins depending on the
+# machine you're running this on.
 
 lag <- lagsarlm(Bush_pct ~ pcincome,
                 data = election, 
@@ -208,15 +210,58 @@ lag <- lagsarlm(Bush_pct ~ pcincome,
                 zero.policy = TRUE,
                 quiet = FALSE)
 
-summary(lag)
+# The `broom` package has many functions for "tidy-ing" data, and includes a
+# Method for tidying the results from the lagsarlm function. You can also use
+# this function on the results from ANOVA, lm, moran.test, etc!
+
+broom::tidy(lag)
+
 ```
 
-```{r lag-2, include = FALSE}
+```{r lag-2, echo = FALSE, message = F, warning= F}
 # I just saved the output from the spatial lag to a .Rds so we can print the
 # results without having to run the model each time I update the document :)
+library(spatialreg)
 
 lag <- read_rds("export/lag.Rds")
-summary(lag)
+
+broom::tidy(lag)
 ```
 
-The values we're interested are our $\rho$ statistic, `Rho`, and our $p$-value. Looking at this result, we can confidently say that `Bush_pct` is strongly 
+The values we're interested are our $\rho$ statistic, `Rho`, and our $p$-value. Looking at this result, we can confidently say that the value of `Bush_pct` is likely to have higher values, if neighboring counties have higher values, and lower values if the neighboring counties have lower values. Notice, also, that our independent variable `pcincome` now has a $p$-value of 0.1058; **it's no longer significant when accounting for spatial autoccorelation!**
+
+## Checking our Residuals
+
+After performing our spatial lag model, it's important to check our results to verify if we've truly accounted for spatial autocorrelation. All we need to do, then, is run a Moran's I test on the *residuals* of the spatial lag model, and if the value of $I$ is close to 0, then there's no spatial autocorrelation among our residuals, which means our spatial lag model performed adequately.
+
+```{r}
+election$lag_residuals <- lag$residuals
+
+lag_moran <- moran.test(
+  election$lag_residuals,
+  listw = us_neighbors_w,
+  zero.policy = TRUE,
+  alternative = 'two.sided'
+)
+```
+
+```{r lag-resids}
+tm_shape(election) + 
+  tm_polygons(col = "lag_residuals",
+              border.col = NULL,
+              palette = "RdBu",
+              style = "cont",
+              midpoint = 0,
+              title = "Residuals (Lag)")
+```
+
+This looks pretty good; ideally, our value of $I$ would be exactly 0, but this tells us that any remaining spatial autocorrelation is very weak. Plotting the residuals from our lag model (in exactly the same way we did from the residuals from `lm()`), we can see that there's no strong spatial pattern that emerges, unlike our residuals from `lm()`. 
+
+## Questions
+
+2. Modeling `Kerry_pct ~ pcincome`, perform the following steps:
+  - Evaluate the relationship between the variables using `lm()`
+  - Plot the resulting residuals, and test for autocorrelation with `moran.test()`. Provide your map!
+  - Estimate the same relationship, using the spatial lag model (`spatialreg::lagsarlm()`)
+  - Perform a Moran's I test on the residuals from the lag model and report your results. Plot the residuals from the spatial lag model, and include in your report.
+  - Is there evidence of remaining spatial autocorrelation in the residuals?
