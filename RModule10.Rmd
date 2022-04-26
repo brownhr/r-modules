@@ -11,7 +11,8 @@ output:
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  fig.align = 'center'
+  fig.align = 'center',
+  message = FALSE
 )
 ```
 
@@ -71,7 +72,6 @@ By the way, if you want to look up more coordinate reference systems, check out 
 ```{r, include = FALSE}
 library(sf)
 library(tidyverse)
-library(spatialreg)
 library(tmap)
 
 election <- read_sf("export/2004_Election_Counties.shp") %>% 
@@ -83,3 +83,41 @@ qtm(election, fill = NULL)
 ```
 
 Quick note, this data only covers the continental U.S.; can you think of a reason why?
+
+Take a look at the dataset with tools like `View()` to familiarize yourself with the data and the variables.
+
+## Spatial Weights
+
+Let's make a spatial weights matrix, just as in previous Modules:
+
+```{r spat-weights, warning= F}
+library(spdep)
+
+us_neighbors <- election %>% 
+  poly2nb(queen = TRUE)
+
+us_centroids <- st_centroid(election)
+
+us_w <- us_neighbors %>% 
+  nb2listw(
+    style = "W",
+    zero.policy = TRUE
+  )
+```
+
+We can plot the connections to see if they look good:
+
+<!-- Not actually plotting it in-document; it just takes a long time :) -->
+
+```{r w, eval = FALSE}
+us_neighbors %>%
+  nb2lines(
+    coords = us_centroids$geometry) %>% 
+  qtm()
+```
+
+```{r neighbors, echo = FALSE}
+knitr::include_graphics("img/R Module 10/neighbors.png")
+```
+
+
