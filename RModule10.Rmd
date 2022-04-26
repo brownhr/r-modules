@@ -9,6 +9,13 @@ output:
       number_sections: false
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  fig.align = 'center'
+)
+```
+
+
 ***
 
 # Spatial Regression in R
@@ -52,3 +59,19 @@ The problem of spatially autocorrelated residuals means that we **really** can't
 ***
 
 # Performing Spatial Regression
+
+This week, we'll perform our spatial models on a new set of data: a Shapefile containing the results from the 2004 presidential election, and is available to download here:
+
+http://www.personal.psu.edu/users/a/c/acr181/2004_Election.zip
+
+Unzip this folder and load the results into R with `sf`. In addition, we'll need to transform (reproject) our data into a *crs* which uses linear units; we'll use the US National Atlas Equal Area, `EPSG:2163`. Refer to R Modules 8 and 9 on how to transform your data with `sf`.
+
+```{r, include = FALSE}
+library(sf)
+library(tidyverse)
+library(spatialreg)
+
+election <- read_sf("export/2004_Election_Counties.shp")
+
+```
+
