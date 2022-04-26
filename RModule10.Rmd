@@ -10,6 +10,8 @@ output:
 ---
 
 ```{r setup, include = FALSE}
+library(RColorBrewer)
+
 knitr::opts_chunk$set(
   fig.align = 'center',
   message = FALSE
@@ -59,11 +61,11 @@ The problem of spatially autocorrelated residuals means that we **really** can't
 
 ***
 
-# Performing Spatial Regression
+# Testing our Residuals
 
-This week, we'll perform our spatial models on a new set of data: a Shapefile containing the results from the 2004 presidential election, and is available to download here:
+This week, we'll perform our spatial models on a new set of data: a Shapefile containing the results from the 2004 presidential election, and is available to download from the Google Drive, or from here:
 
-http://www.personal.psu.edu/users/a/c/acr181/2004_Election.zip
+  - http://www.personal.psu.edu/users/a/c/acr181/2004_Election.zip
 
 Unzip this folder and load the results into R with `sf`. In addition, we'll need to transform (reproject) our data into a *crs* which uses linear units; we'll use the US National Atlas Equal Area, `EPSG:2163`. Refer to R Modules 8 and 9 on how to transform your data with `sf`.
 
@@ -173,7 +175,7 @@ What do the results show? Both variables are strongly and positively spatially a
 1. **Use `lm()` to estimate `Bush_pct ~ pcincome` using ordinary least squares (OLS). Plot the *residuals* on a map (look back to R Module 7) and *test the residuals for spatial autocorrelation*. Provide both an example of your map and the results from your spatial autocorrelation test in your R Markdown report.** 
   - Hint: Your results should look somewhat similar to the results below:
   
-```{r resids, include = F}
+```{r resids, echo = FALSE}
 lm <- lm(Bush_pct ~ pcincome, data = election,)
 
 election$residuals <- lm$residuals
@@ -181,9 +183,10 @@ election$residuals <- lm$residuals
 tm_shape(election) + 
   tm_polygons(col = "residuals",
               border.col = NULL,
-              palette = "RdYlGn",
+              palette = "RdBu",
               style = "cont",
-              midpoint = 0)
+              midpoint = 0,
+              title = "Residuals")
 ```
-  
-  
+
+From our map, it definitely looks like there's spatial autocorrelation among our residuals. 

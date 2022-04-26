@@ -414,11 +414,175 @@ estimated; each model, however, handles this in a different way…</p>
 variable and an associated coefficient that must be estimated:</p>
 <p><span class="math display">\[ y = \rho W_y + \beta X +
 \varepsilon\]</span></p>
+<p>The new variable, <span class="math inline">\(W_y\)</span>, is the
+“lag variable” and represents, for each spatial unit, the weighted
+average of the values of the observations among its neighbors (when
+working with a row-standardized matrix).</p>
+<p>The term <span class="math inline">\(\beta X\)</span> represents our
+independent variables, and epsilon (<span
+class="math inline">\(\varepsilon\)</span>) is our “error term”, which
+describes the amount by which an observed value differs from the
+expected value, based on the whole population.</p>
+<p>Just like in “normal” regression models, there exists a correlation
+coefficient, in this case rho (<span
+class="math inline">\(\rho\)</span>), and for spatial regression the
+value of <span class="math inline">\(\rho\)</span> must be estimated.
+<span class="math inline">\(\rho\)</span> is one of the key statistics;
+our null hypothesis is that <span class="math inline">\(\rho =
+0\)</span>, which represents zero spatial dependence in the <span
+class="math inline">\(W_y\)</span> dependent variable.</p>
+<p>A statistically significant result, therefore is when <span
+class="math inline">\(\rho \neq 0\)</span>, meaning we have successfully
+adjusted our model to account for any spatial dependence.</p>
+<p>As with Moran’s I, <span class="math inline">\(\rho\)</span> can be
+either positive, indicating positive spatial dependence, or negative,
+indicating negative spatial dependence.</p>
 </div>
 <div id="spatial-error-model" class="section level2">
 <h2>Spatial Error Model</h2>
+<p>The other model we have is known as the <em>spatial error model</em>.
+Unlike the lag model, the error model addresses spatial dependence by
+separating the error term <span
+class="math inline">\(\varepsilon\)</span> into two components: one that
+contains the “random error” (<span class="math inline">\(\xi\)</span>),
+and one that contains the spatially-autocorrelated error components
+(<span class="math inline">\(\lambda W_\varepsilon\)</span>):</p>
 <p><span class="math display">\[y = \beta X + \varepsilon; \;\varepsilon
-= \lambda W \varepsilon + \xi\]</span></p>
+= \lambda W_\varepsilon + \xi\]</span></p>
+<p>As with the spatial lag model, the spatial error model has a
+coefficient, lambda (<span class="math inline">\(\lambda\)</span>),
+which must be estimated. The remaining errors, xi (<span
+class="math inline">\(\xi\)</span>), should be randomly distributed as
+per the conventional general linear model. The interpretations of <span
+class="math inline">\(\lambda\)</span> are similar to that of <span
+class="math inline">\(\rho\)</span> in the lag model, as is the
+hypothesis test informed by the coefficient’s value and <span
+class="math inline">\(p\)</span>-value (i.e., our null hypothesis is
+that <span class="math inline">\(\lambda = 0\)</span>)</p>
+</div>
+</div>
+<div id="importance-of-spatial-autocorrelation" class="section level1">
+<h1>Importance of Spatial Autocorrelation</h1>
+<p>Both of these models are computationally intensive and require the
+extra steps of defining a neighborhood construct and its associated
+weighted matrix, so why bother with calculating this?</p>
+<p>The problem of spatially autocorrelated residuals means that we
+<strong>really</strong> can’t trust our results. Think about it like
+this: if values that are spatially close to one another have similar
+values, if we don’t account for spatial autocorrelation, our variables
+appear to have strong correlation. Not only that, without accounting for
+spatial autocorrelation, our <span
+class="math inline">\(p\)</span>-values are much lower, so it also looks
+like our model is much more statistically significant. This is a long
+way to say that any inferences we make based on such models, without
+accounting for spatial autocorrelation, could be very inaccurate.</p>
+<hr />
+</div>
+<div id="performing-spatial-regression" class="section level1">
+<h1>Performing Spatial Regression</h1>
+<p>This week, we’ll perform our spatial models on a new set of data: a
+Shapefile containing the results from the 2004 presidential election,
+and is available to download from the Google Drive, or from here:</p>
+<ul>
+<li><a
+href="http://www.personal.psu.edu/users/a/c/acr181/2004_Election.zip"
+class="uri">http://www.personal.psu.edu/users/a/c/acr181/2004_Election.zip</a></li>
+</ul>
+<p>Unzip this folder and load the results into R with <code>sf</code>.
+In addition, we’ll need to transform (reproject) our data into a
+<em>crs</em> which uses linear units; we’ll use the US National Atlas
+Equal Area, <code>EPSG:2163</code>. Refer to R Modules 8 and 9 on how to
+transform your data with <code>sf</code>.</p>
+<p>By the way, if you want to look up more coordinate reference systems,
+check out <a href="https://epsg.io" class="uri">https://epsg.io</a></p>
+<p>For our data, we want to model the dependent variable as a function
+of our independent variable(s). Our DV is the percent of voters who
+voted for Bush, and our IV is per capita income.</p>
+<pre class="r"><code>library(tmap)
+
+tm_shape(election) + 
+  tm_polygons(
+    col = &quot;Bush_pct&quot;,
+    border.col = NULL,
+    style = &quot;quantile&quot;,
+    n = 7
+  )</code></pre>
+<p><img src="RModule10_files/figure-html/bush-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>tm_shape(election) + 
+  tm_polygons(
+    col = &quot;pcincome&quot;,
+    border.col = NULL,
+    style = &quot;quantile&quot;,
+    n = 7
+  )</code></pre>
+<p><img src="RModule10_files/figure-html/income-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Quick note, this data only covers the continental U.S.; can you think
+of a reason why?</p>
+<p>Take a look at the dataset with tools like <code>View()</code> to
+familiarize yourself with the data and the variables.</p>
+<div id="spatial-weights" class="section level2">
+<h2>Spatial Weights</h2>
+<p>Let’s make a spatial weights matrix, just as in previous Modules:</p>
+<pre class="r"><code>library(spdep)
+
+us_neighbors &lt;- election %&gt;% 
+  poly2nb(queen = TRUE)
+
+us_centroids &lt;- st_centroid(election)
+
+us_w &lt;- us_neighbors %&gt;% 
+  nb2listw(
+    style = &quot;W&quot;,
+    zero.policy = TRUE
+  )</code></pre>
+<p>We can plot the connections to see if they look good:</p>
+<!-- Not actually plotting it in-document; it just takes a long time :) -->
+<pre class="r"><code>us_neighbors %&gt;%
+  nb2lines(
+    coords = us_centroids$geometry) %&gt;% 
+  qtm()</code></pre>
+<p><img src="img/R%20Module%2010/neighbors.png" width="60%" style="display: block; margin: auto;" /></p>
+<p>We can run a global Moran’s I or Geary’s C test on both variables
+that we’ll use in the regression models. First, let’s test for spatial
+autocorrelation among the dependent variable, <code>Bush_pct</code>:</p>
+<pre class="r"><code>moran.test(x = election$Bush_pct,
+           listw = us_neighbors_w,
+           zero.policy = TRUE)
+
+geary.test(x = election$Bush_pct,
+           listw = us_neighbors_w,
+           zero.policy = TRUE)</code></pre>
+<p>Then, perform the tests on the independent variable,
+<code>pcincome</code>:</p>
+<pre class="r"><code>moran.test(x = election$pcincome,
+           listw = us_neighbors_w,
+           zero.policy = TRUE)
+
+geary.test(x = election$pcincome,
+           listw = us_neighbors_w,
+           zero.policy = TRUE)</code></pre>
+<p>What do the results show? Both variables are strongly and positively
+spatially autocorrelated, when using the Queen’s case <span
+class="math inline">\(W_{ij}\)</span>. This is a clue that we should see
+spatially autocorrelation among the residuals from a basic linear
+regression. If so, we’ll need to use a spatial regression model (hint,
+we will!) to estimate the “true nature” of the relationship.</p>
+</div>
+<div id="questions" class="section level2">
+<h2>Questions</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Use <code>lm()</code> to estimate
+<code>Bush_pct ~ pcincome</code> using ordinary least squares (OLS).
+Plot the <em>residuals</em> on a map (look back to R Module 7) and
+<em>test the residuals for spatial autocorrelation</em>. Provide both an
+example of your map and the results from your spatial autocorrelation
+test in your R Markdown report.</strong></li>
+</ol>
+<ul>
+<li>Hint: Your results should look somewhat similar to the results
+below:</li>
+</ul>
+<p><img src="RModule10_files/figure-html/resids-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 

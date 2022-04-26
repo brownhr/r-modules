@@ -39,10 +39,20 @@ election$residuals <- lm$residuals
 tm_shape(election) + 
   tm_polygons(col = "residuals",
               border.col = NULL,
-              palette = "RdYlGn",
-              style = "cont",
-              midpoint = 0)
+              style = "cont")
 
 
 ```
+
+```{r q1-3}
+moran_residuals <- 
+  moran.test(
+    x = election$residuals,
+    listw = election_weighted,
+    zero.policy = TRUE
+  )
+
+moran_residuals
+```
+
 
