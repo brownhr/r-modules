@@ -141,7 +141,7 @@ tm_shape(NC_UTM) +
 **As in previous R Modules, type up your report as an R Markdown document, and export it as a .pdf. Include your figures, plots, and answers, and include your R code.**
 
 
-1. Use the `poly2nb()` function to create a Rook's case neighbor construct by changing `queen = TRUE` to `queen = FALSE`. Call this new object `rook_nb` in your code. Plot a map using `tmap` that shows the counties, the connections as lines, and the county centroids as points. Include a title (hint: use `main.title` if you want to have the title outside the map frame).
+**1. Use the `poly2nb()` function to create a Rook's case neighbor construct by changing `queen = TRUE` to `queen = FALSE`. Call this new object `rook_nb` in your code. Plot a map using `tmap` that shows the counties, the connections as lines, and the county centroids as points. Include a title (hint: use `main.title` if you want to have the title outside the map frame).**
 
 ***
 
@@ -167,7 +167,7 @@ summary(queen_names)
 ```
 
 
-2. Compare the distribution of links between the Queen's case and Rook's case. What changed when we restricted the neighbor criterion by using a Rook's case? Using the code above, what are **names** of the 'least connected regions' generated with a Rook's case neighborhood? Provide the code used to get your results.
+**2. Compare the distribution of links between the Queen's case and Rook's case. What changed when we restricted the neighbor criterion by using a Rook's case? Using the code above, what are *names* of the 'least connected regions' generated with a Rook's case neighborhood? Provide the code used to get your results.**
 
 # Nearest Neighbor
 
@@ -205,8 +205,8 @@ This is quite different to our Rook's and Queen's cases. Again, you can use `sum
 
 ## Questions
 
-3. In addition to $k=1$, use `knn2nb()` to create neighbor constructs for $k=2$, $k=4$, and $k=6$. Plot the connections for each using `tmap`, including the label. Provide your R code and plots for the neighbor constructs. Use `tmap_arrange()` to place all 4 plots in a single "image". 
-- **Try and do this with some R programming; rather than just generating each construct one-at-a-time, try using things like for loops, `lapply`, `purrr::map` functions, etc.**
+**3. In addition to $k=1$, use `knn2nb()` to create neighbor constructs for $k=2$, $k=4$, and $k=6$. Plot the connections for each using `tmap`, including the label. Provide your R code and plots for the neighbor constructs. Use `tmap_arrange()` to place all 4 plots in a single "image".**
+- *Try and do this with some R programming; rather than just generating each construct one-at-a-time, try using things like for loops, `lapply`, `purrr::map` functions, etc.*
 
 # Distance-Based Approach
 
@@ -251,7 +251,7 @@ We can also explore what happens as we increase or decrease the distance thresho
 
 ## Questions:
 
-4.
+**4.**
   a. In addition to our "100%" distance threshold (the code above), create plots for:
     - 50% of the maximum distance,
     - 125% of the maximum distance, 
