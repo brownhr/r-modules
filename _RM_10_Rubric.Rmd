@@ -5,7 +5,6 @@ library(sf)
 library(tidyverse)
 library(spdep)
 library(tmap)
-library(broom)
 library(spatialreg)
 
 election <- read_sf("export/2004_Election_Counties.shp") %>%
@@ -104,14 +103,14 @@ kerry_lag <- lagsarlm(
   zero.policy = TRUE
 )
 
-tidy(kerry_lag)
+summary(kerry_lag)
 ```
   
 ```{r, include = FALSE}
 
 kerry_lag <- read_rds("export/kerry_lag.Rds")
 
-tidy(kerry_lag)
+summary(kerry_lag)
 ```
   
   
@@ -145,3 +144,29 @@ kerry_lag_moran
   - Is there evidence of remaining spatial autocorrelation in the residuals?
   
   *No, as the value of I from the moran.test is close to 0, there is little remaining spatial autocorrelation.*
+
+
+## Question 3:
+
+Using your `Kerry_pct ~ pcincome` analysis, perform the spatial error model. Provide the results of the model and plot its residuals on a map. Then, perform Moran's I on the resulting residuals, and provide the Moran's I and p-value. Explain any differences in the values between:
+  - The coefficient variables ($\lambda$ and $\rho$),
+  - The p-values in the spatial regression models,
+  - The Moran's I statistics, and,
+  - The p-values from the Moran's I
+
+
+```{r, eval = FALSE}
+kerry_error <- errorsarlm(
+  formula = Kerry_pct ~ pcincome,
+  data = election,
+  listw = election_weighted,
+  zero.policy = TRUE
+)
+
+summary(kerry_error)
+```
+```{r, echo = FALSE}
+kerry_error <- read_rds("export/kerry_error.Rds")
+summary(kerry_error)
+```
+
