@@ -10,22 +10,15 @@ output:
 ---
 
 ```{r setup, include = FALSE}
-
 knitr::opts_chunk$set(
-  echo = FALSE,
   fig.align = "center",
   out.width = "60%"
 )
-
-library(tidyverse)
-
-
-airport_survey <- read_csv("data/airport_survey.csv", 
-    col_types = cols(`Date recorded` = col_date(format = "%m/%d/%Y")))
-
-
 ```
 
+```{r, echo = FALSE, include = TRUE}
+klippy::klippy()
+```
 
 
 # Generating Reports using R Markdown
@@ -93,12 +86,7 @@ head(mtcars)
 
 Before we do anything with R Markdown, we need to do a bit of setup to make sure that R Studio is good-to-go in a few ways. 
 
-First, if you haven't already, install *R Tools*. This software is used when installing packages, and makes things a lot easier. For Windows, you can navigate to:
-  https://cran.r-project.org/bin/windows/Rtools/rtools40.html
-
-Download the 64-bit version, and install the software. Note that this requires admin privileges. This step isn't strictly necessary; R tools is used to build packages that are "in development", but it's useful to have if you can.
-
-After that, we'll need to install a few R packages:
+Mainly, we'll need to install a few R packages:
 
   - `rmarkdown`, `knitr`, `markdown`, and `mime`: These allow R Studio to work with Markdown and R Markdown
   - `tinytex`: This package is a lightweight $\LaTeX$ distribution and is necessary to export as a .PDF.
@@ -163,7 +151,53 @@ Within your Chunk (the area between the sets of backticks should be greyed-out) 
 
 In your first Chunk, we'll load some data. Just like in R Scripts, you have to load packages with the `library()` function. If you get a message like `Error in loadNamespace(x) : there is no package called 'packagename`, it means you haven't yet, and need to install it with `install.packages("packagename")` (note the quotes here, but not in `library()`!).
 
-We
+Let's load our airport survey (`airport_survery.csv`) with the `readr` package from the `tidyverse`; enter the code into your first Chunk:
+
+```{r, eval = FALSE}
+library(tidyverse)
+
+survey <- read_csv("data/airport_survey.csv")
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+
+survey <- read_csv("data/airport_survey.csv")
+```
+
+
+You should see three buttons, ![](img/R Module 4/chunkbuttons.png). The first is for your Chunk options, and allows you to interactively set your options and name your Chunk. The second runs all Code Chunks above the current one, and the last runs the current Chunk itself.
+
+Go ahead and run your Chunk. Oh, some helpful keyboard shortcuts in R Markdown and R in general include (on Windows):
+
+| Keys |        Function            |
+|------|----------------|
+|`Ctrl Shift Enter`| Runs the current Chunk (wherever your cursor is placed) |
+|`Ctrl Alt R` | Runs all Chunks, in order |
+|`Alt -` | Enters the `<-` operator |
+|`Ctrl 1`| Focuses the cursor on the Editor pane | 
+|`Ctrl 2`| Focuses the cursor on the Console pane |
+|`Ctrl Shift M`| Enters the `magrittr` `%>%` Pipe Operator |
+|`Ctrl Shift K`| "Knits" the current R Markdown document |
+|`Ctrl Shift C`| 'Comments' or 'un-comments' code with `#`|
+
+These are by no means all of the most useful shortcuts in R Studio, but they're the ones I use most often. 
+
+***
+
+### Viewing data
+
+Back to our code, let's create another Code Chunk, in which we'll set up a histogram plot.
+
+```{r}
+# Often, you'll need to wrap variables containing spaces with backticks. It's
+# not always necessary, but it helps keep your data from breaking.
+
+ggplot(survey, aes(x = "Parking Facilities")) + 
+  geom_bar(
+
+  )
+```
 
 
 

@@ -35,6 +35,10 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 <link rel="shortcut icon" href="aoa_r.svg" />
@@ -398,9 +402,31 @@ div.tocify {
 </div>
 
 
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
 <div id="generating-reports-using-r-markdown" class="section level1">
 <h1>Generating Reports using R Markdown</h1>
-<p>For this R Module, we’ll be taking on the role of …</p>
+<p>For this R Module, we’ll be analyzing some survey data; we have an
+airport quality survey which contains 3,501 survey responses from the
+Austin-Bergstrom International Airport’s customer survey, from the City
+of Austin.</p>
+<p>While generating reports using tools like Excel or Google Sheets is
+perfectly fine, R is an extraordinarily powerful tool for exploring and
+visualizing data, and is perfect for this sort of case. However, it’s
+sometimes difficult to quickly generate a report or create a picture,
+especially when we want to highlight a number of attributes
+simultaneously.</p>
+<p>This is where R Markdown comes in – R Markdown documents are
+excellent at integrating both narrative text (paragraphs and “things
+that you write”) and code (including tables, plots, and maps).</p>
+<p>This R Module is intended to be an introduction into the field of R
+Markdown; many formal publications, websites, and documents are written
+almost entirely in R Markdown (including this website!) As such, there’s
+no way this Module could tell you everything you need to know about R
+Markdown, but I encourage you to take the time to learn how to use R
+Markdown in your coding.</p>
 <div id="what-is-markdown" class="section level2">
 <h2>What is Markdown?</h2>
 <p>Markdown is a popular “markup language” designed to format plain-text
@@ -445,7 +471,7 @@ plot(x, y)
 
 ```</code></pre>
 <p>Which gives you:</p>
-<p><img src="RModule4_files/figure-html/code-example-1.png" width="50%" /></p>
+<p><img src="RModule4_files/figure-html/code-example-1.png" width="50%" style="display: block; margin: auto;" /></p>
 <p>Or, if you want to print a table, you can use:</p>
 <pre><code>```{r table}
 
@@ -466,38 +492,161 @@ head(mtcars)
 <h1>Getting Started</h1>
 <p>Before we do anything with R Markdown, we need to do a bit of setup
 to make sure that R Studio is good-to-go in a few ways.</p>
-<p>First, if you haven’t already, install <em>R Tools</em>. This
-software is used when installing packages, and makes things a lot
-easier. For Windows, you can navigate to: <a
-href="https://cran.r-project.org/bin/windows/Rtools/rtools40.html"
-class="uri">https://cran.r-project.org/bin/windows/Rtools/rtools40.html</a></p>
-<p>Download the 64-bit version, and install the software. Note that this
-requires admin privileges. This step isn’t strictly necessary; R tools
-is used to build packages that are “in development”, but it’s useful to
-have if you can.</p>
-<p>After that, we’ll need to install a few R packages:</p>
+<p>Mainly, we’ll need to install a few R packages:</p>
 <ul>
 <li><code>rmarkdown</code>, <code>knitr</code>, <code>markdown</code>,
 and <code>mime</code>: These allow R Studio to work with Markdown and R
 Markdown</li>
 <li><code>tinytex</code>: This package is a lightweight <span
 class="math inline">\(\LaTeX\)</span> distribution and is necessary to
-export as a .PDF
+export as a .PDF.
 <ul>
 <li>After installing this package, run
 <code>tinytex::install_tinytex()</code>. This step might take some
 time.</li>
+<li>If you have difficulties exporting to a .PDF, I’d recommend
+outputting to Word or HTML.</li>
 </ul></li>
 </ul>
 <p>To get things running, you can just run the following code:</p>
+<pre class="r"><code>pkgs &lt;- c(&quot;rmarkdown&quot;, &quot;knitr&quot;, &quot;markdown&quot;, &quot;mime&quot;, &quot;tinytex&quot;)
+
+install.packages(pkgs)
+
+tinytex::install_tinytex()</code></pre>
 <p>Then, restart R Studio.</p>
 <p>Let’s get started by creating a new R Project, as in previous R
 Modules. Once you have that set up, we want to create a new R Markdown
 document. Navigate to <code>File &gt; New File &gt; R Markdown</code>.
-Give it a title, “R Module 4 Write-up”, enter your name, and select
-<code>PDF</code> as the output format.</p>
-<div id="running-code" class="section level3">
-<h3>Running Code</h3>
+Give it a title, “R Module 4 Report”, enter your name, and select
+<code>HTML</code> as the output format.</p>
+<p><img src="img/R%20Module%204/New%20R%20Markdown.png" width="60%" style="display: block; margin: auto;" /></p>
+<p>You should see a file that looks something like this:</p>
+<p><img src="img/R%20Module%204/R%20Markdown.png" width="60%" style="display: block; margin: auto;" /></p>
+<p>Go ahead and hit Save (<code>Ctrl-S</code>) and save your document.
+When you create a new R Markdown document, it comes with some “example
+text”, such as how to run code and insert “code chunks”. Feel free to
+browse this example text, but delete everything outside the header (your
+header is the text surrounded by three dashes, <code>---</code>).</p>
+<div id="yaml-header" class="section level2">
+<h2>YAML Header</h2>
+<p>One of the most important parts of an R Markdown document is the
+<em>YAML Header</em> – the beginning of the document surrounded by
+<code>---</code>. YAML is a special kind of “data serialization
+language”; basically, it’s a way of storing “options” in plain-text
+format. Don’t worry too much about the details for now – this is an
+introduction, after all – but just remember that most of your important
+options like <code>title</code>, <code>date</code>, <code>output</code>,
+etc. are stored here.</p>
+</div>
+<div id="code-chunks" class="section level2">
+<h2>Code Chunks</h2>
+<p>Code Chunks are the lifeblood of R Markdown documents; they allow you
+to run R code within your document, giving you the ability to embed
+tables, plots, figures, and maps directly in your document (no more
+copy-pasting screenshots!).</p>
+<p>These Code Chunks are surrounded by three backticks,
+<code>```</code>, (it’s the key to the left of the <code>1</code> key on
+most layouts). To insert a Chunk, you can also type
+<code>Ctrl/Cmd-Alt-I</code>.</p>
+<p>The <code>{r}</code> within the chunk signifies that the code we’re
+writing is in the R language (likely, you won’t ever need to change that
+for this course, but other options include <code>html</code>). Anything
+in these curly braces is considered “knitr chunk options”, which control
+how your code is run. For example, if you want to run code but not show
+the code itself in your output document, you can specify
+<code>echo = FALSE</code> in your chunk options (for this course, keep
+<code>echo = TRUE</code> so we can troubleshoot your code!).</p>
+<p>More info about chunk options can be found at Yihui Xie’s (developer
+of knitr, rmarkdown, and many other incredible R packages) website at <a
+href="https://yihui.org/knitr/options/"
+class="uri">https://yihui.org/knitr/options/</a></p>
+<hr />
+</div>
+<div id="writing-your-first-code-chunk" class="section level2">
+<h2>Writing your first Code Chunk</h2>
+<p>After removing everything but your YAML header, start by inserting a
+new Chunk (<code>Ctrl-Alt-I</code>). Make sure there’s a couple lines
+between your header and your Chunk.</p>
+<p>Within your Chunk (the area between the sets of backticks should be
+greyed-out) is where you can enter in R code. Generally, you should have
+a separate Chunk for each “thing” you do; think of them like “paragraphs
+of code”. Not only does this help keep your document tidy, it lets you
+know exactly where potential problems in your code are.</p>
+<p>In your first Chunk, we’ll load some data. Just like in R Scripts,
+you have to load packages with the <code>library()</code> function. If
+you get a message like
+<code>Error in loadNamespace(x) : there is no package called 'packagename</code>,
+it means you haven’t yet, and need to install it with
+<code>install.packages("packagename")</code> (note the quotes here, but
+not in <code>library()</code>!).</p>
+<p>Let’s load our airport survey (<code>airport_survery.csv</code>) with
+the <code>readr</code> package from the <code>tidyverse</code>; enter
+the code into your first Chunk:</p>
+<pre class="r"><code>library(tidyverse)
+
+survey &lt;- read_csv(&quot;data/airport_survey.csv&quot;)</code></pre>
+<pre><code>## Rows: 3501 Columns: 37
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr   (2): Quarter, Date recorded
+## dbl  (34): Ground transportation to/from airport, Parking facilities, Parkin...
+## time  (1): Departure time
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>You should see three buttons, <img
+src="img/R%20Module%204/chunkbuttons.png" />. The first is for your
+Chunk options, and allows you to interactively set your options and name
+your Chunk. The second runs all Code Chunks above the current one, and
+the last runs the current Chunk itself.</p>
+<p>Go ahead and run your Chunk. Oh, some helpful keyboard shortcuts in R
+Markdown and R in general include (on Windows):</p>
+<table>
+<colgroup>
+<col width="27%" />
+<col width="72%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Keys</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Ctrl Shift Enter</code></td>
+<td>Runs the current Chunk (wherever your cursor is placed)</td>
+</tr>
+<tr class="even">
+<td><code>Ctrl Alt R</code></td>
+<td>Runs all Chunks, in order</td>
+</tr>
+<tr class="odd">
+<td><code>Alt -</code></td>
+<td>Enters the <code>&lt;-</code> operator</td>
+</tr>
+<tr class="even">
+<td><code>Ctrl 1</code></td>
+<td>Focuses the cursor on the Editor pane</td>
+</tr>
+<tr class="odd">
+<td><code>Ctrl 2</code></td>
+<td>Focuses the cursor on the Console pane</td>
+</tr>
+<tr class="even">
+<td><code>Ctrl Shift M</code></td>
+<td>Enters the <code>magrittr</code> <code>%&gt;%</code> Pipe
+Operator</td>
+</tr>
+<tr class="odd">
+<td><code>Ctrl Shift K</code></td>
+<td>“Knits” the current R Markdown document</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<hr />
 </div>
 </div>
 <div id="qualitative-data" class="section level1">
