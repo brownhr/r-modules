@@ -376,6 +376,9 @@ div.tocify {
     <li>
       <a href="RModule9.html">R Module 9</a>
     </li>
+    <li>
+      <a href="RModule10.html">R Module 10</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -500,7 +503,7 @@ of our independent variable(s). Our DV is the percent of voters who
 voted for Bush, and our IV is per capita income.</p>
 <pre class="r"><code>library(tmap)
 
-tm_shape(election) + 
+tm_shape(election) +
   tm_polygons(
     col = &quot;Bush_pct&quot;,
     border.col = NULL,
@@ -508,7 +511,7 @@ tm_shape(election) +
     n = 7
   )</code></pre>
 <p><img src="RModule10_files/figure-html/bush-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>tm_shape(election) + 
+<pre class="r"><code>tm_shape(election) +
   tm_polygons(
     col = &quot;pcincome&quot;,
     border.col = NULL,
@@ -516,8 +519,6 @@ tm_shape(election) +
     n = 7
   )</code></pre>
 <p><img src="RModule10_files/figure-html/income-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Quick note, this data only covers the continental U.S.; can you think
-of a reason why?</p>
 <p>Take a look at the dataset with tools like <code>View()</code> to
 familiarize yourself with the data and the variables.</p>
 <div id="spatial-weights" class="section level2">
@@ -525,12 +526,12 @@ familiarize yourself with the data and the variables.</p>
 <p>Let’s make a spatial weights matrix, just as in previous Modules:</p>
 <pre class="r"><code>library(spdep)
 
-us_neighbors &lt;- election %&gt;% 
+us_neighbors &lt;- election %&gt;%
   poly2nb(queen = TRUE)
 
 us_centroids &lt;- st_centroid(election)$geometry
 
-us_neighbors_w &lt;- us_neighbors %&gt;% 
+us_neighbors_w &lt;- us_neighbors %&gt;%
   nb2listw(
     style = &quot;W&quot;,
     zero.policy = TRUE
@@ -539,28 +540,41 @@ us_neighbors_w &lt;- us_neighbors %&gt;%
 <!-- Not actually plotting it in-document; it just takes a long time :) -->
 <pre class="r"><code>us_neighbors %&gt;%
   nb2lines(
-    coords = us_centroids) %&gt;% 
+    coords = us_centroids
+  ) %&gt;%
   qtm()</code></pre>
 <p><img src="img/R%20Module%2010/neighbors.png" width="60%" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+<div id="testing-autocorrelation" class="section level2">
+<h2>Testing Autocorrelation</h2>
 <p>We can run a global Moran’s I or Geary’s C test on both variables
 that we’ll use in the regression models. First, let’s test for spatial
 autocorrelation among the dependent variable, <code>Bush_pct</code>:</p>
-<pre class="r"><code>moran.test(x = election$Bush_pct,
-           listw = us_neighbors_w,
-           zero.policy = TRUE)
+<pre class="r"><code>moran.test(
+  x = election$Bush_pct,
+  listw = us_neighbors_w,
+  zero.policy = TRUE
+)
 
-geary.test(x = election$Bush_pct,
-           listw = us_neighbors_w,
-           zero.policy = TRUE)</code></pre>
+geary.test(
+  x = election$Bush_pct,
+  listw = us_neighbors_w,
+  zero.policy = TRUE
+)</code></pre>
 <p>Then, perform the tests on the independent variable,
 <code>pcincome</code>:</p>
-<pre class="r"><code>moran.test(x = election$pcincome,
-           listw = us_neighbors_w,
-           zero.policy = TRUE)
+<pre class="r"><code>moran.test(
+  x = election$pcincome,
+  listw = us_neighbors_w,
+  zero.policy = TRUE
+)
 
-geary.test(x = election$pcincome,
-           listw = us_neighbors_w,
-           zero.policy = TRUE)</code></pre>
+geary.test(
+  x = election$pcincome,
+  listw = us_neighbors_w,
+  zero.policy = TRUE
+)</code></pre>
 <p>What do the results show? Both variables are strongly and positively
 spatially autocorrelated, when using the Queen’s case <span
 class="math inline">\(W_{ij}\)</span>. This is a clue that we should see
@@ -602,45 +616,24 @@ spatial weights matrix. Let’s give it a shot:</p>
 # This function takes a good bit of time to run; maybe ~5 mins depending on the
 # machine you&#39;re running this on.
 
-lag &lt;- lagsarlm(Bush_pct ~ pcincome,
-                data = election, 
-                listw = us_neighbors_w,
-                zero.policy = TRUE,
-                quiet = FALSE)
+bush_lag &lt;- lagsarlm(Bush_pct ~ pcincome,
+  data = election,
+  listw = us_neighbors_w,
+  zero.policy = TRUE,
+  quiet = FALSE
+)
 
 # The `broom` package has many functions for &quot;tidy-ing&quot; data, and includes a
-# Method for tidying the results from the lagsarlm function.
+# Method for tidying the results from the lagsarlm function. You can also use
+# this function on the results from ANOVA, lm, moran.test, etc!
 
-broom::tidy(lag)</code></pre>
-<pre><code>## 
-## Call:
-## lagsarlm(formula = Bush_pct ~ pcincome, data = election, listw = us_neighbors_w, 
-##     quiet = FALSE, zero.policy = TRUE)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -62.9897  -4.6131   1.0712   5.5165  34.2249 
-## 
-## Type: lag 
-## Regions with no neighbours included:
-##  36 691 711 883 
-## Coefficients: (asymptotic standard errors) 
-##               Estimate Std. Error z value Pr(&gt;|z|)
-## (Intercept) 1.4073e+01 1.0572e+00 13.3118   &lt;2e-16
-## pcincome    5.4600e-05 3.3758e-05  1.6174   0.1058
-## 
-## Rho: 0.75104, LR test value: 1808.2, p-value: &lt; 2.22e-16
-## Asymptotic standard error: 0.014316
-##     z-value: 52.463, p-value: &lt; 2.22e-16
-## Wald statistic: 2752.4, p-value: &lt; 2.22e-16
-## 
-## Log likelihood: -11425.87 for lag model
-## ML residual variance (sigma squared): 79.207, (sigma: 8.8999)
-## Number of observations: 3111 
-## Number of parameters estimated: 4 
-## AIC: 22860, (AIC for lm: 24666)
-## LM test for residual autocorrelation
-## test value: 68.585, p-value: &lt; 2.22e-16</code></pre>
+broom::tidy(bush_lag)</code></pre>
+<pre><code>## # A tibble: 3 x 5
+##   term          estimate std.error statistic p.value
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 rho          0.751     0.0143        52.5    0    
+## 2 (Intercept) 14.1       1.06          13.3    0    
+## 3 pcincome     0.0000546 0.0000338      1.62   0.106</code></pre>
 <p>The values we’re interested are our <span
 class="math inline">\(\rho\)</span> statistic, <code>Rho</code>, and our
 <span class="math inline">\(p\)</span>-value. Looking at this result, we
@@ -660,14 +653,23 @@ All we need to do, then, is run a Moran’s I test on the
 class="math inline">\(I\)</span> is close to 0, then there’s no spatial
 autocorrelation among our residuals, which means our spatial lag model
 performed adequately.</p>
-<pre class="r"><code>election$lag_residuals &lt;- lag$residuals
+<pre class="r"><code>election$bush_lag_res &lt;- bush_lag$residuals
 
 lag_moran &lt;- moran.test(
-  election$lag_residuals,
+  x = election$bush_lag_res,
   listw = us_neighbors_w,
   zero.policy = TRUE,
-  alternative = &#39;two.sided&#39;
+  alternative = &quot;two.sided&quot;
 )</code></pre>
+<pre class="r"><code>tm_shape(election) +
+  tm_polygons(
+    col = &quot;bush_lag_res&quot;,
+    border.col = NULL,
+    palette = &quot;RdBu&quot;,
+    style = &quot;cont&quot;,
+    midpoint = 0,
+    title = &quot;Residuals (Lag)&quot;
+  )</code></pre>
 <p><img src="RModule10_files/figure-html/lag-resids-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>This looks pretty good; ideally, our value of <span
 class="math inline">\(I\)</span> would be exactly 0, but this tells us
@@ -686,15 +688,118 @@ steps:</li>
 <ul>
 <li>Evaluate the relationship between the variables using
 <code>lm()</code></li>
-<li>Plot the resulting residuals, and test for autocorrelation with
+<li>Plot the resulting residuals, then test for autocorrelation with
 <code>moran.test()</code>. Provide your map!</li>
 <li>Estimate the same relationship, using the spatial lag model
 (<code>spatialreg::lagsarlm()</code>)</li>
+<li>Perform a Moran’s I test on the residuals from the lag model and
+report your results. Plot the residuals from the spatial lag model, and
+include in your report.</li>
+<li>Is there evidence of remaining spatial autocorrelation in the
+residuals?</li>
+</ul>
+</div>
+</div>
+<div id="spatial-error-model-1" class="section level1">
+<h1>Spatial Error Model</h1>
+<p>Now that we’ve seen what the spatial lag model does, let’s try
+running a spatial error model:</p>
+<pre class="r"><code>bush_error &lt;- errorsarlm(
+  formula = Bush_pct ~ pcincome,
+  data = election,
+  listw = us_neighbors_w,
+  zero.policy = T,
+  quiet = FALSE
+)
+
+summary(bush_error)</code></pre>
+<pre><code>## 
+## Call:
+## errorsarlm(formula = Bush_pct ~ pcincome, data = election, listw = us_neighbors_w, 
+##     quiet = FALSE, zero.policy = T)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -62.1908  -4.3998   1.2162   5.6286  33.8837 
+## 
+## Type: error 
+## Regions with no neighbours included:
+##  36 691 711 883 
+## Coefficients: (asymptotic standard errors) 
+##               Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) 5.8347e+01 9.9104e-01 58.8747  &lt; 2e-16
+## pcincome    8.0218e-05 4.1698e-05  1.9238  0.05438
+## 
+## Lambda: 0.76197, LR test value: 1803.8, p-value: &lt; 2.22e-16
+## Asymptotic standard error: 0.014223
+##     z-value: 53.574, p-value: &lt; 2.22e-16
+## Wald statistic: 2870.2, p-value: &lt; 2.22e-16
+## 
+## Log likelihood: -11428.06 for error model
+## ML residual variance (sigma squared): 78.896, (sigma: 8.8823)
+## Number of observations: 3111 
+## Number of parameters estimated: 4 
+## AIC: 22864, (AIC for lm: 24666)</code></pre>
+<p>And of course, we should map our results:</p>
+<pre class="r"><code>election$bush_err_res &lt;- bush_error$residuals
+
+
+tm_shape(election) +
+  tm_polygons(
+    col = &quot;bush_err_res&quot;,
+    border.col = NULL,
+    palette = &quot;RdBu&quot;,
+    style = &quot;cont&quot;,
+    midpoint = 0,
+    title = &quot;Residuals&quot;
+  )</code></pre>
+<p><img src="RModule10_files/figure-html/errorsarlm-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Finally, let’s test our residuals for any remaining spatial
+autocorrelation:</p>
+<pre class="r"><code>moran.test(
+  x = election$bush_err_res,
+  listw = us_neighbors_w,
+  zero.policy = TRUE,
+  alternative = &quot;two.sided&quot;
+)</code></pre>
+<pre><code>## 
+##  Moran I test under randomisation
+## 
+## data:  election$bush_err_res  
+## weights: us_neighbors_w  n reduced by no-neighbour observations
+##   
+## 
+## Moran I statistic standard deviate = -4.7192, p-value = 2.367e-06
+## alternative hypothesis: two.sided
+## sample estimates:
+## Moran I statistic       Expectation          Variance 
+##     -0.0510920669     -0.0003219575      0.0001157378</code></pre>
+<p>While it’s a little bit higher than the value from the spatial lag
+model, it still shows that we’ve accounted for most of the spatial
+autocorrelation. Think about some of the other factors that could have
+been affecting our spatial regression models, for example, is the
+neighborhood (Queen’s case) the best fit for our data?</p>
+<div id="questions-2" class="section level2">
+<h2>Questions</h2>
+<ol start="3" style="list-style-type: decimal">
+<li>Using your <code>Kerry_pct ~ pcincome</code> analysis, perform the
+spatial error model. Provide the results of the model and plot its
+residuals on a map. Then, perform Moran’s I on the resulting residuals,
+and provide the Moran’s I and p-value. Explain any differences in the
+values between:</li>
+</ol>
+<ul>
+<li>The coefficient variables (<span
+class="math inline">\(\lambda\)</span> and <span
+class="math inline">\(\rho\)</span>),</li>
+<li>The p-values in the spatial regression models,</li>
+<li>The Moran’s I statistics, and,</li>
+<li>The p-values from the Moran’s I</li>
 </ul>
 </div>
 </div>
 
-<p>&copy; 2022 Maggie Sugg & Harrison Brown. v.0.0.12</p>
+<p>&copy; 2022 Maggie Sugg & Harrison Brown. v.0.0.13</p>
 
 
 </div>

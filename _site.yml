@@ -37,6 +37,8 @@ navbar:
         href: RModule8.html
       - text: "R Module 9"
         href: RModule9.html
+      - text: "R Module 10"
+        href: RModule10.html
 output:
   html_document:
     theme: flatly
