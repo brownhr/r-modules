@@ -169,4 +169,57 @@ summary(kerry_error)
 kerry_error <- read_rds("export/kerry_error.Rds")
 summary(kerry_error)
 ```
+```{r}
+election$kerry_err_res <- kerry_error$residuals
+
+kerry_error_moran <- moran.test(
+  election$kerry_err_res,
+  listw = election_weighted,
+  zero.policy = TRUE,
+  alternative = "two.sided"
+)
+```
+
+
+
+```{r}
+library(broom)
+options(pillar.sigfig = 5)
+
+
+# Regression Coefficients
+bind_rows(
+  tidy(kerry_lag)[1, ],
+  tidy(kerry_error)[3, ]
+)
+
+
+# Autocorrelation Coefficients
+
+moran_names <-
+  c(
+    "Moran's I",
+    "Expectation",
+    "Variance",
+    "Standard Dev.",
+    "p-value",
+    "Method",
+    "Alternative"
+  )
+
+
+tribble(
+  ~Model,
+  "Spatial Lag",
+  "Spatial Error"
+) %>%
+  bind_cols(bind_rows(
+    tidy(kerry_lag_moran) %>%
+      `colnames<-`(moran_names),
+    tidy(kerry_error_moran) %>%
+      `colnames<-`(moran_names)
+  ))
+
+
+```
 
