@@ -189,4 +189,34 @@ tm_shape(election) +
               title = "Residuals")
 ```
 
-From our map, it definitely looks like there's spatial autocorrelation among our residuals. 
+
+# Performing Spatial Lag
+
+From our map, it definitely looks like there's spatial autocorrelation among our residuals. After testing the residuals using Moran's I or Geary's C, we've successfully confirmed that our residuals are spatially autocorrelated; what does this mean, exactly? For starters, it strongly affects the apparent relationship between `Bush_pct` and `pcincome`. Our linear model suggests that there is a significant relationship between the two variables, but after seeing how strongly the residuals are spatially autocorrelated, it's difficult to say if this relationship is actually this strong, or if it's due to spatial proximity. 
+
+Let's perform our first spatial regression using the spatial lag model. Our function `lagsarlm` from the `spatialreg` package works very similarly to the traditional `lm` function, with a few additional arguments to input our spatial weights matrix. Let's give it a shot:
+
+```{r lag, eval = FALSE}
+library(spatialreg)
+
+# This function takes a good bit of time to run! Set quiet = FALSE to see what
+# the function is doing
+
+lag <- lagsarlm(Bush_pct ~ pcincome,
+                data = election, 
+                listw = us_neighbors_w,
+                zero.policy = TRUE,
+                quiet = FALSE)
+
+summary(lag)
+```
+
+```{r lag-2, include = FALSE}
+# I just saved the output from the spatial lag to a .Rds so we can print the
+# results without having to run the model each time I update the document :)
+
+lag <- read_rds("export/lag.Rds")
+summary(lag)
+```
+
+The values we're interested are our $\rho$ statistic, `Rho`, and our $p$-value. Looking at this result, we can confidently say that `Bush_pct` is strongly 
