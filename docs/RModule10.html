@@ -415,9 +415,9 @@ estimated; each model, however, handles this in a different way…</p>
 <h2>Spatial Lag Model</h2>
 <p>The spatial lag model, shown below, introduces a new explanatory
 variable and an associated coefficient that must be estimated:</p>
-<p><span class="math display">\[ y = \rho W_y + \beta X +
+<p><span class="math display">\[ y = \rho Wy + \beta X +
 \varepsilon\]</span></p>
-<p>The new variable, <span class="math inline">\(W_y\)</span>, is the
+<p>The new variable, <span class="math inline">\(Wy\)</span>, is the
 “lag variable” and represents, for each spatial unit, the weighted
 average of the values of the observations among its neighbors (when
 working with a row-standardized matrix).</p>
@@ -433,7 +433,7 @@ value of <span class="math inline">\(\rho\)</span> must be estimated.
 <span class="math inline">\(\rho\)</span> is one of the key statistics;
 our null hypothesis is that <span class="math inline">\(\rho =
 0\)</span>, which represents zero spatial dependence in the <span
-class="math inline">\(W_y\)</span> dependent variable.</p>
+class="math inline">\(Wy\)</span> dependent variable.</p>
 <p>A statistically significant result, therefore is when <span
 class="math inline">\(\rho \neq 0\)</span>, meaning we have successfully
 adjusted our model to account for any spatial dependence.</p>
@@ -449,7 +449,7 @@ separating the error term <span
 class="math inline">\(\varepsilon\)</span> into two components: one that
 contains the “random error” (<span class="math inline">\(\xi\)</span>),
 and one that contains the spatially-autocorrelated error components
-(<span class="math inline">\(\lambda W_\varepsilon\)</span>):</p>
+(<span class="math inline">\(\lambda W\varepsilon\)</span>):</p>
 <p><span class="math display">\[y = \beta X + \varepsilon; \;\varepsilon
 = \lambda W \varepsilon + \xi\]</span></p>
 <p>As with the spatial lag model, the spatial error model has a
@@ -623,17 +623,37 @@ bush_lag &lt;- lagsarlm(Bush_pct ~ pcincome,
   quiet = FALSE
 )
 
-# The `broom` package has many functions for &quot;tidy-ing&quot; data, and includes a
-# Method for tidying the results from the lagsarlm function. You can also use
-# this function on the results from ANOVA, lm, moran.test, etc!
 
-broom::tidy(bush_lag)</code></pre>
-<pre><code>## # A tibble: 3 x 5
-##   term          estimate std.error statistic p.value
-##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 rho          0.751     0.0143        52.5    0    
-## 2 (Intercept) 14.1       1.06          13.3    0    
-## 3 pcincome     0.0000546 0.0000338      1.62   0.106</code></pre>
+summary(bush_lag)</code></pre>
+<pre><code>## 
+## Call:
+## lagsarlm(formula = Bush_pct ~ pcincome, data = election, listw = us_neighbors_w, 
+##     quiet = FALSE, zero.policy = TRUE)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -62.9897  -4.6131   1.0712   5.5165  34.2249 
+## 
+## Type: lag 
+## Regions with no neighbours included:
+##  36 691 711 883 
+## Coefficients: (asymptotic standard errors) 
+##               Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) 1.4073e+01 1.0572e+00 13.3118   &lt;2e-16
+## pcincome    5.4600e-05 3.3758e-05  1.6174   0.1058
+## 
+## Rho: 0.75104, LR test value: 1808.2, p-value: &lt; 2.22e-16
+## Asymptotic standard error: 0.014316
+##     z-value: 52.463, p-value: &lt; 2.22e-16
+## Wald statistic: 2752.4, p-value: &lt; 2.22e-16
+## 
+## Log likelihood: -11425.87 for lag model
+## ML residual variance (sigma squared): 79.207, (sigma: 8.8999)
+## Number of observations: 3111 
+## Number of parameters estimated: 4 
+## AIC: 22860, (AIC for lm: 24666)
+## LM test for residual autocorrelation
+## test value: 68.585, p-value: &lt; 2.22e-16</code></pre>
 <p>The values we’re interested are our <span
 class="math inline">\(\rho\)</span> statistic, <code>Rho</code>, and our
 <span class="math inline">\(p\)</span>-value. Looking at this result, we
