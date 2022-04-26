@@ -29,13 +29,13 @@ Regression residuals are the primary way to assess if a regression violates any 
 
 The spatial lag model, shown below, introduces a new explanatory variable and an associated coefficient that must be estimated:
 
-$$ y = \rho W_y + \beta X + \varepsilon$$
+$$ y = \rho Wy + \beta X + \varepsilon$$
 
-The new variable, $W_y$, is the "lag variable" and represents, for each spatial unit, the weighted average of the values of the observations among its neighbors (when working with a row-standardized matrix). 
+The new variable, $Wy$, is the "lag variable" and represents, for each spatial unit, the weighted average of the values of the observations among its neighbors (when working with a row-standardized matrix). 
 
 The term $\beta X$ represents our independent variables, and epsilon ($\varepsilon$) is our "error term", which describes the amount by which an observed value differs from the expected value, based on the whole population.
 
-Just like in "normal" regression models, there exists a correlation coefficient, in this case rho ($\rho$), and for spatial regression the value of $\rho$ must be estimated. $\rho$ is one of the key statistics; our null hypothesis is that $\rho = 0$, which represents zero spatial dependence in the $W_y$ dependent variable.
+Just like in "normal" regression models, there exists a correlation coefficient, in this case rho ($\rho$), and for spatial regression the value of $\rho$ must be estimated. $\rho$ is one of the key statistics; our null hypothesis is that $\rho = 0$, which represents zero spatial dependence in the $Wy$ dependent variable.
 
 A statistically significant result, therefore is when $\rho \neq 0$, meaning we have successfully adjusted our model to account for any spatial dependence. 
 
@@ -45,7 +45,7 @@ As with Moran's I, $\rho$ can be either positive, indicating positive spatial de
 ## Spatial Error Model
 
 
-The other model we have is known as the *spatial error model*. Unlike the lag model, the error model addresses spatial dependence by separating the error term $\varepsilon$ into two components: one that contains the "random error" ($\xi$), and one that contains the spatially-autocorrelated error components ($\lambda W_\varepsilon$):
+The other model we have is known as the *spatial error model*. Unlike the lag model, the error model addresses spatial dependence by separating the error term $\varepsilon$ into two components: one that contains the "random error" ($\xi$), and one that contains the spatially-autocorrelated error components ($\lambda W\varepsilon$):
 
 $$y = \beta X + \varepsilon; \;\varepsilon = \lambda W \varepsilon + \xi$$
 
