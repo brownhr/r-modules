@@ -12,7 +12,9 @@ output:
 ```{r setup, include = FALSE}
 
 knitr::opts_chunk$set(
-  echo = FALSE
+  echo = FALSE,
+  fig.align = "center",
+  out.width = "60%"
 )
 
 library(tidyverse)
@@ -28,7 +30,14 @@ airport_survey <- read_csv("data/airport_survey.csv",
 
 # Generating Reports using R Markdown
 
-For this R Module, we'll be taking on the role of ...
+For this R Module, we'll be analyzing some survey data; we have an airport quality survey which contains 3,501 survey responses from the Austin-Bergstrom International Airport's customer survey, from the City of Austin. 
+
+While generating reports using tools like Excel or Google Sheets is perfectly fine, R is an extraordinarily powerful tool for exploring and visualizing data, and is perfect for this sort of case. However, it's sometimes difficult to quickly generate a report or create a picture, especially when we want to highlight a number of attributes simultaneously.
+
+This is where R Markdown comes in -- R Markdown documents are excellent at integrating both narrative text (paragraphs and "things that you write") and code (including tables, plots, and maps).
+
+This R Module is intended to be an introduction into the field of R Markdown; many formal publications, websites, and documents are written almost entirely in R Markdown (including this website!) As such, there's no way this Module could tell you everything you need to know about R Markdown, but I encourage you to take the time to learn how to use R Markdown in your coding. 
+
 
 ## What is Markdown?
 
@@ -92,8 +101,9 @@ Download the 64-bit version, and install the software. Note that this requires a
 After that, we'll need to install a few R packages:
 
   - `rmarkdown`, `knitr`, `markdown`, and `mime`: These allow R Studio to work with Markdown and R Markdown
-  - `tinytex`: This package is a lightweight $\LaTeX$ distribution and is necessary to export as a .PDF
+  - `tinytex`: This package is a lightweight $\LaTeX$ distribution and is necessary to export as a .PDF.
     - After installing this package, run `tinytex::install_tinytex()`. This step might take some time. 
+    - If you have difficulties exporting to a .PDF, I'd recommend outputting to Word or HTML.
   
 
 To get things running, you can just run the following code:
@@ -110,13 +120,55 @@ tinytex::install_tinytex()
 Then, restart R Studio.
 
 
-Let's get started by creating a new R Project, as in previous R Modules. Once you have that set up, we want to create a new R Markdown document. Navigate to `File > New File > R Markdown`. Give it a title, "R Module 4 Write-up", enter your name, and select `PDF` as the output format. 
+Let's get started by creating a new R Project, as in previous R Modules. Once you have that set up, we want to create a new R Markdown document. Navigate to `File > New File > R Markdown`. Give it a title, "R Module 4 Report", enter your name, and select `HTML` as the output format. 
 
 
 
-### Running Code
+```{r nrmd, echo = FALSE}
+knitr::include_graphics("img/R Module 4/New R Markdown.png")
+```
 
 
+You should see a file that looks something like this:
+
+```{r rmd, echo = FALSE}
+knitr::include_graphics("img/R Module 4/R Markdown.png")
+```
+
+Go ahead and hit Save (`Ctrl-S`) and save your document. When you create a new R Markdown document, it comes with some "example text", such as how to run code and insert "code chunks". Feel free to browse this example text, but delete everything outside the header (your header is the text surrounded by three dashes, `---`).
+
+## YAML Header
+
+One of the most important parts of an R Markdown document is the *YAML Header* -- the beginning of the document surrounded by `---`. YAML is a special kind of "data serialization language"; basically, it's a way of storing "options" in plain-text format. Don't worry too much about the details for now -- this is an introduction, after all -- but just remember that most of your important options like `title`, `date`, `output`, etc. are stored here. 
+
+
+## Code Chunks
+
+Code Chunks are the lifeblood of R Markdown documents; they allow you to run R code within your document, giving you the ability to embed tables, plots, figures, and maps directly in your document (no more copy-pasting screenshots!). 
+
+These Code Chunks are surrounded by three backticks, ```` ``` ````, (it's the key to the left of the `1` key on most layouts). To insert a Chunk, you can also type `Ctrl/Cmd-Alt-I`.
+
+The `{r}` within the chunk signifies that the code we're writing is in the R language (likely, you won't ever need to change that for this course, but other options include `html`). Anything in these curly braces is considered "knitr chunk options", which control how your code is run. For example, if you want to run code but not show the code itself in your output document, you can specify `echo = FALSE` in your chunk options (for this course, keep `echo = TRUE` so we can troubleshoot your code!).
+
+More info about chunk options can be found at Yihui Xie's (developer of knitr, rmarkdown, and many other incredible R packages) website at https://yihui.org/knitr/options/
+
+
+***
+
+## Writing your first Code Chunk
+
+After removing everything but your YAML header, start by inserting a new Chunk (`Ctrl-Alt-I`). Make sure there's a couple lines between your header and your Chunk. 
+
+Within your Chunk (the area between the sets of backticks should be greyed-out) is where you can enter in R code. Generally, you should have a separate Chunk for each "thing" you do; think of them like "paragraphs of code". Not only does this help keep your document tidy, it lets you know exactly where potential problems in your code are.
+
+In your first Chunk, we'll load some data. Just like in R Scripts, you have to load packages with the `library()` function. If you get a message like `Error in loadNamespace(x) : there is no package called 'packagename`, it means you haven't yet, and need to install it with `install.packages("packagename")` (note the quotes here, but not in `library()`!).
+
+We
+
+
+
+***
+***
 
 # Qualitative Data
 
