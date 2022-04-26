@@ -221,11 +221,8 @@ bush_lag <- lagsarlm(Bush_pct ~ pcincome,
   quiet = FALSE
 )
 
-# The `broom` package has many functions for "tidy-ing" data, and includes a
-# Method for tidying the results from the lagsarlm function. You can also use
-# this function on the results from ANOVA, lm, moran.test, etc!
 
-broom::tidy(bush_lag)
+summary(bush_lag)
 ```
 
 ```{r lag-2, echo = FALSE, message = F, warning= F}
@@ -235,7 +232,7 @@ library(spatialreg)
 
 bush_lag <- read_rds("export/lag.Rds")
 
-broom::tidy(bush_lag)
+summary(bush_lag)
 ```
 
 The values we're interested are our $\rho$ statistic, `Rho`, and our $p$-value. Looking at this result, we can confidently say that the value of `Bush_pct` is likely to have higher values, if neighboring counties have higher values, and lower values if the neighboring counties have lower values. Notice, also, that our independent variable `pcincome` now has a $p$-value of 0.1058; **it's no longer significant when accounting for spatial autoccorelation!**
