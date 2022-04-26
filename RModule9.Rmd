@@ -282,7 +282,7 @@ To calculate Local Moran's I, we'll use the `localmoran()` function from `spdep`
 local_moran_queen <- localmoran(
   x = NC_UTM$MNEM2000,
   listw = queen_nb_w,
-  # zero.policy = TRUE,
+  zero.policy = TRUE,
   alternative = "two.sided"
 )
 
@@ -315,12 +315,16 @@ This plot shows us quite a bit of information. First, we should note that the me
 It's important to note that the way each county is assigned is dependent on our significance level; right now it's still $\alpha = 0.05$. Counties on the above scatter plot with the 'diamond' symbol are those where the $p$-value is less than our significance level. If we change our significance level to say, 50%, we can see more of the distribution (but of course, our results are not nearly as significant)
 
 ```{r}
+
+# This pulls out the quadrants from the results and assigns it to a vector
 quadr <- attr(local_moran_queen, "quadr")[, 2]
 
 NC_localmoran <- NC_UTM
 
 NC_localmoran$Quadrant <- quadr
 
+
+# The 5th column represents the p-value
 NC_localmoran$p.value <- local_moran_queen[, 5]
 
 sig_level <- 0.5

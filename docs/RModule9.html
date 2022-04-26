@@ -811,7 +811,7 @@ class="math inline">\(W_{ij}\)</span> to use. Let’s use
 <pre class="r"><code>local_moran_queen &lt;- localmoran(
   x = NC_UTM$MNEM2000,
   listw = queen_nb_w,
-  # zero.policy = TRUE,
+  zero.policy = TRUE,
   alternative = &quot;two.sided&quot;
 )
 
@@ -858,12 +858,15 @@ class="math inline">\(p\)</span>-value is less than our significance
 level. If we change our significance level to say, 50%, we can see more
 of the distribution (but of course, our results are not nearly as
 significant)</p>
-<pre class="r"><code>quadr &lt;- attr(local_moran_queen, &quot;quadr&quot;)[, 2]
+<pre class="r"><code># This pulls out the quadrants from the results and assigns it to a vector
+quadr &lt;- attr(local_moran_queen, &quot;quadr&quot;)[, 2]
 
 NC_localmoran &lt;- NC_UTM
 
 NC_localmoran$Quadrant &lt;- quadr
 
+
+# The 5th column represents the p-value
 NC_localmoran$p.value &lt;- local_moran_queen[, 5]
 
 sig_level &lt;- 0.5
