@@ -39,4 +39,16 @@ The other model we have is known as the *spatial error model*. Unlike the lag mo
 
 $$y = \beta X + \varepsilon; \;\varepsilon = \lambda W_\varepsilon + \xi$$
 
-As with the spatial lag model, the spatial error model has a coefficient, lambda ($\lambda$), which 
+As with the spatial lag model, the spatial error model has a coefficient, lambda ($\lambda$), which must be estimated. The remaining errors, xi ($\xi$), should be randomly distributed as per the conventional general linear model. The interpretations of $\lambda$ are similar to that of $\rho$ in the lag model, as is the hypothesis test informed by the coefficient's value and $p$-value (i.e., our null hypothesis is that $\lambda = 0$)
+
+
+
+# Importance of Spatial Autocorrelation
+
+Both of these models are computationally intensive and require the extra steps of defining a neighborhood construct and its associated weighted matrix, so why bother with calculating this?
+
+The problem of spatially autocorrelated residuals means that we **really** can't trust our results. Think about it like this: if values that are spatially close to one another have similar values, if we don't account for spatial autocorrelation, our variables appear to have strong correlation. Not only that, without accounting for spatial autocorrelation, our $p$-values are much lower, so it  also looks like our model is much more statistically significant. This is a long way to say that any inferences we make based on such models, without accounting for spatial autocorrelation, could be very inaccurate.
+
+***
+
+# Performing Spatial Regression
