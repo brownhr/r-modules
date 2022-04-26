@@ -261,7 +261,7 @@ This looks pretty good; ideally, our value of $I$ would be exactly 0, but this t
 
 2. Modeling `Kerry_pct ~ pcincome`, perform the following steps:
   - Evaluate the relationship between the variables using `lm()`
-  - Plot the resulting residuals, and test for autocorrelation with `moran.test()`. Provide your map!
+  - Plot the resulting residuals, then test for autocorrelation with `moran.test()`. Provide your map!
   - Estimate the same relationship, using the spatial lag model (`spatialreg::lagsarlm()`)
   - Perform a Moran's I test on the residuals from the lag model and report your results. Plot the residuals from the spatial lag model, and include in your report.
   - Is there evidence of remaining spatial autocorrelation in the residuals?

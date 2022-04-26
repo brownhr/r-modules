@@ -5,22 +5,22 @@ library(sf)
 library(tidyverse)
 library(spdep)
 library(tmap)
+library(broom)
 library(spatialreg)
 
-election <- read_sf("export/2004_Election_Counties.shp") %>% 
+election <- read_sf("export/2004_Election_Counties.shp") %>%
   st_transform(crs = st_crs("EPSG:2163"))
 
 centroids <- st_centroid(election)$geometry
 
-election_neighbors <- election %>% 
+election_neighbors <- election %>%
   poly2nb()
 
-election_weighted <- election_neighbors %>% 
+election_weighted <- election_neighbors %>%
   nb2listw(
     style = "W",
     zero.policy = TRUE
   )
-
 ```
 
 
@@ -29,23 +29,23 @@ election_weighted <- election_neighbors %>%
 Use `lm()` to estimate `Bush_pct ~ pcincome` using ordinary least squares (OLS). Plot the **residuals** on a map (look back to R Module 7) and **test the residuals for spatial autocorrelation**. Provide both an example of your map and the results from your spatial autocorrelation test in your R Markdown report. 
 
 ```{r q1-1}
-lm <- lm(Bush_pct ~ pcincome, data = election,)
+lm <- lm(Bush_pct ~ pcincome, data = election)
 summary(lm)
 ```
 
 ```{r q1-2}
 election$residuals <- lm$residuals
 
-tm_shape(election) + 
-  tm_polygons(col = "residuals",
-              border.col = NULL,
-              style = "cont")
-
-
+tm_shape(election) +
+  tm_polygons(
+    col = "residuals",
+    border.col = NULL,
+    style = "cont"
+  )
 ```
 
 ```{r q1-3}
-moran_residuals <- 
+moran_residuals <-
   moran.test(
     x = election$residuals,
     listw = election_weighted,
@@ -61,10 +61,8 @@ moran_residuals
 
 Modeling `Kerry_pct ~ pcincome`, perform the following steps:
   - Evaluate the relationship between the variables using `lm()`
-  - Plot the resulting residuals, and test for autocorrelation with `moran.test()`. Provide your map!
-  - Estimate the same relationship, using the spatial lag model (`spatialreg::lagsarlm()`)
-  - Perform a Moran's I test on the residuals from the lag model and report your results. Plot the residuals from the spatial lag model, and include in your report.
-  - Is there evidence of remaining spatial autocorrelation in the residuals?
+  - Plot the resulting residuals, then test for autocorrelation with `moran.test()`. Provide your map!
+
 
 
 ```{r q2-1}
@@ -73,15 +71,18 @@ kerry_lm <- lm(Kerry_pct ~ pcincome, data = election)
 
 election$kerry_lm_res <- kerry_lm$residuals
 
-tm_shape(election) + 
-  tm_polygons(col = "kerry_lm_res",
-              border.col = NULL,
-              palette = "RdBu",
-              style = "cont",
-              midpoint = 0,
-              title = "Residuals")
-
+tm_shape(election) +
+  tm_polygons(
+    col = "kerry_lm_res",
+    border.col = NULL,
+    palette = "RdBu",
+    style = "cont",
+    midpoint = 0,
+    title = "Residuals"
+  )
 ```
+
+
 ```{r q2-2}
 kerry_moran <- moran.test(
   election$kerry_lm_res,
@@ -92,3 +93,55 @@ kerry_moran <- moran.test(
 kerry_moran
 ```
 
+  - Estimate the same relationship, using the spatial lag model (`spatialreg::lagsarlm()`)
+  
+```{r q2-3, eval = FALSE}
+library(spatialreg)
+kerry_lag <- lagsarlm(
+  Kerry_pct ~ pcincome,
+  data = election,
+  listw = election_weighted,
+  zero.policy = TRUE
+)
+
+tidy(kerry_lag)
+```
+  
+```{r, include = FALSE}
+
+kerry_lag <- read_rds("export/kerry_lag.Rds")
+
+tidy(kerry_lag)
+```
+  
+  
+  - Perform a Moran's I test on the residuals from the lag model and report your results. Plot the residuals from the spatial lag model, and include in your report.
+  
+```{r q2-4}
+election$kerry_lag_res <- kerry_lag$residuals
+
+tm_shape(election) +
+  tm_polygons(
+    col = "kerry_lag_res",
+    border.col = NULL,
+    palette = "RdBu",
+    style = "cont",
+    midpoint = 0,
+    title = "Residuals"
+  )
+```
+
+
+```{r q2-4b}
+kerry_lag_moran <- moran.test(
+  election$kerry_lag_res,
+  election_weighted, ,
+  zero.policy = TRUE,
+  alternative = "two.sided"
+)
+kerry_lag_moran
+```
+  
+  - Is there evidence of remaining spatial autocorrelation in the residuals?
+  
+  *No, as the value of I from the moran.test is close to 0, there is little remaining spatial autocorrelation.*
