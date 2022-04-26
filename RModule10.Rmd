@@ -35,5 +35,8 @@ As with Moran's I, $\rho$ can be either positive, indicating positive spatial de
 ## Spatial Error Model
 
 
-$$y = \beta X + \varepsilon; \;\varepsilon = \lambda W \varepsilon + \xi$$
+The other model we have is known as the *spatial error model*. Unlike the lag model, the error model addresses spatial dependence by separating the error term $\varepsilon$ into two components: one that contains the "random error" ($\xi$), and one that contains the spatially-autocorrelated error components ($\lambda W_\varepsilon$):
 
+$$y = \beta X + \varepsilon; \;\varepsilon = \lambda W_\varepsilon + \xi$$
+
+As with the spatial lag model, the spatial error model has a coefficient, lambda ($\lambda$), which 
