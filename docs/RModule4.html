@@ -35,10 +35,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
-<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
-<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
-<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 <link rel="shortcut icon" href="aoa_r.svg" />
@@ -402,13 +398,16 @@ div.tocify {
 </div>
 
 
-<script>
-  addClassKlippyTo("pre.r, pre.markdown");
-  addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
-</script>
 <div id="generating-reports-using-r-markdown" class="section level1">
 <h1>Generating Reports using R Markdown</h1>
-<!-- For this R Module, we'll be analyzing some survey data; we have an airport quality survey which contains 3,501 survey responses from the Austin-Bergstrom International Airport's customer survey, from the City of Austin.  -->
+<p>For this R Module, we’ll be analyzing some survey data; our data is a
+survey of approximately 10,000 individuals who work in the tech
+industry. The questionnaire was designed to ask respondents’ salaries in
+$US, their job description, level of education, gender, and several
+other attributes. We wish to examine the relationship between experience
+level (years worked in a similar job), education, and salary – do people
+with more experience and a higher level of education earn more money?
+We’ll use R Markdown to run our analysis.</p>
 <p>While generating reports using tools like Excel or Google Sheets is
 perfectly fine, R is an extraordinarily powerful tool for exploring and
 visualizing data, and is perfect for this sort of case. However, it’s
@@ -424,6 +423,10 @@ almost entirely in R Markdown (including this website!) As such, there’s
 no way this Module could tell you everything you need to know about R
 Markdown, but I encourage you to take the time to learn how to use R
 Markdown in your coding.</p>
+<p>One of the main benefits of R Markdown is that your results are
+highly reproducible; what you see in the document is the code that
+actually generates your results. This makes troubleshooting easier for
+you, and understanding easier for your readers.</p>
 <div id="what-is-markdown" class="section level2">
 <h2>What is Markdown?</h2>
 <p>Markdown is a popular “markup language” designed to format plain-text
@@ -483,6 +486,10 @@ head(mtcars)
 ## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
 ## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
 ## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+<p>When you’re ready to generate a document (whether a PDF, html, or
+Word document), you <strong>knit</strong> your R Markdown, which runs
+the included code, formats your text, and exports to a file format of
+your choice.</p>
 </div>
 </div>
 <div id="getting-started" class="section level1">
@@ -494,9 +501,10 @@ to make sure that R Studio is good-to-go in a few ways.</p>
 <li><code>rmarkdown</code>, <code>knitr</code>, <code>markdown</code>,
 and <code>mime</code>: These allow R Studio to work with Markdown and R
 Markdown</li>
-<li><code>tinytex</code>: This package is a lightweight <span
-class="math inline">\(\LaTeX\)</span> distribution and is necessary to
-export as a .PDF.
+<li><code>tinytex</code>: This package is a lightweight <a
+href="https://yihui.org/tinytex/"><span
+class="math inline">\(\LaTeX\)</span></a> distribution and is necessary
+to kint to a .PDF.
 <ul>
 <li>After installing this package, run
 <code>tinytex::install_tinytex()</code>. This step might take some
@@ -506,9 +514,7 @@ outputting to Word or HTML.</li>
 </ul></li>
 </ul>
 <p>To get things running, you can just run the following code:</p>
-<pre class="r"><code>pkgs &lt;- c(&quot;rmarkdown&quot;, &quot;knitr&quot;, &quot;markdown&quot;, &quot;mime&quot;, &quot;tinytex&quot;)
-
-install.packages(pkgs)
+<pre class="r"><code>install.packages(&quot;rmarkdown&quot;, &quot;knitr&quot;, &quot;markdown&quot;, &quot;mime&quot;, &quot;tinytex&quot;)
 
 tinytex::install_tinytex()</code></pre>
 <p>Then, restart R Studio.</p>
@@ -572,12 +578,20 @@ of code”. Not only does this help keep your document tidy, it lets you
 know exactly where potential problems in your code are.</p>
 <p>In your first Chunk, we’ll load some data. Just like in R Scripts,
 you have to load packages with the <code>library()</code> function. If
-you get a message like
-<code>Error in loadNamespace(x) : there is no package called 'packagename</code>,
-it means you haven’t yet, and need to install it with
-<code>install.packages("packagename")</code> (note the quotes here, but
-not in <code>library()</code>!).</p>
-<!-- Let's load our airport survey (`airport_survery.csv`) with the `readr` package from the `tidyverse`; enter the code into your first Chunk: -->
+you get a message like</p>
+<blockquote>
+<p>Error in loadNamespace(x) : there is no package called
+‘packagename’,</p>
+</blockquote>
+<p>it means you haven’t installed the package yet, and need to install
+it with <code>install.packages("packagename")</code> (note the quotes
+<em>here</em>, but not in <code>library()</code>!).</p>
+<p>Let’s load our salary survey (<code>salary_survey.xlsx</code>) into
+R. Our data comes in Excel format, but R has no issues working with this
+kind of data; the <code>readxl</code> package was designed with this in
+mind! We’ll load the <code>tidyverse</code> packages as well, so we can
+manipulate our data with <code>dplyr</code> and <code>forcats</code>,
+and visualize our data with <code>ggplot2</code>.</p>
 <pre class="r"><code>library(tidyverse)
 library(readxl)
 
@@ -639,14 +653,28 @@ Operator</td>
 <p>These are by no means all of the most useful shortcuts in R Studio,
 but they’re the ones I use most often.</p>
 <hr />
-<p>Manipulating Data</p>
+<p>For this R Module, you should focus on mainly on the document
+structure and writing your document in R Markdown. Follow along with the
+code – whenever you see code in this Module, put it in a Chunk. The
+questions for this Module will be pretty simple; you’ll mostly be
+describing the distributions and attributes of the data, but the idea is
+to get you writing your answers in tandem with your Code Chunks, so you
+can generate a document without having to copy and paste code and
+images.</p>
+</div>
+</div>
+<div id="manipulating-data" class="section level1">
+<h1>Manipulating Data</h1>
 <p>Back to our code, let’s create another Code Chunk, in which we’ll
 pull out some of the variables we want to work with. We’ll use
 <code>dplyr</code> to select our variables of interest (stored in
-columns), and the pipe operator <code>%&gt;%</code>, which takes
-whatever is on its left-hand side and “pipes” it into a function on its
-right-hand side, like so:</p>
-<!-- select columns, then separate code chunk for mutating to factor -->
+columns), and the pipe operator <code>%&gt;%</code> (loaded with the
+<code>tidyverse</code>), which takes whatever is on its left-hand side
+and “pipes” it into a function on its right-hand side, like so:</p>
+<p>Let’s select the columns and work with our data by creating a new
+<code>object</code>, “<code>survey_sub</code>”. Using
+<code>%&gt;%</code>, we’ll pipe our <code>survey</code> into the
+<code>dplyr::select()</code> function.</p>
 <pre class="r"><code>survey_sub &lt;- survey %&gt;%
   select(`Survey Year`, Country, PrimaryDatabase, SalaryUSD, YearsWithThisDatabase, YearsWithThisTypeOfJob, Education)</code></pre>
 <pre class="r"><code>survey_sub &lt;- survey_sub %&gt;%
@@ -671,11 +699,18 @@ right-hand side, like so:</p>
   ggplot(aes(y = Education, x = SalaryUSD)) +
   geom_boxplot(notch = TRUE)</code></pre>
 <p><img src="RModule4_files/figure-html/boxplots-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Our salaries don’t appear normally distributed, do they? When
+exploring data, it’s often a good idea to <em>transform</em> your data
+to help visualize the general distribution of the data. We’ll transform
+by taking the base-10 logarithm of our salary variable:</p>
 <pre class="r"><code>survey_sub &lt;- survey_sub %&gt;%
   mutate(
     SalaryLog10 = log10(SalaryUSD)
-  )</code></pre>
-<pre class="r"><code>survey_sub %&gt;%
+  )
+
+
+# We&#39;ll pop this back into our boxplots...
+survey_sub %&gt;%
   ggplot(aes(y = Education, x = SalaryLog10)) +
   geom_boxplot(notch = TRUE)</code></pre>
 <p><img src="RModule4_files/figure-html/boxplots-log10-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -814,7 +849,6 @@ observations:</p>
 <p><img src="RModule4_files/figure-html/boxplots-final-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 <hr />
-</div>
 </div>
 <div id="assignment" class="section level1">
 <h1>Assignment</h1>
