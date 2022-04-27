@@ -20,13 +20,15 @@ knitr::opts_chunk$set(
 
 # Generating Reports using R Markdown
 
-<!-- For this R Module, we'll be analyzing some survey data; we have an airport quality survey which contains 3,501 survey responses from the Austin-Bergstrom International Airport's customer survey, from the City of Austin.  -->
+For this R Module, we'll be analyzing some survey data; our data is a survey of approximately 10,000 individuals who work in the tech industry. The questionnaire was designed to ask respondents' salaries in $US, their job description, level of education, gender, and several other attributes. We wish to examine the relationship between experience level (years worked in a similar job), education, and salary -- do people with more experience and a higher level of education earn more money? We'll use R Markdown to run our analysis.
 
 While generating reports using tools like Excel or Google Sheets is perfectly fine, R is an extraordinarily powerful tool for exploring and visualizing data, and is perfect for this sort of case. However, it's sometimes difficult to quickly generate a report or create a picture, especially when we want to highlight a number of attributes simultaneously.
 
 This is where R Markdown comes in -- R Markdown documents are excellent at integrating both narrative text (paragraphs and "things that you write") and code (including tables, plots, and maps).
 
 This R Module is intended to be an introduction into the field of R Markdown; many formal publications, websites, and documents are written almost entirely in R Markdown (including this website!) As such, there's no way this Module could tell you everything you need to know about R Markdown, but I encourage you to take the time to learn how to use R Markdown in your coding. 
+
+One of the main benefits of R Markdown is that your results are highly reproducible; what you see in the document is the code that actually generates your results. This makes troubleshooting easier for you, and understanding easier for your readers. 
 
 
 ## What is Markdown?
@@ -143,7 +145,7 @@ Within your Chunk (the area between the sets of backticks should be greyed-out) 
 
 In your first Chunk, we'll load some data. Just like in R Scripts, you have to load packages with the `library()` function. If you get a message like `Error in loadNamespace(x) : there is no package called 'packagename`, it means you haven't yet, and need to install it with `install.packages("packagename")` (note the quotes here, but not in `library()`!).
 
-<!-- Let's load our airport survey (`airport_survery.csv`) with the `readr` package from the `tidyverse`; enter the code into your first Chunk: -->
+Let's load our salary survey (`salary_survey.xlsx`) into R. Our data comes in Excel format, but R has no issues working with this kind of data; the `readxl` package was designed with this in mind! We'll load the `tidyverse` packages as well, so we can manipulate our data with `dplyr` and `forcats`, and visualize our data with `ggplot2`. 
 
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
@@ -178,7 +180,7 @@ For this R Module, you should focus on mainly on the document structure and writ
 
 # Manipulating Data
 
-Back to our code, let's create another Code Chunk, in which we'll pull out some of the variables we want to work with. We'll use `dplyr` to select our variables of interest (stored in columns), and the pipe operator `%>%`, which takes whatever is on its left-hand side and "pipes" it into a function on its right-hand side, like so:
+Back to our code, let's create another Code Chunk, in which we'll pull out some of the variables we want to work with. We'll use `dplyr` to select our variables of interest (stored in columns), and the pipe operator `%>%` (loaded with the `tidyverse`), which takes whatever is on its left-hand side and "pipes" it into a function on its right-hand side, like so:
 
 
 <!-- select columns, then separate code chunk for mutating to factor -->
