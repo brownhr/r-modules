@@ -16,9 +16,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r, echo = FALSE, include = TRUE}
-klippy::klippy()
-```
 
 
 # Generating Reports using R Markdown
