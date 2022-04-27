@@ -92,9 +92,7 @@ Mainly, we'll need to install a few R packages:
 To get things running, you can just run the following code:
 
 ```{r packages, eval = FALSE}
-pkgs <- c("rmarkdown", "knitr", "markdown", "mime", "tinytex")
-
-install.packages(pkgs)
+install.packages("rmarkdown", "knitr", "markdown", "mime", "tinytex")
 
 tinytex::install_tinytex()
 ```
@@ -176,7 +174,9 @@ These are by no means all of the most useful shortcuts in R Studio, but they're 
 
 ***
 
-Manipulating Data
+For this R Module, you should focus on mainly on the document structure and writing your document in R Markdown. Follow along with the code -- whenever you see code in this Module, put it in a Chunk. The questions for this Module will be pretty simple; you'll mostly be describing the distributions and attributes of the data, but the idea is to get you writing your answers in tandem with your Code Chunks, so you can generate a document without having to copy and paste code and images. 
+
+# Manipulating Data
 
 Back to our code, let's create another Code Chunk, in which we'll pull out some of the variables we want to work with. We'll use `dplyr` to select our variables of interest (stored in columns), and the pipe operator `%>%`, which takes whatever is on its left-hand side and "pipes" it into a function on its right-hand side, like so:
 
@@ -218,16 +218,16 @@ survey_sub %>%
 ```
 
 
+Our salaries don't appear normally distributed, do they? When exploring data, it's often a good idea to *transform* your data to help visualize the general distribution of the data. We'll transform by taking the base-10 logarithm of our salary variable:
 
-```{r}
+```{r boxplots-log10}
 survey_sub <- survey_sub %>%
   mutate(
     SalaryLog10 = log10(SalaryUSD)
   )
-```
 
-```{r boxplots-log10}
 
+# We'll pop this back into our boxplots...
 survey_sub %>%
   ggplot(aes(y = Education, x = SalaryLog10)) +
   geom_boxplot(notch = TRUE)
