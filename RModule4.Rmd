@@ -188,9 +188,35 @@ Manipulating Data
 Back to our code, let's create another Code Chunk, in which we'll pull out some of the variables we want to work with. We'll use `dplyr` to select our variables of interest (stored in columns), and the pipe operator `%>%`, which takes whatever is on its left-hand side and "pipes" it into a function on its right-hand side, like so:
 
 
+<!-- select columns, then separate code chunk for mutating to factor -->
 
 
+```{r select}
+survey_sub <- survey %>% 
+  select(`Survey Year`, Country, PrimaryDatabase, SalaryUSD, Education)
+```
 
+```{r mutate}
+
+survey_clean <- survey_sub %>% 
+  filter(
+    Education != "Not Asked"
+  ) %>% 
+  mutate(across(.cols = -SalaryUSD, .fns = as.factor)) 
+
+```
+
+```{r}
+survey_clean <- survey_clean %>% 
+  select(-PrimaryDatabase)
+
+survey_clean %>% 
+  filter(Country == "United States") %>% 
+  ggplot(aes(y = Education, x = SalaryUSD)) + 
+  scale_x_log10() +
+  geom_boxplot(outlier.shape = NA)
+
+```
 
 
 ***
