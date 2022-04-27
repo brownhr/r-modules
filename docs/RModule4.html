@@ -408,10 +408,7 @@ div.tocify {
 </script>
 <div id="generating-reports-using-r-markdown" class="section level1">
 <h1>Generating Reports using R Markdown</h1>
-<p>For this R Module, we’ll be analyzing some survey data; we have an
-airport quality survey which contains 3,501 survey responses from the
-Austin-Bergstrom International Airport’s customer survey, from the City
-of Austin.</p>
+<!-- For this R Module, we'll be analyzing some survey data; we have an airport quality survey which contains 3,501 survey responses from the Austin-Bergstrom International Airport's customer survey, from the City of Austin.  -->
 <p>While generating reports using tools like Excel or Google Sheets is
 perfectly fine, R is an extraordinarily powerful tool for exploring and
 visualizing data, and is perfect for this sort of case. However, it’s
@@ -520,9 +517,9 @@ Modules. Once you have that set up, we want to create a new R Markdown
 document. Navigate to <code>File &gt; New File &gt; R Markdown</code>.
 Give it a title, “R Module 4 Report”, enter your name, and select
 <code>HTML</code> as the output format.</p>
-<p><img src="img/R%20Module%204/New%20R%20Markdown.png" width="60%" style="display: block; margin: auto;" /></p>
+<p><img src="img/R%20Module%204/New%20R%20Markdown.png" width="265" style="display: block; margin: auto;" /></p>
 <p>You should see a file that looks something like this:</p>
-<p><img src="img/R%20Module%204/R%20Markdown.png" width="60%" style="display: block; margin: auto;" /></p>
+<p><img src="img/R%20Module%204/R%20Markdown.png" width="386" style="display: block; margin: auto;" /></p>
 <p>Go ahead and hit Save (<code>Ctrl-S</code>) and save your document.
 When you create a new R Markdown document, it comes with some “example
 text”, such as how to run code and insert “code chunks”. Feel free to
@@ -580,21 +577,11 @@ you get a message like
 it means you haven’t yet, and need to install it with
 <code>install.packages("packagename")</code> (note the quotes here, but
 not in <code>library()</code>!).</p>
-<p>Let’s load our airport survey (<code>airport_survery.csv</code>) with
-the <code>readr</code> package from the <code>tidyverse</code>; enter
-the code into your first Chunk:</p>
+<!-- Let's load our airport survey (`airport_survery.csv`) with the `readr` package from the `tidyverse`; enter the code into your first Chunk: -->
 <pre class="r"><code>library(tidyverse)
+library(readxl)
 
-survey &lt;- read_csv(&quot;data/airport_survey.csv&quot;)</code></pre>
-<pre><code>## Rows: 3501 Columns: 37
-## -- Column specification --------------------------------------------------------
-## Delimiter: &quot;,&quot;
-## chr   (2): Quarter, Date recorded
-## dbl  (34): Ground transportation to/from airport, Parking facilities, Parkin...
-## time  (1): Departure time
-## 
-## i Use `spec()` to retrieve the full column specification for this data.
-## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+survey &lt;- read_xlsx(path = &quot;data/salary_survey.xlsx&quot;)</code></pre>
 <p>You should see three buttons, <img
 src="img/R%20Module%204/chunkbuttons.png" />. The first is for your
 Chunk options, and allows you to interactively set your options and name
@@ -643,38 +630,188 @@ Operator</td>
 <td><code>Ctrl Shift K</code></td>
 <td>“Knits” the current R Markdown document</td>
 </tr>
+<tr class="even">
+<td><code>Ctrl Shift C</code></td>
+<td>‘Comments’ or ‘un-comments’ code with <code>#</code></td>
+</tr>
 </tbody>
 </table>
+<p>These are by no means all of the most useful shortcuts in R Studio,
+but they’re the ones I use most often.</p>
 <hr />
-<hr />
-</div>
-</div>
-<div id="qualitative-data" class="section level1">
-<h1>Qualitative Data</h1>
-<div id="factors-and-levels-in-r" class="section level3">
-<h3>Factors and Levels in R</h3>
-<hr />
-</div>
-<div id="recoding-using-dplyr" class="section level2">
-<h2>Recoding using <code>dplyr</code></h2>
-<hr />
-</div>
-<div id="visualizing-qualitative-data-with-ggplot2"
-class="section level2">
-<h2>Visualizing Qualitative Data with <code>ggplot2</code></h2>
-<hr />
-<hr />
-</div>
-</div>
-<div id="survey-development-sampling-and-statistical-tests"
-class="section level1">
-<h1>Survey Development, Sampling, and Statistical Tests</h1>
-<div id="sampling-techniques" class="section level2">
-<h2>Sampling Techniques</h2>
-<hr />
-</div>
-<div id="statistisal-tests-for-surveys" class="section level2">
-<h2>Statistisal Tests for Surveys</h2>
+<p>Manipulating Data</p>
+<p>Back to our code, let’s create another Code Chunk, in which we’ll
+pull out some of the variables we want to work with. We’ll use
+<code>dplyr</code> to select our variables of interest (stored in
+columns), and the pipe operator <code>%&gt;%</code>, which takes
+whatever is on its left-hand side and “pipes” it into a function on its
+right-hand side, like so:</p>
+<!-- select columns, then separate code chunk for mutating to factor -->
+<pre class="r"><code>survey_sub &lt;- survey %&gt;%
+  select(`Survey Year`, Country, PrimaryDatabase, SalaryUSD, YearsWithThisDatabase, YearsWithThisTypeOfJob, Education)</code></pre>
+<pre class="r"><code>survey_sub &lt;- survey_sub %&gt;%
+  filter(
+    # Some respondents put in the year they started working with the database,
+    # which makes it look like they have 2,000 years&#39; experience
+    YearsWithThisDatabase &lt;= 50,
+
+    # Same for the following:
+    YearsWithThisTypeOfJob &lt;= 50,
+
+    # We&#39;re only interested in the U.S.
+    Country == &quot;United States&quot;,
+
+    # We want to filter out &quot;missing values&quot;
+    Education != &quot;Not Asked&quot;,
+
+    # Some respondents put in their hourly wage rather than their yearly salary
+    SalaryUSD &gt; 1000
+  )</code></pre>
+<pre class="r"><code>survey_sub %&gt;%
+  ggplot(aes(y = Education, x = SalaryUSD)) +
+  geom_boxplot(notch = TRUE)</code></pre>
+<p><img src="RModule4_files/figure-html/boxplots-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>survey_sub &lt;- survey_sub %&gt;%
+  mutate(
+    SalaryLog10 = log10(SalaryUSD)
+  )</code></pre>
+<pre class="r"><code>survey_sub %&gt;%
+  ggplot(aes(y = Education, x = SalaryLog10)) +
+  geom_boxplot(notch = TRUE)</code></pre>
+<p><img src="RModule4_files/figure-html/boxplots-log10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Our distribution appears to be much more normal now.</p>
+<pre class="r"><code>survey_sub &lt;- survey_sub %&gt;%
+  mutate(
+    Education = factor(
+      Education,
+      ordered = TRUE,
+      levels = c(
+        &quot;None (no degree completed)&quot;,
+        &quot;Associates (2 years)&quot;,
+        &quot;Bachelors (4 years)&quot;,
+        &quot;Masters&quot;,
+        &quot;Doctorate/PhD&quot;
+      )
+    )
+  )
+
+summary(survey_sub)</code></pre>
+<pre><code>##   Survey Year     Country          PrimaryDatabase      SalaryUSD      
+##  Min.   :2017   Length:4494        Length:4494        Min.   :  11100  
+##  1st Qu.:2017   Class :character   Class :character   1st Qu.:  85000  
+##  Median :2018   Mode  :character   Mode  :character   Median : 102000  
+##  Mean   :2018                                         Mean   : 107496  
+##  3rd Qu.:2018                                         3rd Qu.: 122000  
+##  Max.   :2019                                         Max.   :1450000  
+##  YearsWithThisDatabase YearsWithThisTypeOfJob                      Education   
+##  Min.   : 0.00         Min.   : 0.000         None (no degree completed): 671  
+##  1st Qu.: 6.00         1st Qu.: 3.000         Associates (2 years)      : 500  
+##  Median :10.00         Median : 5.000         Bachelors (4 years)       :2540  
+##  Mean   :11.31         Mean   : 7.386         Masters                   : 759  
+##  3rd Qu.:16.00         3rd Qu.:10.000         Doctorate/PhD             :  24  
+##  Max.   :38.00         Max.   :40.000                                          
+##   SalaryLog10   
+##  Min.   :4.045  
+##  1st Qu.:4.929  
+##  Median :5.009  
+##  Mean   :5.004  
+##  3rd Qu.:5.086  
+##  Max.   :6.161</code></pre>
+<p>Our goal is to perform a Chi-Squared test, which only works on
+categorical data. Our predictor variable, <code>Education</code>, is
+categorical, but our response variable, <code>SalaryUSD</code> is
+continuous. However, we’re not exactly worried yet about specific dollar
+amounts, just a general “range” of salaries. A common way we describe
+this is with figures (e.g., a “six-figure” salary). This just means the
+“number of zeros” in one’s paycheck, and we pretty much have that data
+already (a <span class="math inline">\(log_{10}\)</span>) transformation
+is exactly what that represents). So, if we recode our
+<code>SalaryLog10</code> column to be categorical (e.g., 4-figs, 5-figs,
+etc.), we can perform a Chi-Squared test.</p>
+<pre class="r"><code>factors &lt;- cut(survey_sub$SalaryLog10, breaks = c(4, 5, 6, 7), labels = c(&quot;5 Figures&quot;, &quot;6 Figures&quot;, &quot;7 Figures&quot;))
+
+survey_sub &lt;- survey_sub %&gt;%
+  mutate(
+    SalaryFigs = factors
+  )
+summary(survey_sub)</code></pre>
+<pre><code>##   Survey Year     Country          PrimaryDatabase      SalaryUSD      
+##  Min.   :2017   Length:4494        Length:4494        Min.   :  11100  
+##  1st Qu.:2017   Class :character   Class :character   1st Qu.:  85000  
+##  Median :2018   Mode  :character   Mode  :character   Median : 102000  
+##  Mean   :2018                                         Mean   : 107496  
+##  3rd Qu.:2018                                         3rd Qu.: 122000  
+##  Max.   :2019                                         Max.   :1450000  
+##  YearsWithThisDatabase YearsWithThisTypeOfJob                      Education   
+##  Min.   : 0.00         Min.   : 0.000         None (no degree completed): 671  
+##  1st Qu.: 6.00         1st Qu.: 3.000         Associates (2 years)      : 500  
+##  Median :10.00         Median : 5.000         Bachelors (4 years)       :2540  
+##  Mean   :11.31         Mean   : 7.386         Masters                   : 759  
+##  3rd Qu.:16.00         3rd Qu.:10.000         Doctorate/PhD             :  24  
+##  Max.   :38.00         Max.   :40.000                                          
+##   SalaryLog10        SalaryFigs  
+##  Min.   :4.045   5 Figures:2182  
+##  1st Qu.:4.929   6 Figures:2309  
+##  Median :5.009   7 Figures:   3  
+##  Mean   :5.004                   
+##  3rd Qu.:5.086                   
+##  Max.   :6.161</code></pre>
+<p>Interesting! It looks like there are only 3 cases where an individual
+reported a 7-figure salary. We probably want to filter out these cases,
+as we won’t be able to make any significant statistical inference about
+them (remember n = 30)</p>
+<p>Let’s perform some final cleaning, and select out only the variables
+we’re interested in:</p>
+<pre class="r"><code>survey_clean &lt;- survey_sub %&gt;%
+  select(
+    -PrimaryDatabase, -Country, SalaryLog10
+  ) %&gt;%
+  filter(
+    SalaryFigs != &quot;7 Figures&quot;
+  ) %&gt;%
+  mutate(
+    Education = fct_recode(
+      Education,
+      &quot;None&quot; = &quot;None (no degree completed)&quot;,
+      &quot;Associates&quot; = &quot;Associates (2 years)&quot;,
+      &quot;Bachelors&quot; = &quot;Bachelors (4 years)&quot;,
+      &quot;Masters&quot; = &quot;Masters&quot;,
+      &quot;Doctorate&quot; = &quot;Doctorate/PhD&quot;
+    )
+  )
+
+nrow(survey_clean)</code></pre>
+<pre><code>## [1] 4491</code></pre>
+<pre class="r"><code>summary(survey_clean)</code></pre>
+<pre><code>##   Survey Year     SalaryUSD       YearsWithThisDatabase YearsWithThisTypeOfJob
+##  Min.   :2017   Min.   :  11100   Min.   : 0.00         Min.   : 0.000        
+##  1st Qu.:2017   1st Qu.:  85000   1st Qu.: 6.00         1st Qu.: 3.000        
+##  Median :2018   Median : 102000   Median :10.00         Median : 5.000        
+##  Mean   :2018   Mean   : 106616   Mean   :11.31         Mean   : 7.382        
+##  3rd Qu.:2018   3rd Qu.: 122000   3rd Qu.:16.00         3rd Qu.:10.000        
+##  Max.   :2019   Max.   :1000000   Max.   :38.00         Max.   :40.000        
+##       Education     SalaryLog10        SalaryFigs  
+##  None      : 671   Min.   :4.045   5 Figures:2182  
+##  Associates: 500   1st Qu.:4.929   6 Figures:2309  
+##  Bachelors :2538   Median :5.009   7 Figures:   0  
+##  Masters   : 758   Mean   :5.003                   
+##  Doctorate :  24   3rd Qu.:5.086                   
+##                    Max.   :6.000</code></pre>
+<p>We can plot our remaining data, of which there are 2,570
+observations:</p>
+<pre class="r"><code>survey_clean %&gt;%
+  ggplot(aes(x = YearsWithThisTypeOfJob, y = SalaryFigs, fill = SalaryFigs)) +
+  geom_boxplot(notch = T) +
+  facet_grid(rows = vars(Education)) +
+  labs(
+    x = &quot;Years with this type of job&quot;,
+    y = &quot;Salary Figures&quot;,
+    title = &quot;Years Experience vs. Salary&quot;,
+    fill = &quot;Figures&quot;
+  )</code></pre>
+<pre><code>## notch went outside hinges. Try setting notch=FALSE.
+## notch went outside hinges. Try setting notch=FALSE.</code></pre>
+<p><img src="RModule4_files/figure-html/boxplots-final-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
 <hr />
 </div>
