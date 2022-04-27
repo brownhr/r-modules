@@ -23,7 +23,7 @@ klippy::klippy()
 
 # Generating Reports using R Markdown
 
-For this R Module, we'll be analyzing some survey data; we have an airport quality survey which contains 3,501 survey responses from the Austin-Bergstrom International Airport's customer survey, from the City of Austin. 
+<!-- For this R Module, we'll be analyzing some survey data; we have an airport quality survey which contains 3,501 survey responses from the Austin-Bergstrom International Airport's customer survey, from the City of Austin.  -->
 
 While generating reports using tools like Excel or Google Sheets is perfectly fine, R is an extraordinarily powerful tool for exploring and visualizing data, and is perfect for this sort of case. However, it's sometimes difficult to quickly generate a report or create a picture, especially when we want to highlight a number of attributes simultaneously.
 
@@ -151,19 +151,17 @@ Within your Chunk (the area between the sets of backticks should be greyed-out) 
 
 In your first Chunk, we'll load some data. Just like in R Scripts, you have to load packages with the `library()` function. If you get a message like `Error in loadNamespace(x) : there is no package called 'packagename`, it means you haven't yet, and need to install it with `install.packages("packagename")` (note the quotes here, but not in `library()`!).
 
-Let's load our airport survey (`airport_survery.csv`) with the `readr` package from the `tidyverse`; enter the code into your first Chunk:
+<!-- Let's load our airport survey (`airport_survery.csv`) with the `readr` package from the `tidyverse`; enter the code into your first Chunk: -->
 
-```{r, eval = FALSE}
+```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
+library(readxl)
 
-survey <- read_csv("data/airport_survey.csv")
+survey <- read_xlsx(path = "data/salary_survey.xlsx")
+
 ```
 
-```{r, include = FALSE}
-library(tidyverse)
 
-survey <- read_csv("data/airport_survey.csv")
-```
 
 
 You should see three buttons, ![](img/R Module 4/chunkbuttons.png). The first is for your Chunk options, and allows you to interactively set your options and name your Chunk. The second runs all Code Chunks above the current one, and the last runs the current Chunk itself.
@@ -185,19 +183,13 @@ These are by no means all of the most useful shortcuts in R Studio, but they're 
 
 ***
 
-### Viewing data
+Manipulating Data
 
-Back to our code, let's create another Code Chunk, in which we'll set up a histogram plot.
+Back to our code, let's create another Code Chunk, in which we'll pull out some of the variables we want to work with. We'll use `dplyr` to select our variables of interest (stored in columns), and the pipe operator `%>%`, which takes whatever is on its left-hand side and "pipes" it into a function on its right-hand side, like so:
 
-```{r}
-# Often, you'll need to wrap variables containing spaces with backticks. It's
-# not always necessary, but it helps keep your data from breaking.
 
-ggplot(survey, aes(x = "Parking Facilities")) + 
-  geom_bar(
 
-  )
-```
+
 
 
 
