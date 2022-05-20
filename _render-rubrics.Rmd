@@ -3,6 +3,7 @@
 library(tidyverse)
 library(rmarkdown)
 library(googledrive)
+library(doconv)
 
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -31,13 +32,14 @@ walk(
   base <- basename(input)
   num <- str_extract(input, "\\d+")
   out_name <- paste0("R Module ", num, " Rubric")
-    rmarkdown::render(
+    out <- rmarkdown::render(
       input = input,
       output_dir = out_dir,
-      output_format = c("bookdown::word_document2",
-                        "bookdown::pdf_document2"),
+      output_options = list(number_sections = FALSE),
+      output_format = c("bookdown::word_document2"),
       output_file = out_name
     )
+    doconv::docx2pdf(out)
   }
 )
 ```
@@ -55,16 +57,16 @@ gd_sub <- drive_ls(gd_rmods)
 # Lists the rubrics which are in .docx format
 rubric_docx <- list.files(
   path = "rubrics/files",
-  pattern = "^_.+\\.docx",
+  pattern = "\\.docx",
   full.names = TRUE)
 
 
 # Uploads .docx rubrics to Google Drive
-walk(rubric_docx, function(x) {
-  base <- basename(x)
-  num <- str_extract(x, "\\d+")
-  name <- paste0("R Module ", num)
-  gd_dir <- drive_get(id = gd_sub[gd_sub$name == name,]$id)
-  drive_upload(x, path = gd_dir, name = paste0(name, " Rubric.docx"), overwrite = T)
+walk(rubric_docx, function(input) {
+  base <- input %>% 
+    basename() %>% 
+    str_remove(" Rubric.docx")
+  gd_dir <- drive_get(id = gd_sub[gd_sub$name == base,]$id)
+  drive_upload(input, path = gd_dir, name = basename(input), overwrite = T)
 })
 ```
