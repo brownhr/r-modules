@@ -22,7 +22,7 @@ to ignore the file when building the website
 ``` {r}
 rubric_list <- list.files(pattern = "^_.+_Rubric\\.Rmd", full.names = T)
 
-out_dir <- "rubrics/files"
+out_dir <- "rubrics"
 
 if(!dir.exists(out_dir)) dir.create(out_dir)
 
@@ -46,7 +46,6 @@ walk(
 
 This function uploads the .docx files to Google Drive and this chunk needs to be run manually
 ``` {r, eval = FALSE}
-
 # Loads the shared Google Drive with the googledrive package
 gd_rmods <- drive_get(id = "1dFkBUBZY0JV6QUEMHV6mLBtZ0UPDMHjE")
 
@@ -56,7 +55,7 @@ gd_sub <- drive_ls(gd_rmods)
 
 # Lists the rubrics which are in .docx format
 rubric_docx <- list.files(
-  path = "rubrics/files",
+  path = out_dir,
   pattern = "\\.docx",
   full.names = TRUE)
 
@@ -67,6 +66,6 @@ walk(rubric_docx, function(input) {
     basename() %>% 
     str_remove(" Rubric.docx")
   gd_dir <- drive_get(id = gd_sub[gd_sub$name == base,]$id)
-  drive_upload(input, path = gd_dir, name = basename(input), overwrite = T)
+  drive_put(input, path = gd_dir)
 })
 ```
