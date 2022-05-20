@@ -1,7 +1,7 @@
 
 ```{r setup, include = FALSE}
+library(tidyverse)
 library(rmarkdown)
-library(purrr)
 library(googledrive)
 
 knitr::opts_chunk$set(echo = TRUE)
@@ -46,16 +46,27 @@ map(
 
 This function uploads the .docx files to Google Drive and this chunk needs to be run manually
 ``` {r, eval = FALSE}
+
+# Loads the shared Google Drive with the googledrive package
+gd_rmods <- drive_get(id = "1dFkBUBZY0JV6QUEMHV6mLBtZ0UPDMHjE")
+
+# Gets child folders for each R Module
+gd_sub <- drive_ls(gd_rmods)
+
+
+# Lists the rubrics which are in .docx format
 rubric_docx <- list.files(
   path = "rubrics/docx",
   pattern = "^_.+\\.docx",
   full.names = TRUE)
 
+
+# Uploads .docx rubrics to Google Drive
 walk(rubric_docx, function(x) {
   base <- basename(x)
   num <- str_extract(x, "\\d+")
   name <- paste0("R Module ", num)
-  dir <- paste0("Updated R Modules/", name, "/")
+  dir <- drive_get(id = gd_sub[gd_sub$name == name,]$id)
   drive_upload(x, path = dir, name = paste0(name, " Rubric.docx"), overwrite = T)
 })
 ```
