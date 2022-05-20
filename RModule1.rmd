@@ -148,6 +148,6 @@ Let's try some more meaningful summaries for quantitative data using R. Just as 
 
     -   Use `?boxplot()` to figure out how to change the orientation.
 
-7.  Repeat steps 4-6 on a dataset of your own choosing and interpret the data. You can also use functions such as `mean`, `median`, `quantile`, etc. to help interpret your data.
+7.  Repeat steps 4-6 (histogram, histogram with nbreaks = 2, and horizontal boxplot) on a dataset of your own choosing and interpret the data. You can also use functions such as `mean`, `median`, `quantile`, etc. to help interpret your data. Give each of your new plots x- and y-axis labels and a title*
 
 If you've made it this far, then congrats -- you're learning R! Once you're done celebrating, give your document a title or header called "R Module 1", add your name, and turn it in to Google Classroom. Bring any questions, insights, comments, or concerns to the next class!
