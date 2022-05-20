@@ -144,7 +144,7 @@ Let's try some more meaningful summaries for quantitative data using R. Just as 
 
     -   *Hint: use `?hist()` to see more documentation on the `hist()` function.*
 
-6.  A boxplot of eruptions that is horizontal, rather than vertical.
+6.  A *boxplot* of eruptions that is horizontal, rather than vertical.
 
     -   Use `?boxplot()` to figure out how to change the orientation.
 
