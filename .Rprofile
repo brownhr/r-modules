@@ -4,27 +4,32 @@ library(fs)
 library(googledrive)
 library(tidyverse)
 
-rmd_gd <- drive_get(id = "1dFkBUBZY0JV6QUEMHV6mLBtZ0UPDMHjE")
+# rmd_gd <- drive_get(id = "1dFkBUBZY0JV6QUEMHV6mLBtZ0UPDMHjE")
+# 
+# rmd_ls <- drive_ls(rmd_gd)
+# 
+# source("get_files.R")
+# 
+# local_id <- get_local_files()
+# 
+# source("export_data.R")
+# 
+# local_id <- append_local_data(local_id)
+# 
+# # local_id$id %>%
+# #   walk(make_rmd_gd_dir)
+# 
+# gd_data <-  
+#   map2_dfr(
+#     .x = local_id$id,
+#     .y = local_id$name,
+#     .f = function(.x, name){
+#     ls <- drive_ls(.x)
+#     tibble_row(name, data_id = ls[ls$name == "data", "id"])
+#   })
+# 
+# local_id <- left_join(local_id, gd_data)
+# 
+# local_id_hasdata <- local_id[!is.na(local_id$data_files),]
 
-rmd_ls <- drive_ls(rmd_gd)
 
-local_rm_html <- list.files("docs", "RModule.+\\.html", full.names = TRUE)
-local_rm_pdf <- list.files("rendered_docs", "\\.pdf", full.names = TRUE)
-local_rm_rmd <- list.files(pattern = "RModule\\d*\\.rmd", full.names = TRUE, ignore.case = T)
-
-local_num <- local_rm_html %>% 
-  basename() %>% 
-  path_ext_remove() %>% 
-  str_extract("\\d+\\b")
-
-local_names <- paste0("R Module ", local_num)
-
-local_id <- left_join(
-  rmd_ls,
-  data.frame(
-    name = local_names,
-    local_html = local_rm_html,
-    local_pdf = local_rm_pdf,
-    local_rmd = local_rm_rmd
-  )
-)
