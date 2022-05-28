@@ -4,9 +4,9 @@ library(fs)
 library(googledrive)
 library(tidyverse)
 
-rmd_gd <- drive_get(id = "1dFkBUBZY0JV6QUEMHV6mLBtZ0UPDMHjE")
+# rmd_gd <- drive_get(id = "1dFkBUBZY0JV6QUEMHV6mLBtZ0UPDMHjE")
 # 
-rmd_ls <- drive_ls(rmd_gd)
+# rmd_ls <- drive_ls(rmd_gd)
 # 
 # source("get_files.R")
 # 
