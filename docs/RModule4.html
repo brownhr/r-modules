@@ -461,7 +461,7 @@ write up reports in Word anymore. Rather than endlessly take screenshots
 and paste into a document, you can embed your code in an R Markdown
 document, and it’ll insert the plots and graphs that you generate
 <em>directly</em>, like this:</p>
-<pre><code>```{r code-example}
+<pre><code>```{r}
 
 x <- seq(-1, 1, length = 20)
 
@@ -473,7 +473,7 @@ plot(x, y)
 <p>Which gives you:</p>
 <p><img src="RModule4_files/figure-html/code-example-1.png" width="50%" style="display: block; margin: auto;" /></p>
 <p>Or, if you want to print a table, you can use:</p>
-<pre><code>```{r table}
+<pre><code>```{r}
 
 head(mtcars)
 
@@ -544,10 +544,10 @@ etc. are stored here.</p>
 </div>
 <div id="code-chunks" class="section level2">
 <h2>Code Chunks</h2>
-<p>Code Chunks are the lifeblood of R Markdown documents; they allow you
-to run R code within your document, giving you the ability to embed
-tables, plots, figures, and maps directly in your document (no more
-copy-pasting screenshots!).</p>
+<p>Code Chunks are the essential element of R Markdown documents; they
+allow you to run R code within your document, giving you the ability to
+embed tables, plots, figures, and maps directly in your document (no
+more copy-pasting screenshots!).</p>
 <p>These Code Chunks are surrounded by three backticks,
 <code>```</code>, (it’s the key to the left of the <code>1</code> key on
 most layouts). To insert a Chunk, you can also type
@@ -659,8 +659,8 @@ code – whenever you see code in this Module, put it in a Chunk. The
 questions for this Module will be pretty simple; you’ll mostly be
 describing the distributions and attributes of the data, but the idea is
 to get you writing your answers in tandem with your Code Chunks, so you
-can generate a document without having to copy and paste code and
-images.</p>
+can generate a document without having to copy and paste code and images
+into something like a Word document.</p>
 </div>
 </div>
 <div id="manipulating-data" class="section level1">
@@ -674,13 +674,28 @@ and “pipes” it into a function on its right-hand side, like so:</p>
 <p>Let’s select the columns and work with our data by creating a new
 <code>object</code>, “<code>survey_sub</code>”. Using
 <code>%&gt;%</code>, we’ll pipe our <code>survey</code> into the
-<code>dplyr::select()</code> function.</p>
+<code>dplyr::select()</code> function. Again, you can type
+<code>Ctrl-Shift-M</code> to insert a <code>%&gt;%</code>, and
+<code>Alt-Minus'</code>to insert a <code>&lt;-</code>.</p>
 <pre class="r"><code>survey_sub &lt;- survey %&gt;%
   select(`Survey Year`, Country, PrimaryDatabase, SalaryUSD, YearsWithThisDatabase, YearsWithThisTypeOfJob, Education)</code></pre>
+<p>Now that we have a selection of the columns deemed most important,
+let’s do some additional steps to clean up our data. Because the initial
+survey was open-ended, some of the responses might not be correct or
+make much sense. For example, under <code>YearsWithThisTypeOfJob</code>,
+a few respondents answered with values like <code>2020</code> and
+<code>1997</code>. It’s entirely likely that they meant that they had
+been working in that job field <em>since</em> 2020 or 1997. In a
+real-world analysis, you should clean the data up by calculating how
+many years they have actually had, but in this module, we’ll simply
+remove those columns.</p>
+<p>We’ll also apply this process to a few other columns in the dataset,
+as well as filtering by other columns to get a subset of the data that
+we’re interested in. Our analysis intends to examine the distribution of
+salary and education within the United states, so we’ll also filter by
+respondents from within the U.S.</p>
 <pre class="r"><code>survey_sub &lt;- survey_sub %&gt;%
-  filter(
-    # Some respondents put in the year they started working with the database,
-    # which makes it look like they have 2,000 years&#39; experience
+  dplyr::filter(
     YearsWithThisDatabase &lt;= 50,
 
     # Same for the following:
@@ -692,17 +707,27 @@ and “pipes” it into a function on its right-hand side, like so:</p>
     # We want to filter out &quot;missing values&quot;
     Education != &quot;Not Asked&quot;,
 
-    # Some respondents put in their hourly wage rather than their yearly salary
+    # Some respondents put in their hourly wage rather than their yearly salary;
+    # it&#39;s doubtful that anyone only makes $13 USD per year working in this kind
+    # of job!
+
     SalaryUSD &gt; 1000
   )</code></pre>
+<p>Now, we should visually inspect our data. Let’s create a
+visualization with <code>ggplot2</code>: a boxplot of the distribution
+of salaries within each education level.</p>
 <pre class="r"><code>survey_sub %&gt;%
   ggplot(aes(y = Education, x = SalaryUSD)) +
-  geom_boxplot(notch = TRUE)</code></pre>
+  geom_boxplot()</code></pre>
 <p><img src="RModule4_files/figure-html/boxplots-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Our salaries don’t appear normally distributed, do they? When
 exploring data, it’s often a good idea to <em>transform</em> your data
-to help visualize the general distribution of the data. We’ll transform
-by taking the base-10 logarithm of our salary variable:</p>
+to help visualize the general distribution of the data. However, we
+should always be careful when working with transformations when doing
+any kind of <em>analysis</em>, as it could potentially skew our results
+or lead us to conclusions that might not be entirely accurate. For now,
+though, we’ll transform by taking the base-10 logarithm of our salary
+variable:</p>
 <pre class="r"><code>survey_sub &lt;- survey_sub %&gt;%
   mutate(
     SalaryLog10 = log10(SalaryUSD)
@@ -712,23 +737,45 @@ by taking the base-10 logarithm of our salary variable:</p>
 # We&#39;ll pop this back into our boxplots...
 survey_sub %&gt;%
   ggplot(aes(y = Education, x = SalaryLog10)) +
-  geom_boxplot(notch = TRUE)</code></pre>
+  geom_boxplot()</code></pre>
 <p><img src="RModule4_files/figure-html/boxplots-log10-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Our distribution appears to be much more normal now.</p>
-<pre class="r"><code>survey_sub &lt;- survey_sub %&gt;%
-  mutate(
-    Education = factor(
-      Education,
-      ordered = TRUE,
-      levels = c(
-        &quot;None (no degree completed)&quot;,
-        &quot;Associates (2 years)&quot;,
-        &quot;Bachelors (4 years)&quot;,
-        &quot;Masters&quot;,
-        &quot;Doctorate/PhD&quot;
-      )
+<p>Great! Although the data itself hasn’t changed, by applying a
+transformation, we are able to see the shape and pattern of the
+distribution of our variable more easily.</p>
+<hr />
+<p>Another consideration when working with data in R is the
+<em>class</em> of the data we’re working with. Categorical variables in
+R are best represented with the <code>factor</code> class; rather than a
+<code>character</code>, which can represent any sort of text, a
+<code>factor</code> is used when there is a known set of “choices” or
+potential values. For example, if you had a dataset of movies, the name
+of the movie would be best suited as a <code>character</code> variable,
+while the <em>genre</em> of a movie might work better as a
+<code>factor</code>.</p>
+<p>We’ll convert (the R-technical term is “coerce”) our
+<code>Education</code> variable to a <code>factor</code>, which allows
+us to see more useful summary statistics about the number of occurrences
+within each level of education.</p>
+<pre class="r"><code>survey_sub$Education &lt;-
+  factor(
+    survey_sub$Education,
+
+    # We set this argument to TRUE when the order of our factor matters, or if
+    # we intend to compare the &quot;amount&quot; of education (a PhD is a greater
+    # &quot;amount&quot; of education than a Bachelors, for example.)
+    ordered = TRUE,
+
+    # The `levels` argument requests a character vector of the different factor
+    # levels in the dataset, and the order we want them to be in.
+    levels = c(
+      &quot;None (no degree completed)&quot;,
+      &quot;Associates (2 years)&quot;,
+      &quot;Bachelors (4 years)&quot;,
+      &quot;Masters&quot;,
+      &quot;Doctorate/PhD&quot;
     )
   )
+
 
 summary(survey_sub)</code></pre>
 <pre><code>##   Survey Year     Country          PrimaryDatabase      SalaryUSD      
@@ -763,12 +810,19 @@ already (a <span class="math inline">\(log_{10}\)</span>) transformation
 is exactly what that represents). So, if we recode our
 <code>SalaryLog10</code> column to be categorical (e.g., 4-figs, 5-figs,
 etc.), we can perform a Chi-Squared test.</p>
-<pre class="r"><code>factors &lt;- cut(survey_sub$SalaryLog10, breaks = c(4, 5, 6, 7), labels = c(&quot;5 Figures&quot;, &quot;6 Figures&quot;, &quot;7 Figures&quot;))
-
-survey_sub &lt;- survey_sub %&gt;%
-  mutate(
-    SalaryFigs = factors
+<pre class="r"><code>factors &lt;-
+  # The `cut()` function takes a character vector and &quot;cuts&quot; it into a factor,
+  # by looking at values that fall within each break. Think of it as plotting a
+  # histogram with a certain number of bins, and assigning each of those bins as
+  # a factor level.
+  cut(
+    survey_sub$SalaryLog10,
+    breaks = c(4, 5, 6, 7),
+    labels = c(&quot;5 Figures&quot;, &quot;6 Figures&quot;, &quot;7 Figures&quot;)
   )
+
+survey_sub$SalaryFigs &lt;- factors
+
 summary(survey_sub)</code></pre>
 <pre><code>##   Survey Year     Country          PrimaryDatabase      SalaryUSD      
 ##  Min.   :2017   Length:4494        Length:4494        Min.   :  11100  
@@ -794,30 +848,22 @@ summary(survey_sub)</code></pre>
 <p>Interesting! It looks like there are only 3 cases where an individual
 reported a 7-figure salary. We probably want to filter out these cases,
 as we won’t be able to make any significant statistical inference about
-them (remember n = 30)</p>
+them (remember n = 30).</p>
 <p>Let’s perform some final cleaning, and select out only the variables
 we’re interested in:</p>
 <pre class="r"><code>survey_clean &lt;- survey_sub %&gt;%
-  select(
-    -PrimaryDatabase, -Country, SalaryLog10
-  ) %&gt;%
-  filter(
-    SalaryFigs != &quot;7 Figures&quot;
-  ) %&gt;%
-  mutate(
-    Education = fct_recode(
-      Education,
-      &quot;None&quot; = &quot;None (no degree completed)&quot;,
-      &quot;Associates&quot; = &quot;Associates (2 years)&quot;,
-      &quot;Bachelors&quot; = &quot;Bachelors (4 years)&quot;,
-      &quot;Masters&quot; = &quot;Masters&quot;,
-      &quot;Doctorate&quot; = &quot;Doctorate/PhD&quot;
-    )
-  )
+  # We&#39;re not interested in these columns, so we can exclude them with a &quot;-&quot;
+  dplyr::select(-PrimaryDatabase, -Country, SalaryLog10) %&gt;%
+  # Likewise, we want to ignore the cases where the salary is 7 figures, so we set our filter criterion to the observations where SalaryFigs is not (!= represents &quot;is not&quot;) &quot;7 Figures&quot;.
+  dplyr::filter(SalaryFigs != &quot;7 Figures&quot;) %&gt;%
+  # Even though we filtered out the cases of 7-figure salaries, the &quot;7 Figures&quot;
+  # level still exists within our data. We use the `droplevels()` function to
+  # remove unused factor levels. Nothing actually changes about our data itself,
+  # but it helps keep our results tidy.
+  droplevels()
 
-nrow(survey_clean)</code></pre>
-<pre><code>## [1] 4491</code></pre>
-<pre class="r"><code>summary(survey_clean)</code></pre>
+
+summary(survey_clean)</code></pre>
 <pre><code>##   Survey Year     SalaryUSD       YearsWithThisDatabase YearsWithThisTypeOfJob
 ##  Min.   :2017   Min.   :  11100   Min.   : 0.00         Min.   : 0.000        
 ##  1st Qu.:2017   1st Qu.:  85000   1st Qu.: 6.00         1st Qu.: 3.000        
@@ -825,18 +871,18 @@ nrow(survey_clean)</code></pre>
 ##  Mean   :2018   Mean   : 106616   Mean   :11.31         Mean   : 7.382        
 ##  3rd Qu.:2018   3rd Qu.: 122000   3rd Qu.:16.00         3rd Qu.:10.000        
 ##  Max.   :2019   Max.   :1000000   Max.   :38.00         Max.   :40.000        
-##       Education     SalaryLog10        SalaryFigs  
-##  None      : 671   Min.   :4.045   5 Figures:2182  
-##  Associates: 500   1st Qu.:4.929   6 Figures:2309  
-##  Bachelors :2538   Median :5.009   7 Figures:   0  
-##  Masters   : 758   Mean   :5.003                   
-##  Doctorate :  24   3rd Qu.:5.086                   
-##                    Max.   :6.000</code></pre>
+##                       Education     SalaryLog10        SalaryFigs  
+##  None (no degree completed): 671   Min.   :4.045   5 Figures:2182  
+##  Associates (2 years)      : 500   1st Qu.:4.929   6 Figures:2309  
+##  Bachelors (4 years)       :2538   Median :5.009                   
+##  Masters                   : 758   Mean   :5.003                   
+##  Doctorate/PhD             :  24   3rd Qu.:5.086                   
+##                                    Max.   :6.000</code></pre>
 <p>We can plot our remaining data, of which there are 2,570
 observations:</p>
 <pre class="r"><code>survey_clean %&gt;%
   ggplot(aes(x = YearsWithThisTypeOfJob, y = SalaryFigs, fill = SalaryFigs)) +
-  geom_boxplot(notch = T) +
+  geom_boxplot() +
   facet_grid(rows = vars(Education)) +
   labs(
     x = &quot;Years with this type of job&quot;,
@@ -844,14 +890,46 @@ observations:</p>
     title = &quot;Years Experience vs. Salary&quot;,
     fill = &quot;Figures&quot;
   )</code></pre>
-<pre><code>## notch went outside hinges. Try setting notch=FALSE.
-## notch went outside hinges. Try setting notch=FALSE.</code></pre>
 <p><img src="RModule4_files/figure-html/boxplots-final-1.png" width="672" style="display: block; margin: auto;" /></p>
 <hr />
+</div>
+<div id="finalizing-your-r-markdown" class="section level1">
+<h1>Finalizing your R Markdown</h1>
+<p>Once you have all of the code you need embedded in your code chunks
+(remember, put each block of code in a separate chunk to keep things
+tidy!), you’ll need to <em>knit</em> your R Markdown document to some
+other format. Usually, you can export as either a <code>.html</code>,
+<code>.pdf</code>, or <code>.docx</code> document; for compatibility,
+we’ll export our document as a Word doc, <code>.docx</code>. Knitting to
+a PDF can sometimes be tricky and requires additional software to be
+installed – if you’re interested , it’s called <a
+href="https://yihui.org/tinytex/">tinytex</a>, and is quite easy to set
+up, but it’s a bit outside the scope of this Module.</p>
+<p>Anyways, make sure that your header (the section between each
+<code>---</code> at the top) looks about like:</p>
+<pre><code>---
+title: R Module 4
+author: Your Name
+
+output: word_document
+
+---</code></pre>
+<p>Whenever you’re ready to knit to a Word document, either click the
+<code>Knit</code> icon (<img src="img/R%20Module%204/knit.png" />), or
+enter <code>Ctrl-Shift-K</code>. This runs the R code in each code chunk
+and embeds it into a document alongside whatever text you enter between
+code chunks.</p>
+<p>R Markdown is a very powerful tool for writing code alongside text –
+this whole series of R Modules was written <em>entirely</em> in R
+Markdown!</p>
 <hr />
 </div>
 <div id="assignment" class="section level1">
 <h1>Assignment</h1>
+<p>For this assignment, you don’t have many questions to answer! Mostly,
+the goal is to get you working with R Markdown, so the main thing to
+submit will be the Word Document (or PDF, if you want) generated by R
+Markdown.</p>
 </div>
 
 <p>&copy; 2022 Maggie Sugg & Harrison Brown. v.0.0.15</p>
