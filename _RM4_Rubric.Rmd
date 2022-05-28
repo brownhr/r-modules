@@ -24,7 +24,7 @@ survey <- read_xlsx(path = "data/salary_survey.xlsx")
 
 ```{r select}
 survey_sub <- survey %>%
-  select(`Survey Year`, Country, PrimaryDatabase, SalaryUSD, YearsWithThisDatabase, YearsWithThisTypeOfJob, Education)
+  dplyr::select(`Survey Year`, Country, PrimaryDatabase, SalaryUSD, YearsWithThisDatabase, YearsWithThisTypeOfJob, Education)
 ```
 
 
