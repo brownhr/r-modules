@@ -12,8 +12,6 @@ output:
 ```{r su3, echo = F, message=F, warning=F}
 library(sf)
 library(tidyverse)
-library(plotly)
-library(crosstalk)
 ```
 
 ```{r klrm3, echo = F, include = T}
