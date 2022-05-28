@@ -13,7 +13,7 @@
 
 <title>R Markdown Reports and Survey Data</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -362,6 +362,9 @@ div.tocify {
       <a href="RModule3.html">R Module 3</a>
     </li>
     <li>
+      <a href="RModule4.html">R Module 4</a>
+    </li>
+    <li>
       <a href="RModule5.html">R Module 5</a>
     </li>
     <li>
@@ -695,7 +698,7 @@ we’re interested in. Our analysis intends to examine the distribution of
 salary and education within the United states, so we’ll also filter by
 respondents from within the U.S.</p>
 <pre class="r"><code>survey_sub &lt;- survey_sub %&gt;%
-  dplyr::filter(
+  filter(
     YearsWithThisDatabase &lt;= 50,
 
     # Same for the following:
@@ -853,9 +856,9 @@ them (remember n = 30).</p>
 we’re interested in:</p>
 <pre class="r"><code>survey_clean &lt;- survey_sub %&gt;%
   # We&#39;re not interested in these columns, so we can exclude them with a &quot;-&quot;
-  dplyr::select(-PrimaryDatabase, -Country, SalaryLog10) %&gt;%
+  select(-PrimaryDatabase, -Country, SalaryLog10) %&gt;%
   # Likewise, we want to ignore the cases where the salary is 7 figures, so we set our filter criterion to the observations where SalaryFigs is not (!= represents &quot;is not&quot;) &quot;7 Figures&quot;.
-  dplyr::filter(SalaryFigs != &quot;7 Figures&quot;) %&gt;%
+  filter(SalaryFigs != &quot;7 Figures&quot;) %&gt;%
   # Even though we filtered out the cases of 7-figure salaries, the &quot;7 Figures&quot;
   # level still exists within our data. We use the `droplevels()` function to
   # remove unused factor levels. Nothing actually changes about our data itself,
