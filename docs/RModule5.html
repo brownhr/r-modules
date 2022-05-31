@@ -35,10 +35,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
-<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
-<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
-<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 <link rel="shortcut icon" href="aoa_r.svg" />
@@ -405,10 +401,6 @@ div.tocify {
 </div>
 
 
-<script>
-  addClassKlippyTo("pre.r, pre.markdown");
-  addKlippy('left', 'top', 'auto', '1', 'Copy code', 'Copied!');
-</script>
 <hr />
 <div id="calculating-probability-of-a-normal-distribution"
 class="section level1">
@@ -426,41 +418,19 @@ distribution in <code>R</code>:</p>
 <pre class="r"><code># This code generates 200 equally-spaced values between -4 and 4, which we&#39;ll
 # use as the &#39;input values&#39;
 
-x &lt;- seq(from = -4,
+input &lt;- seq(from = -4,
          to = 4,
          length = 200)</code></pre>
 <p>Next, we’ll calculate the normal probability density of
-<code>x</code> using <code>dnorm()</code>. This calculates the
-likelihood that each value of <code>x</code> will be observed, and
-assigns it to the variable <code>y</code>. Note that we must specify the
-mean and standard deviation; we’ll set them to 0 and 1,
+<code>input</code> using <code>dnorm()</code>. This calculates the
+likelihood that each value of <code>input</code> will be observed, and
+assigns it to the variable <code>output</code>. Note that we must
+specify the mean and standard deviation; we’ll set them to 0 and 1,
 respectively.</p>
-<pre class="r"><code>y &lt;- dnorm(x = x,
+<pre class="r"><code>output &lt;- dnorm(x = input,
            mean = 0,
            sd = 1)</code></pre>
 <p>We can plot these to see the classic “bell-shaped” curve.</p>
-<pre class="r"><code># qplot is a great function if you&#39;re more familiar with base R plot(), but can
-# be used in tandem with ggplot functions.
-
-qplot(
-  x = x,
-  y = y,
-  geom = &quot;line&quot;,
-  
-  # Don&#39;t worry too much about what the I() function does here, it&#39;s just a
-  # qplot thing :)
-  color = I(&quot;red&quot;)
-)
-
-# But if you want to keep it simple, you can plot with base R.
-
-plot(x, y, type = &quot;l&quot;, col = &quot;red&quot;)</code></pre>
-<div class="figure" style="text-align: center">
-<img src="RModule5_files/figure-html/plots-1.png" alt="ggplot2 (left) vs base R (right)" width="672" />
-<p class="caption">
-ggplot2 (left) vs base R (right)
-</p>
-</div>
 <p>For normally distributed data, we can estimate the probability of
 observing a range of values by calculating the area under the curve that
 corresponds to those values. For example, consider the area under the
@@ -493,13 +463,13 @@ p_2 &lt;- pnorm(-1, mean = 0, sd = 1)
 p_1 - p_2</code></pre>
 <pre><code>## [1] 0.6826895</code></pre>
 <p>We can interpret this as meaning there being a 68.27% probability of
-a single observed value of <code>x</code> as falling between -1 and
+a single observed value of <code>input</code> as falling between -1 and
 +1.</p>
 <div id="questions" class="section level2">
 <h2>Questions</h2>
 <ol style="list-style-type: decimal">
 <li>Adapt the code above to calculate the area under the curve
-(probability) for the following intervals of <code>x</code>:
+(probability) for the following intervals of <code>input</code>:
 <ul>
 <li>(-2, 2)</li>
 <li>(-3, 3)</li>
@@ -512,31 +482,31 @@ a single observed value of <code>x</code> as falling between -1 and
 <div id="qnorm" class="section level1">
 <h1><code>qnorm()</code></h1>
 <p>What if we know the probabilities we want to achieve, but don’t know
-the values of <code>x</code> associated with these probabilities?
+the values of <code>input</code> associated with these probabilities?
 Consider the figure below; 95% of the area of the curve lies to the left
-of what value of <code>x</code>?</p>
+of what value of <code>input</code>?</p>
 <p><img src="RModule5_files/figure-html/qnorm1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>We can use <code>qnorm()</code>, which is the “inverse” of
 <code>pnorm()</code>; <code>qnorm()</code> returns the value of
-<code>x</code> to the left of a probability <code>p</code> (the area
+<code>input</code> to the left of a probability <code>p</code> (the area
 under the curve, visually speaking).</p>
 <pre class="r"><code>qnorm(p = 0.95,
       mean = 0,
       sd = 1)</code></pre>
 <pre><code>## [1] 1.644854</code></pre>
 <p>We can interpret this as meaning there is a 95% probability of a
-single observed value of <code>x</code> as falling between -4 and
-1.644854 (note, these values of <code>x</code> are also z-scores, since
-our mean is 0 and our standard deviation is 1). Because the area under
-the curve must sum to 1, we can also say that the probability of
-observing a value <code>x</code> that is more than 1.644854 is 5% (100%
-- 95%).</p>
+single observed value of <code>input</code> as falling between -4 and
+1.644854 (note, these values of <code>input</code> are also z-scores,
+since our mean is 0 and our standard deviation is 1). Because the area
+under the curve must sum to 1, we can also say that the probability of
+observing a value <code>input</code> that is more than 1.644854 is 5%
+(100% - 95%).</p>
 <div id="questions-1" class="section level2">
 <h2>Questions</h2>
 <ol start="2" style="list-style-type: decimal">
-<li>Use <code>qnorm()</code> to calculate the values of <code>x</code>
-for each of the following circumstances. Provide both the calculated
-values of <code>x</code> and your R code.</li>
+<li>Use <code>qnorm()</code> to calculate the values of
+<code>input</code> for each of the following circumstances. Provide both
+the calculated values of <code>input</code> and your R code.</li>
 </ol>
 <ol style="list-style-type: lower-alpha">
 <li>20% of the area of the curve is to the left of an unknown value of
@@ -622,9 +592,6 @@ lbound</code></pre>
 <p>What does this mean? We are 70% confident that the actual
 (population) mean salary of all recent graduates lies within the range
 between $9361.46 and $19193.94</p>
-<!--
-Maggie, I put a backslash in front of the $ so it's not interpreted as a latex equation. 
--->
 <div id="writing-a-function-in-r" class="section level3">
 <h3>Writing a function in R</h3>
 <p>Let’s take everything we’ve done so far and compose an R function.
@@ -632,7 +599,7 @@ Rather than running everything line-by-line, we can call this function
 with the arguments we set, which makes this a lot more repeatable,
 reproducible, and reduces our chance of errors.</p>
 <p>To create a function in R, we use the form:</p>
-<pre><code>func_name &lt;- function(arg1, arg2, etc.) {
+<pre><code>function_name &lt;- function(arg1, arg2, etc.) {
   contents of our function...
 }</code></pre>
 <p>We can call this function by first, defining the function in our
@@ -640,7 +607,7 @@ environment by hitting <code>Ctrl-Enter</code> within an R script, and
 second, using the function just like any other R function.</p>
 <p>Let’s try it out! We’ll call our function <code>confidence.</code> We
 need a couple arguments (inputs, options, etc.), including: our data,
-<code>x</code>, our population standard deviation (15,000), and our
+<code>input</code>, our population standard deviation (15,000), and our
 desired confidence interval (70%, or 0.7)</p>
 <pre class="r"><code>confidence &lt;- function(x, sdev = 15000, ci) {
   # Notice that we&#39;ve set the sdev argument to 15000, which means we&#39;ve given
@@ -693,7 +660,7 @@ percentage?</li>
 </ol>
 </div>
 
-<p>&copy; 2022 Maggie Sugg & Harrison Brown. v.1.0.0</p>
+<p>&copy; 2022 Maggie Sugg & Harrison Brown. v.1.0.1</p>
 
 
 </div>

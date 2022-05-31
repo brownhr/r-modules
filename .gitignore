@@ -36,3 +36,5 @@ vignettes/*.pdf
 rsconnect/
 
 /Old/
+
+docs/rendered_docs

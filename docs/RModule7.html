@@ -508,7 +508,7 @@ cor &lt;- NC %&gt;%
   # function. We&#39;re not actually getting rid of it from our original data, of
   # course.
   st_drop_geometry() %&gt;%
-  select(MNEM2000, POP2000) %&gt;%
+  dplyr::select(MNEM2000, POP2000) %&gt;%
   correlate(use = &quot;pairwise.complete.obs&quot;,
             method = &quot;pearson&quot;)
 
@@ -537,7 +537,7 @@ as any character columns:</p>
   # Finally, we can choose the columns we actually want to correlate. Note that
   # this is a bit redundant with the `select_if()` above, but I wanted to show
   # how to select columns programmatically with a logical test.
-  select(
+  dplyr::select(
     c(
       POP2000,
       MNEM2000,
@@ -740,7 +740,7 @@ choropleth mapping.</p>
 </div>
 </div>
 
-<p>&copy; 2022 Maggie Sugg & Harrison Brown. v.1.0.0</p>
+<p>&copy; 2022 Maggie Sugg & Harrison Brown. v.1.0.1</p>
 
 
 </div>
