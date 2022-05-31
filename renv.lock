@@ -9,14 +9,6 @@
     ]
   },
   "Packages": {
-    "AsioHeaders": {
-      "Package": "AsioHeaders",
-      "Version": "1.16.1-1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "9305444d113b052089eba3694047d42d",
-      "Requirements": []
-    },
     "DBI": {
       "Package": "DBI",
       "Version": "1.1.2",
@@ -1039,23 +1031,6 @@
       "Hash": "d07e729b27b372429d42d24d503613a0",
       "Requirements": []
     },
-    "klippy": {
-      "Package": "klippy",
-      "Version": "0.0.0.9500",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "klippy",
-      "RemoteUsername": "RLesur",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "378c247fbbc76ec662f6c1ed1103121b87091be4",
-      "Hash": "70516a1ba81efed1fedff43b6fdccbe5",
-      "Requirements": [
-        "assertthat",
-        "htmltools",
-        "stringi"
-      ]
-    },
     "knitr": {
       "Package": "knitr",
       "Version": "1.39",
@@ -1312,25 +1287,6 @@
       "Hash": "6d3bef2e305f55c705c674653c7d7d3d",
       "Requirements": [
         "askpass"
-      ]
-    },
-    "pagedown": {
-      "Package": "pagedown",
-      "Version": "0.18",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "3a7a335accfe88e3614efafd2bb98bef",
-      "Requirements": [
-        "bookdown",
-        "htmltools",
-        "httpuv",
-        "jsonlite",
-        "later",
-        "processx",
-        "rmarkdown",
-        "servr",
-        "websocket",
-        "xfun"
       ]
     },
     "pdftools": {
@@ -1731,19 +1687,6 @@
         "gclus",
         "qap",
         "registry"
-      ]
-    },
-    "servr": {
-      "Package": "servr",
-      "Version": "0.24",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "e2c3e268d654becf0d78a1ec13a05b46",
-      "Requirements": [
-        "httpuv",
-        "jsonlite",
-        "mime",
-        "xfun"
       ]
     },
     "sf": {
@@ -2168,19 +2111,6 @@
         "tzdb",
         "vctrs",
         "withr"
-      ]
-    },
-    "websocket": {
-      "Package": "websocket",
-      "Version": "1.4.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "76e0d400757e318cca33def29ccebbc2",
-      "Requirements": [
-        "AsioHeaders",
-        "R6",
-        "cpp11",
-        "later"
       ]
     },
     "widgetframe": {
