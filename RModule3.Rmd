@@ -14,9 +14,6 @@ library(sf)
 library(tidyverse)
 ```
 
-```{r klrm3, echo = F, include = T}
-klippy::klippy()
-```
 
 # File Management
 

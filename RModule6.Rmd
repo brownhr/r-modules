@@ -16,9 +16,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r echo = F, include = TRUE}
-klippy::klippy()
-```
 
 # What is *ANOVA*?
 

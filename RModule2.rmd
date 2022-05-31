@@ -12,9 +12,7 @@ output:
 # R Module 2
 
 
-```{r klrm2, echo = F, include = T}
-klippy::klippy()
-```
+
 
 
 ## Working with R Scripts and Projects
