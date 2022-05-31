@@ -48,15 +48,17 @@ For writing up documents and reports, text editors like Word and Google Docs do 
 
 ## Getting Started
 
-In order to use R and R Studio, you'll need to download and install them onto your computer. If you've used R before, make sure you're using at least version 4.1.2 to make sure everything runs smoothly.
+In order to use R and R Studio, you'll need to download and install them onto your computer. If you've used R before, make sure you're using at least version `r getRversion()` to make sure everything runs smoothly.
 
 Navigate to these websites to download the right version for your device (versions for both Windows and Mac exist!)
 
--   [Download R 4.1.2 for Windows 32/64-bit](https://cran.r-project.org/bin/windows/base/)
+-   [Download R `r getRversion()` for Windows 64-bit](https://cran.r-project.org/bin/windows/base/)
 
 -   [Download R for macOS](https://cran.r-project.org/bin/macosx/)
 
 -   [Download RStudio](https://www.rstudio.com/products/rstudio/download/#download)
+
+If you've used R before and have a lower version, you can use the `installr` package to update your R version and copy your packages, making it very easy to stay up-to-date!
 
 ### R Studio Interface
 
