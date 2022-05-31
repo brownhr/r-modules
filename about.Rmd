@@ -13,6 +13,8 @@ Built with R `r getRversion()`
 ```{r renv-pkgs, include = FALSE}
 require(styler)
 require(miniUI)
+require(bookdown)
+require(knitr)
 ```
 
 
