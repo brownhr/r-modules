@@ -11,7 +11,7 @@ RMD_files <-
              pattern = "RModule.+\\.[Rr]md",
              full.names = TRUE)
 
-RMD_files %>%
+RMD_files[6:10] %>%
   walk(
     .f = function(input) {
       rmarkdown::render(
