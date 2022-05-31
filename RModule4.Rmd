@@ -182,7 +182,7 @@ Let's select the columns and work with our data by creating a new `object`, "`su
 
 ```{r select}
 survey_sub <- survey %>%
-  select(`Survey Year`, Country, PrimaryDatabase, SalaryUSD, YearsWithThisDatabase, YearsWithThisTypeOfJob, Education)
+  dplyr::select(`Survey Year`, Country, PrimaryDatabase, SalaryUSD, YearsWithThisDatabase, YearsWithThisTypeOfJob, Education)
 ```
 
 Now that we have a selection of the columns deemed most important, let's do some additional steps to clean up our data. Because the initial survey was open-ended, some of the responses might not be correct or make much sense. For example, under `YearsWithThisTypeOfJob`, a few respondents answered with values like `2020` and `1997`. It's entirely likely that they meant that they had been working in that job field *since* 2020 or 1997. In a real-world analysis, you should clean the data up by calculating how many years they have actually had, but in this module, we'll simply remove those columns.
@@ -192,7 +192,7 @@ We'll also apply this process to a few other columns in the dataset, as well as 
 ```{r mutate}
 
 survey_sub <- survey_sub %>%
-  filter(
+  dplyr::filter(
     YearsWithThisDatabase <= 50,
 
     # Same for the following:

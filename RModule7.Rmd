@@ -105,7 +105,7 @@ cor <- NC %>%
   # function. We're not actually getting rid of it from our original data, of
   # course.
   st_drop_geometry() %>%
-  select(MNEM2000, POP2000) %>%
+  dplyr::select(MNEM2000, POP2000) %>%
   correlate(use = "pairwise.complete.obs",
             method = "pearson")
 
@@ -128,7 +128,7 @@ NC_filter <- NC %>%
   # Finally, we can choose the columns we actually want to correlate. Note that
   # this is a bit redundant with the `select_if()` above, but I wanted to show
   # how to select columns programmatically with a logical test.
-  select(
+  dplyr::select(
     c(
       POP2000,
       MNEM2000,

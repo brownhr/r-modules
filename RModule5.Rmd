@@ -68,34 +68,7 @@ b <- ~{plot(input, output, type = "l", col = "red")} %>%
   ggdraw()
 
 ```
-<!--
-```{r normplot, eval = F}
 
-# qplot is a great function if you're more familiar with base R plot(), but can
-# be used in tandem with ggplot functions.
-
-qplot(
-  x = input,
-  y = output,
-  geom = "line",
-  
-  # Don't worry too much about what the I() function does here, it's just a
-  # qplot thing :)
-  color = I("red")
-)
-
-# But if you want to keep it simple, you can plot with base R.
-
-plot(x, y, type = "l", col = "red")
-
-```
-
-```{r plots, echo = F, fig.cap = "ggplot2 (left) vs base R (right)"}
-
-cowplot::plot_grid(plotlist = list(q, b))
-
-```
--->
 
 
 For normally distributed data, we can estimate the probability of observing a range of values by calculating the area under the curve that corresponds to those values. For example, consider the area under the curve below. What is the probability that any value of x will be $\leq$ 0?
