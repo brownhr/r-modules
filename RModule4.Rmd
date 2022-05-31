@@ -294,7 +294,7 @@ Let's perform some final cleaning, and select out only the variables we're inter
 ```{r}
 survey_clean <- survey_sub %>%
   # We're not interested in these columns, so we can exclude them with a "-"
-  select(-PrimaryDatabase, -Country, SalaryLog10) %>%
+  dplyr::select(-PrimaryDatabase, -Country, SalaryLog10) %>%
   # Likewise, we want to ignore the cases where the salary is 7 figures, so we set our filter criterion to the observations where SalaryFigs is not (!= represents "is not") "7 Figures".
   filter(SalaryFigs != "7 Figures") %>%
   # Even though we filtered out the cases of 7-figure salaries, the "7 Figures"
