@@ -4,18 +4,25 @@ library(doconv)
 
 output_dir <- "rendered_docs"
 
+if(!dir.exists(output_dir)) dir.create(output_dir)
+
 RMD_files <-
-  list.files(path = "docs",
-             pattern = "RModule.+\\.html",
+  list.files(path = ".",
+             pattern = "RModule.+\\.[Rr]md",
              full.names = TRUE)
 
 RMD_files %>%
   walk(
-    .f = function(x) {
-      name <- fs::path_ext_remove(basename(x))
-      out_name <- fs::path(output_dir, fs::path_ext_set(name, ".pdf"))
-      pagedown::chrome_print(input = x,
-                             output = out_name)
+    .f = function(input) {
+      rmarkdown::render(
+        input,
+        output_format = "bookdown::word_document2",
+        output_dir = output_dir,
+        output_options = list(
+          number_sections = FALSE,
+          toc = FALSE
+        )
+      )
     }
   )
 
@@ -23,7 +30,8 @@ rmd_gd <- drive_get(id = "1dFkBUBZY0JV6QUEMHV6mLBtZ0UPDMHjE")
 
 
 rmd_out <-
-  list.files("rendered_docs", pattern = "\\.pdf", full.names = TRUE)
+  list.files("rendered_docs", pattern = "\\.docx", full.names = TRUE)
+rmd_ls <- drive_ls(rmd_gd)
 
 rmd_out %>%
   walk(function(x) {
